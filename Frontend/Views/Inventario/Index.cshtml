@@ -1,0 +1,288 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Pricing | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+
+    <!-- dark layout js -->
+    <script src="~/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/icons.css" />
+
+</head>
+
+<body>
+    <div class="container mt-4">
+        <!-- Encabezado principal -->
+        <div class="text-center mb-4">
+            <h1>Gestión de Inventarios</h1>
+            <p class="text-muted">Administra y organiza los productos de tu inventario</p>
+        </div>
+
+        <!-- Panel superior: Filtros y acciones -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <a class="btn btn-primary btn-lg w-100" asp-controller="Inventario" asp-action="RegistrarProducto">Registrar Nuevo Producto</a>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Buscar por nombre..." />
+            </div>
+            <div class="col-md-4">
+                <select class="form-select">
+                    <option value="">Filtrar por categoría</option>
+                    <option value="categoria1">Medias Antideslizantes</option>
+                    <option value="categoria2">Medias Cortadas</option>
+                    <option value="categoria3">Medias de Compresión</option>
+                    <option value="categoria3">Espinilleras</option>
+                    <option value="categoria3">Portaespinilleras</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tabla de productos -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Productos en Inventario</h5>
+                <p class="text-muted">Consulta, actualiza o inactiva productos en el inventario</p>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Código</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Medias Antideslizantes Blancas</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008776</td>
+                            <td><span class="badge bg-primary">300</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <a class="btn btn-sm btn-secondary" asp-controller="Inventario" asp-action="EditarProducto">Editar</a>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Negras</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008777</td>
+                            <td><span class="badge bg-primary">200</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Azules</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008778</td>
+                            <td><span class="badge bg-primary">150</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Rojas</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008779</td>
+                            <td><span class="badge bg-primary">200</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Azules Oscuro</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008780</td>
+                            <td><span class="badge bg-primary">50</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Naranjas</td>
+                            <td>Medias Antideslizantes</td>
+                            <td>00008781</td>
+                            <td><span class="badge bg-primary">230</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Espinilleras Blancas</td>
+                            <td>Espinilleras</td>
+                            <td>00008782</td>
+                            <td><span class="badge bg-primary">78</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Espinilleras Negras</td>
+                            <td>Espinilleras</td>
+                            <td>00008783</td>
+                            <td><span class="badge bg-primary">78</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Portaespinilleras Negras</td>
+                            <td>Portaespinilleras</td>
+                            <td>00008784</td>
+                            <td><span class="badge bg-primary">90</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Portaespinilleras Blancas</td>
+                            <td>Portaespinilleras</td>
+                            <td>00008785</td>
+                            <td><span class="badge bg-primary">87</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medias Cortadas Azules</td>
+                            <td>Medias Cortadas</td>
+                            <td>00008786</td>
+                            <td><span class="badge bg-primary">800</span></td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Editar</button>
+                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Exportar inventario -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <button class="btn btn-primary w-100">Exportar a PDF</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-secondary w-100">Exportar a Excel</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-success w-100">Exportar a CSV</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+    <script src="~/libs/jquery/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/node-waves/waves.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/js/app.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleButtons = document.querySelectorAll(".btn-toggle-status");
+
+            toggleButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    // Mostrar la alerta de confirmación
+                    Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    }).fire({
+                        title: "¿Estás seguro?",
+                        text: "¡No podrás revertir este cambio!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cambiar estado",
+                        cancelButtonText: "No, cancelar",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const row = button.closest("tr"); 
+                            const statusCell = row.querySelector("td:nth-child(5) span"); 
+
+                            // Cambiar el estado y el texto del botón
+                            if (button.classList.contains("btn-danger")) {
+                                // Cambiar a Activar
+                                button.classList.remove("btn-danger");
+                                button.classList.add("btn-success");
+                                button.textContent = "Activar";
+
+                                // Cambiar visualmente el estado a Inactivo
+                                statusCell.textContent = "Inactivo";
+                                statusCell.classList.remove("bg-success");
+                                statusCell.classList.add("bg-danger");
+                            } else {
+                                // Cambiar a Inactivar
+                                button.classList.remove("btn-success");
+                                button.classList.add("btn-danger");
+                                button.textContent = "Inactivar";
+
+                                // Cambiar visualmente el estado a Activo
+                                statusCell.textContent = "Activo";
+                                statusCell.classList.remove("bg-danger");
+                                statusCell.classList.add("bg-success");
+                            }
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "El cambio de estado ha sido cancelado.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Registrar Producto | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/icons.css" />
+
+</head>
+
+<body>
+    <div class="container mt-4">
+        <!-- Encabezado principal -->
+        <div class="text-center mb-4">
+            <h1>Editar Producto</h1>
+            <p class="text-muted">Actualiza los detalles de un producto existente</p>
+        </div>
+
+        <!-- Formulario de edición -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Formulario de Edición</h5>
+                <p class="text-muted">Modifica los campos necesarios y guarda los cambios</p>
+
+                <form enctype="multipart/form-data" method="post" action="ActualizarProducto">
+                    <!-- Campo oculto para el ID del producto -->
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" value="@Model.NombreProducto" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="categoriaProducto" class="form-label">Categoría</label>
+                            <select class="form-select" id="categoriaProducto" name="categoriaProducto" required>
+                                <option value="" disabled>Selecciona una categoría</option>
+                                <option value="Medias Antideslizantes">Medias Antideslizantes</option>
+                                <option value="Medias Cortadas">Medias Cortadas</option>
+                                <option value="Medias de Compresión">Medias de Compresión</option>
+                                <option value="Espinilleras">Espinilleras</option>
+                                <option value="Portaespinilleras">Portaespinilleras</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="stockProducto" class="form-label">Cantidad en Stock</label>
+                            <input type="number" class="form-control" id="stockProducto" name="stockProducto" value="@Model.StockProducto" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="imagenProducto" class="form-label">Actualizar Imagen del Producto</label>
+                            <input type="file" class="form-control" id="imagenProducto" name="imagenProducto" accept="image/*">
+                            <small class="form-text text-muted">Si no seleccionas una nueva imagen, se mantendrá la existente.</small>
+                        </div>
+                    </div>
+
+                    <!-- Vista previa de la imagen actual -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Imagen Actual:</label>
+                            <div>
+                                <img src="@Model.ImagenUrl" alt="Imagen del Producto" class="img-thumbnail" style="max-width: 200px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/libs/jquery/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/node-waves/waves.min.js"></script>
+    <script src="~/js/app.js"></script>
+</body>
+</html>

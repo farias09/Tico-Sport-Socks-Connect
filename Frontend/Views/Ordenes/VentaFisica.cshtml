@@ -1,0 +1,285 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gestión de Órdenes | Tico Sport Socks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Gestión de órdenes de Tico Sport Socks" name="description" />
+    <meta content="Tico Sport Socks" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <!-- dark layout js -->
+    <script src="~/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/icons.css" />
+    <style>
+        .bg-card {
+            background-color: #f5f5f5;
+        }
+
+        .text-muted-foreground {
+            color: #6c757d;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .space-y-2 > * + * {
+            margin-top: 0.5rem;
+        }
+
+        .space-y-1 > * + * {
+            margin-top: 0.25rem;
+        }
+
+        .product-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Gestión de órdenes</h1>
+        <p class="text-muted text-center">Gestiona las órdenes que recibe Tico Sport Socks</p>
+
+        <div class="row">
+            <!-- Formulario y lista de productos -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">Registrar Venta Física</div>
+                    <div class="card-body">
+                        <form id="ventaForm">
+                            <div class="mb-3">
+                                <label for="clienteNombre" class="form-label">Nombre del Cliente</label>
+                                <input type="text" class="form-control" id="clienteNombre" name="clienteNombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">Correo Electrónico del Cliente</label>
+                                <input type="email" class="form-control" id="correo" name="correo" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="buscadorProducto" class="form-label">Buscar Producto</label>
+                                <input type="text" class="form-control" id="buscadorProducto" placeholder="Código o nombre del producto">
+                            </div>
+                            <div class="mb-3">
+                                <label for="producto" class="form-label">Producto</label>
+                                <select class="form-select" id="producto" name="producto">
+                                    <option value="">Selecciona un producto</option>
+                                    <option value="medias_blancas" data-price="5000">Medias Antideslizantes Blancas - ₡5,000</option>
+                                    <option value="medias_negras" data-price="5000">Medias Antideslizantes Negras - ₡5,000</option>
+                                    <option value="medias_negras2" data-price="4500">Medias Cortadas Negras - ₡4,500</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="1">
+                            </div>
+                            <button type="button" class="btn btn-success" id="agregarProducto">
+                                <i class="bi bi-plus-circle"></i> Agregar Producto
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Productos Agregados</div>
+                    <div class="card-body">
+                        <ul class="list-group product-list" id="listaProductos"></ul>
+                        <hr>
+                        <button type="button" class="btn btn-primary" id="registrarVenta">
+                            <i class="bi bi-check-circle"></i> Registrar Venta
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista previa de factura -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Vista Previa de Factura</div>
+                    <div class="card-body">
+                        <div class="rounded-lg border bg-light p-4">
+                            <div id="vistaFactura">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-sm fw-bold" id="facturaNumero">Factura #<span id="numeroFactura">---</span></p>
+                                        <p class="text-muted small" id="facturaFecha">Fecha: <span id="fechaActual">---</span></p>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="fw-bold">Tico Sport Socks</p>
+                                        <p class="text-muted small">Heredia, Costa Rica</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <p class="fw-bold">Detalles del Cliente</p>
+                                <p id="facturaCliente">Nombre: <span class="text-muted">N/A</span></p>
+                                <p id="facturaCorreo">Correo: <span class="text-muted">N/A</span></p>
+                                <hr>
+                                <p class="fw-bold">Productos</p>
+                                <div id="facturaProductos" class="mb-3">
+                                    <p class="text-muted">No hay productos agregados.</p>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <p class="fw-bold">Total:</p>
+                                    <p id="facturaTotal">₡0.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/libs/jquery/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/node-waves/waves.min.js"></script>
+
+    <script src="~/js/app.js"></script>
+
+    <!-- apexcharts -->
+    <script src="~/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="~/js/pages/dashboard.init.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elementos del DOM
+            const clienteNombreInput = document.getElementById('clienteNombre');
+            const correoInput = document.getElementById('correo');
+            const buscadorProducto = document.getElementById('buscadorProducto');
+            const productoSelect = document.getElementById('producto');
+            const cantidadInput = document.getElementById('cantidad');
+            const agregarProductoBtn = document.getElementById('agregarProducto');
+            const listaProductos = document.getElementById('listaProductos');
+            const registrarVentaBtn = document.getElementById('registrarVenta');
+            const facturaCliente = document.getElementById('facturaCliente');
+            const facturaCorreo = document.getElementById('facturaCorreo');
+            const facturaProductos = document.getElementById('facturaProductos');
+            const facturaTotal = document.getElementById('facturaTotal');
+            const numeroFactura = document.getElementById('numeroFactura');
+            const fechaActual = document.getElementById('fechaActual');
+
+            // Estado
+            let productosAgregados = [];
+            let totalFactura = 0;
+
+            // Inicializar fecha y número de factura
+            numeroFactura.textContent = Math.floor(Math.random() * 9000) + 1000;
+            fechaActual.textContent = new Date().toLocaleDateString();
+
+            // Búsqueda de productos
+            buscadorProducto.addEventListener('input', function () {
+                const query = buscadorProducto.value.toLowerCase();
+                for (let option of productoSelect.options) {
+                    if (option.text.toLowerCase().includes(query)) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            });
+
+            // Agregar producto
+            agregarProductoBtn.addEventListener('click', function () {
+                const producto = productoSelect.value;
+                const productoNombre = productoSelect.options[productoSelect.selectedIndex]?.text;
+                const precioUnitario = parseFloat(productoSelect.options[productoSelect.selectedIndex].getAttribute('data-price'));
+                const cantidad = parseInt(cantidadInput.value, 10);
+
+                if (!producto || !cantidad || cantidad <= 0) {
+                    alert('Seleccione un producto y una cantidad válida.');
+                    return;
+                }
+
+                const subtotal = cantidad * precioUnitario;
+
+                productosAgregados.push({
+                    producto,
+                    productoNombre,
+                    cantidad,
+                    precioUnitario,
+                    subtotal
+                });
+                totalFactura += subtotal;
+
+                actualizarListaProductos();
+                actualizarFactura();
+                productoSelect.selectedIndex = 0;
+                cantidadInput.value = '1';
+            });
+
+            // Actualizar lista de productos
+            function actualizarListaProductos() {
+                listaProductos.innerHTML = '';
+                productosAgregados.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+                    li.innerHTML = `
+                                ${item.productoNombre} x ${item.cantidad} - ₡${item.subtotal.toLocaleString()}
+                                <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${index})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            `;
+                    listaProductos.appendChild(li);
+                });
+            }
+
+            // Actualizar factura
+            function actualizarFactura() {
+                facturaCliente.innerHTML = `Nombre: <span class="text-muted">${clienteNombreInput.value || 'N/A'}</span>`;
+                facturaCorreo.innerHTML = `Correo: <span class="text-muted">${correoInput.value || 'N/A'}</span>`;
+
+                if (productosAgregados.length === 0) {
+                    facturaProductos.innerHTML = '<p class="text-muted">No hay productos agregados.</p>';
+                } else {
+                    facturaProductos.innerHTML = productosAgregados.map(item =>
+                        `<p>${item.productoNombre} x ${item.cantidad} - ₡${item.subtotal.toLocaleString()}</p>`
+                    ).join('');
+                }
+
+                facturaTotal.textContent = `₡${totalFactura.toLocaleString()}`;
+            }
+
+            // Eliminar producto
+            window.eliminarProducto = function (index) {
+                totalFactura -= productosAgregados[index].subtotal;
+                productosAgregados.splice(index, 1);
+                actualizarListaProductos();
+                actualizarFactura();
+            };
+
+            // Registrar venta
+            registrarVentaBtn.addEventListener('click', function () {
+                if (productosAgregados.length === 0) {
+                    alert('Agregue al menos un producto antes de registrar la venta.');
+                    return;
+                }
+
+                const ventaData = {
+                    cliente: {
+                        nombre: clienteNombreInput.value,
+                        correo: correoInput.value
+                    },
+                    productos: productosAgregados,
+                    total: totalFactura,
+                    numeroFactura: numeroFactura.textContent,
+                    fecha: fechaActual.textContent
+                };
+
+                console.log('Venta registrada:', ventaData);
+                alert('Venta registrada con éxito.');
+            });
+        });
+    </script>
+</body>
+
+</html>

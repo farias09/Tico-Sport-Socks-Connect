@@ -1,0 +1,193 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.csproj" />
+    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\Entities\Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\libs\%40chenfengyuan\datepicker\" />
+    <Folder Include="wwwroot\libs\%40curiosityx\bootstrap-session-timeout\" />
+    <Folder Include="wwwroot\libs\admin-resources\bootstrap-filestyle\" />
+    <Folder Include="wwwroot\libs\admin-resources\jquery.vectormap\maps\" />
+    <Folder Include="wwwroot\libs\admin-resources\rwd-table\" />
+    <Folder Include="wwwroot\libs\block-ui\node_modules\jquery\" />
+    <Folder Include="wwwroot\libs\bootstrap-datepicker\css\" />
+    <Folder Include="wwwroot\libs\bootstrap-datepicker\js\" />
+    <Folder Include="wwwroot\libs\bootstrap-datepicker\locales\" />
+    <Folder Include="wwwroot\libs\bootstrap-datetime-picker\css\" />
+    <Folder Include="wwwroot\libs\bootstrap-datetime-picker\js\locales\" />
+    <Folder Include="wwwroot\libs\bootstrap-editable\css\" />
+    <Folder Include="wwwroot\libs\bootstrap-editable\img\" />
+    <Folder Include="wwwroot\libs\bootstrap-editable\js\" />
+    <Folder Include="wwwroot\libs\bootstrap-timepicker\css\" />
+    <Folder Include="wwwroot\libs\bootstrap-timepicker\js\" />
+    <Folder Include="wwwroot\libs\bootstrap\css\" />
+    <Folder Include="wwwroot\libs\bootstrap\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-autofill-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-autofill-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-autofill-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-autofill\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-autofill\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-bs5\images\" />
+    <Folder Include="wwwroot\libs\datatables.net-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-buttons-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-buttons-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-buttons-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-buttons\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-buttons\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-colreorder-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-colreorder-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-colreorder-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-colreorder\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedcolumns-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedcolumns-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedcolumns-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedcolumns\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedcolumns\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedheader-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedheader-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedheader-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedheader\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-fixedheader\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-keytable-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-keytable-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-keytable-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-keytable\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-keytable\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-responsive-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-responsive-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-responsive-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-responsive\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-responsive\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowgroup-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowgroup-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowgroup-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowgroup\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowgroup\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowreorder-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowreorder-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowreorder-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowreorder\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-rowreorder\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-scroller-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-scroller-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-scroller-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-scroller\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-scroller\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-searchpanes-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-searchpanes-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-searchpanes-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-searchpanes\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-searchpanes\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-select-bs5\css\" />
+    <Folder Include="wwwroot\libs\datatables.net-select-bs5\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-select-bs5\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net-select\js\" />
+    <Folder Include="wwwroot\libs\datatables.net-select\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\datatables.net\js\" />
+    <Folder Include="wwwroot\libs\datatables.net\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\daterangepicker\node_modules\jquery\" />
+    <Folder Include="wwwroot\libs\daterangepicker\node_modules\moment\locale\" />
+    <Folder Include="wwwroot\libs\daterangepicker\node_modules\moment\min\" />
+    <Folder Include="wwwroot\libs\daterangepicker\website\" />
+    <Folder Include="wwwroot\libs\dropzone\min\" />
+    <Folder Include="wwwroot\libs\glightbox\css\" />
+    <Folder Include="wwwroot\libs\glightbox\js\" />
+    <Folder Include="wwwroot\libs\gmaps\lib\" />
+    <Folder Include="wwwroot\libs\inputmask\bindings\" />
+    <Folder Include="wwwroot\libs\ion-rangeslider\css\" />
+    <Folder Include="wwwroot\libs\ion-rangeslider\js\" />
+    <Folder Include="wwwroot\libs\jquery-contextmenu-js\font\" />
+    <Folder Include="wwwroot\libs\jquery-steps\build\" />
+    <Folder Include="wwwroot\libs\jquery-steps\lib\" />
+    <Folder Include="wwwroot\libs\jquery-steps\nuget\" />
+    <Folder Include="wwwroot\libs\jquery-ui-dist\external\jquery\" />
+    <Folder Include="wwwroot\libs\jquery-ui-dist\images\" />
+    <Folder Include="wwwroot\libs\jquery-validation\localization\" />
+    <Folder Include="wwwroot\libs\jquery.easing\bower_components\jquery-easing-original\" />
+    <Folder Include="wwwroot\libs\jquery.easing\bower_components\jquery\" />
+    <Folder Include="wwwroot\libs\jquery.flot.tooltip\js\" />
+    <Folder Include="wwwroot\libs\jstree\themes\default-dark\" />
+    <Folder Include="wwwroot\libs\jstree\themes\default\" />
+    <Folder Include="wwwroot\libs\leaflet\images\" />
+    <Folder Include="wwwroot\libs\metismenu\cjs\" />
+    <Folder Include="wwwroot\libs\metismenu\modules\" />
+    <Folder Include="wwwroot\libs\moment\locale\" />
+    <Folder Include="wwwroot\libs\moment\min\" />
+    <Folder Include="wwwroot\libs\parsleyjs\i18n\" />
+    <Folder Include="wwwroot\libs\pdfmake\build\" />
+    <Folder Include="wwwroot\libs\select2\css\" />
+    <Folder Include="wwwroot\libs\select2\js\i18n\" />
+    <Folder Include="wwwroot\libs\slick-carousel\slick\fonts\" />
+    <Folder Include="wwwroot\libs\sortablejs\modular\" />
+    <Folder Include="wwwroot\libs\table-edits\build\" />
+    <Folder Include="wwwroot\libs\tinymce\icons\default\" />
+    <Folder Include="wwwroot\libs\tinymce\models\dom\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\advlist\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\anchor\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\autolink\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\autoresize\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\autosave\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\charmap\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\codesample\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\code\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\directionality\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\emoticons\js\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\fullscreen\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\help\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\image\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\importcss\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\insertdatetime\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\link\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\lists\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\media\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\nonbreaking\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\pagebreak\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\preview\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\quickbars\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\save\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\searchreplace\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\table\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\template\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\visualblocks\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\visualchars\" />
+    <Folder Include="wwwroot\libs\tinymce\plugins\wordcount\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\dark\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\default\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\document\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\tinymce-5-dark\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\tinymce-5\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\content\writer\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\ui\oxide-dark\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\ui\oxide\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\ui\tinymce-5-dark\" />
+    <Folder Include="wwwroot\libs\tinymce\skins\ui\tinymce-5\" />
+    <Folder Include="wwwroot\libs\tinymce\themes\silver\" />
+    <Folder Include="wwwroot\libs\toastr\build\" />
+    <Folder Include="wwwroot\libs\toastr\node_modules\jquery\external\sizzle\" />
+    <Folder Include="wwwroot\libs\toastr\nuget\content\content\" />
+    <Folder Include="wwwroot\libs\toastr\nuget\content\scripts\" />
+    <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\css\" />
+    <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\fonts\" />
+    <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\img\" />
+    <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\libs\apexcharts\locales\area_chart_irregular.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,230 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gestión de Órdenes | Tico Sport Socks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Gestión de órdenes de Tico Sport Socks" name="description" />
+    <meta content="Tico Sport Socks" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <!-- dark layout js -->
+    <script src="~/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/icons.css" />
+</head>
+
+<style>
+    body {
+        background-color: #f9f9f9;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .card-header {
+        border-bottom: 2px solid #ddd;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .badge-pendiente {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .badge-en-proceso {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .badge-enviado {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .modal-header {
+        border-bottom: 2px solid #ddd;
+    }
+
+    .btn-outline-primary {
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+</style>
+
+<body>
+    <div class="container py-5">
+        <div class="mb-4 text-center">
+            <h1 class="display-5 fw-bold text-primary">Pedidos Pendientes</h1>
+            <p class="text-muted">Gestiona y actualiza los pedidos realizados a por los clientes.</p>
+            <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'"><i class="bi bi-plus-circle"></i> Crear Nueva Orden</button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-search text-primary"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar por ID o código de caja">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select">
+                    <option selected>Filtrar por estado</option>
+                    <option value="1">Pendiente</option>
+                    <option value="2">En proceso</option>
+                    <option value="3">Enviado</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Pedidos -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title mb-0">Pedido #ORD001</h5>
+                    <small>Fecha de pedido: 15/06/2023</small>
+                </div>
+                <span class="badge badge-pendiente">Pendiente</span>
+            </div>
+            <div class="card-body">
+                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
+                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-end">Cantidad</th>
+                            <th class="text-end">Precio</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Medias Antideslizantes Blancas (M)</td>
+                            <td class="text-end">2</td>
+                            <td class="text-end">₡1,000</td>
+                            <td class="text-end">₡2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Negras (M)</td>
+                            <td class="text-end">1</td>
+                            <td class="text-end">₡1,000</td>
+                            <td class="text-end">₡1,000</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end fw-bold">Total:</td>
+                            <td class="text-end fw-bold">₡3,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha de envío no establecida</p>
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
+                    <i class="bi bi-calendar"></i> Establecer Envío
+                </button>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title mb-0">Pedido #ORD002</h5>
+                    <small>Fecha de pedido: 15/06/2023</small>
+                </div>
+                <span class="badge badge-en-proceso">En Proceso</span>
+            </div>
+            <div class="card-body">
+                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
+                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-end">Cantidad</th>
+                            <th class="text-end">Precio</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Medias Antideslizantes Blancas (L)</td>
+                            <td class="text-end">2</td>
+                            <td class="text-end">₡1,000</td>
+                            <td class="text-end">₡2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Medias Antideslizantes Negras (XL)</td>
+                            <td class="text-end">1</td>
+                            <td class="text-end">₡1,000</td>
+                            <td class="text-end">₡1,000</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end fw-bold">Total:</td>
+                            <td class="text-end fw-bold">₡3,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha estimada de envío: 29/12/2024</p>
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
+                    <i class="bi bi-calendar"></i> Modificar Fecha
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="envioModal" tabindex="-1" aria-labelledby="envioModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="envioModalLabel">Detalles de Envío - Pedido #ORD001</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <p>Establezca la fecha estimada de envío y confirme el envío del pedido.</p>
+                            <label for="shipping-date" class="form-label">Fecha de envío</label>
+                            <input type="date" class="form-control" id="shipping-date">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="bi bi-check-circle"></i> Confirmar Envío</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/libs/jquery/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/node-waves/waves.min.js"></script>
+
+    <script src="~/js/app.js"></script>
+
+    <!-- apexcharts -->
+    <script src="~/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="~/js/pages/dashboard.init.js"></script>
+</body>
+</html>
