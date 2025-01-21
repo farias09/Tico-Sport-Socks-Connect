@@ -6,8 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{FD7D815A-3152-4384-90B8-74DDB5DCBE59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{060BDAF0-E313-40B9-965A-9BC39C30506C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FD7D815A-3152-4384-90B8-74DDB5DCBE59} = {FD7D815A-3152-4384-90B8-74DDB5DCBE59}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{B40BCEFF-7599-45D8-9BCB-38A1787F53E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{060BDAF0-E313-40B9-965A-9BC39C30506C} = {060BDAF0-E313-40B9-965A-9BC39C30506C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{3FCB5A45-9AEB-4325-BDF8-2748AB756B52}"
 EndProject
