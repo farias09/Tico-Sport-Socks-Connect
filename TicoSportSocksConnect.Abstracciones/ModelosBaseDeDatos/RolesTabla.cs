@@ -10,9 +10,9 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public int Rol_ID { get; set; }
 
         [Required, StringLength(50)]
-        public string Nombre { get; set; }
+        public string nombre { get; set; }
 
-        public string Descripcion { get; set; }
+        public string descripcion { get; set; }
 
         public virtual ICollection<UsuariosTabla> Usuarios { get; set; }
     }

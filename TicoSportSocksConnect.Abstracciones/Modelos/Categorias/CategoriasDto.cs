@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
+namespace TicoSportSocksConnect.Abstracciones.Modelos.Categorias
 {
-    [Table("Categorias")]
-    public class CategoriasTabla
+    public class CategoriasDto
     {
         [Key]
         public int Categoria_ID { get; set; }
@@ -18,7 +16,5 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public string nombre { get; set; }
 
         public string descripcion { get; set; }
-
-        public virtual ICollection<ProductosTabla> Productos { get; set; }
     }
 }

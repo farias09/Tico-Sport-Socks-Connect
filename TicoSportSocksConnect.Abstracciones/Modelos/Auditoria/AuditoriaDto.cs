@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
+namespace TicoSportSocksConnect.Abstracciones.Modelos.Auditoria
 {
-    [Table("Auditoria")]
-    public class AuditoriaTabla
+    public class AuditoriaDto
     {
         [Key]
         public int Auditoria_ID { get; set; }
@@ -22,13 +24,10 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public string tipo_accion { get; set; }
 
         [Required]
-        public int registro_ID { get; set; }
+        public int Registro_ID { get; set; }
 
         public string valor_anterior { get; set; }
         public string valor_nuevo { get; set; }
         public string descripcion { get; set; }
-
-        [ForeignKey("Usuario_ID")]
-        public virtual UsuariosTabla Usuario { get; set; }
     }
 }

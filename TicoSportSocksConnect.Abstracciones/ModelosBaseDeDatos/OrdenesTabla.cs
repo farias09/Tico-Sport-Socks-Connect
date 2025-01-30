@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
 {
-    [Table("Ordenes")] //Cambiar por la tabla correcta
+    [Table("Ordenes")] //No hay tabla
     public class OrdenesTabla
     {
     }

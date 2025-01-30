@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
+namespace TicoSportSocksConnect.Abstracciones.Modelos.Carrito
 {
-    [Table("Carrito")]
-    public class CarritoTabla
+    public class CarritoDto
     {
         [Key]
         public int Carrito_ID { get; set; }
@@ -24,12 +22,5 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
 
         [Required]
         public decimal subtotal { get; set; }
-
-        [ForeignKey("Venta_ID")]
-        public virtual VentasTabla Venta { get; set; }
-
-        [ForeignKey("Producto_ID")]
-        public virtual ProductosTabla Producto { get; set; }
     }
-
 }

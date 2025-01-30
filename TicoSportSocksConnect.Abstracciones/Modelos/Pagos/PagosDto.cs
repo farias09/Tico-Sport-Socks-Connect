@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
+namespace TicoSportSocksConnect.Abstracciones.Modelos.Factura
 {
-    [Table("Pagos")]
-    public class PagosTabla
+    public class PagosDto
     {
         [Key]
         public int Pago_ID { get; set; }
@@ -31,12 +29,5 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public string referencia_transaccion { get; set; }
 
         public int Caja_ID { get; set; }
-
-        [ForeignKey("Venta_ID")]
-        public virtual VentasTabla Venta { get; set; }
-
-        [ForeignKey("Caja_ID")]
-        public virtual CajasTabla Caja { get; set; }
     }
-
 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
+namespace TicoSportSocksConnect.Abstracciones.Modelos.Caja
 {
-    [Table("Cajas")]
-    public class CajasTabla
+    public class CajasDto
     {
         [Key]
         public int Caja_ID { get; set; }
@@ -32,9 +30,5 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public string estado { get; set; }
 
         public int Usuario_ID { get; set; }
-
-        [ForeignKey("Usuario_ID")]
-        public virtual UsuariosTabla Usuario { get; set; }
     }
-
 }

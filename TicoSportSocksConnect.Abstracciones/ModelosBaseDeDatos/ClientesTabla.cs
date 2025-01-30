@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
 {
-    [Table("Clientes")]
+    [Table("Clientes")] //No hay tabla
     public class ClientesTabla
     {
     }

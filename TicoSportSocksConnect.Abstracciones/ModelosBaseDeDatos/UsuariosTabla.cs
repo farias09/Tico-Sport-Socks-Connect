@@ -15,23 +15,23 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public int Usuario_ID { get; set; }
 
         [Required, StringLength(255)]
-        public string Nombre { get; set; }
+        public string nombre { get; set; }
 
         [Required, StringLength(255)]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [StringLength(20)]
-        public string Telefono { get; set; }
+        public string telefono { get; set; }
 
         [StringLength(255)]
-        public string Direccion { get; set; }
+        public string direccion { get; set; }
 
         [StringLength(100)]
-        public string Provincia { get; set; }
+        public string provincia { get; set; }
 
         public int Rol_ID { get; set; }
 
-        public bool Estado { get; set; }
+        public bool estado { get; set; }
 
         [ForeignKey("Rol_ID")]
         public virtual RolesTabla Rol { get; set; }

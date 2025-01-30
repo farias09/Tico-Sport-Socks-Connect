@@ -15,18 +15,18 @@ namespace TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos
         public int Reporte_ID { get; set; }
 
         [Required, StringLength(100)]
-        public string TipoReporte { get; set; }
+        public string tipo_reporte { get; set; }
 
         [Required]
-        public DateTime FechaGeneracion { get; set; }
+        public DateTime fecha_generacion { get; set; }
 
         public int Usuario_ID { get; set; }
 
         [Required, StringLength(50)]
-        public string Periodo { get; set; }
+        public string periodo { get; set; }
 
         [Required, StringLength(50)]
-        public string Formato { get; set; }
+        public string formato { get; set; }
 
         [ForeignKey("Usuario_ID")]
         public virtual UsuariosTabla Usuario { get; set; }
