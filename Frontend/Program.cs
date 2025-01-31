@@ -1,7 +1,13 @@
+using Frontend.Extenciones;
+using System;
+using TicoSportsSocksConnect.AccesoADatos;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.ConfigurarDependencias();
 
 var app = builder.Build();
 
