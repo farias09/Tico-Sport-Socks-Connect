@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Backend\Backend.csproj" />
-    <ProjectReference Include="..\DAL\DAL.csproj" />
-    <ProjectReference Include="..\Entities\Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\libs\%40chenfengyuan\datepicker\" />
     <Folder Include="wwwroot\libs\%40curiosityx\bootstrap-session-timeout\" />
     <Folder Include="wwwroot\libs\admin-resources\bootstrap-filestyle\" />
@@ -181,6 +175,10 @@
     <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\fonts\" />
     <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\img\" />
     <Folder Include="wwwroot\libs\twitter-bootstrap-wizard\bootstrap\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicoSportsSocksConnect.AccesoADatos\TicoSportsSocksConnect.AccesoADatos.csproj" />
   </ItemGroup>
 
   <ItemGroup>
