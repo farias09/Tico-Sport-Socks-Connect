@@ -15,6 +15,87 @@
     <link href="~/libs/simplebar/simplebar.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/app-rtl.min.css" />
 </head>
+
+<style>
+
+    /* Estilos base para el sidebar */
+    .sidebar-left {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 250px;
+        z-index: 999;
+        transition: all 0.3s ease;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+    }
+
+        /* Estilos para los elementos del menú */
+        .sidebar-left .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-left .nav-link i {
+                font-size: 1.25rem;
+                margin-right: 1rem;
+                min-width: 24px;
+                transition: all 0.3s ease;
+            }
+
+            .sidebar-left .nav-link span {
+                transition: opacity 0.3s ease;
+                opacity: 1;
+                white-space: nowrap;
+            }
+
+        /* Estilos cuando el sidebar está minimizado */
+        .sidebar-left.minimized {
+            width: 60px;
+        }
+
+            .sidebar-left.minimized + .main-content {
+                margin-left: 60px;
+            }
+
+            .sidebar-left.minimized .menu-title {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+            }
+
+            .sidebar-left.minimized .nav-link {
+                padding: 0.75rem;
+                justify-content: center;
+            }
+
+                .sidebar-left.minimized .nav-link span {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                    overflow: hidden;
+                }
+
+                .sidebar-left.minimized .nav-link i {
+                    margin-right: 0;
+                    font-size: 1.5rem;
+                }
+
+        /* Estilos de hover cuando el sidebar está desplegado */
+        .sidebar-left:not(.minimized) .nav-link:hover {
+            background-color: #e9ecef; /* Cambia el color de fondo al hacer hover */
+            color: #000; /* Cambia el color del texto al hacer hover */
+        }
+
+            .sidebar-left:not(.minimized) .nav-link:hover i {
+                color: #000; /* Cambia el color del ícono al hacer hover */
+            }
+</style>
+
 <body>
 
     <div id="layout-wrapper">
@@ -24,7 +105,7 @@
             <div class="navbar-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm">
                 <!-- Logo -->
                 <div class="navbar-logo-box">
-                    <a href="index.html" class="navbar-brand d-flex align-items-center">
+                    <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
                         <img src="~/images/LOGOTSS.png" alt="logo-TSS" height="50">
                     </a>
                 </div>
@@ -113,51 +194,48 @@
         </header>
         <!-- End topbar -->
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="sidebar-left">
-
-            <div data-simplebar class="h-100">
-
-                <!--- Sidebar-menu -->
-                <div id="sidebar-menu">
-                    <!-- Left Menu Start -->
-                    <ul class="left-menu list-unstyled" id="side-menu">
-                        <li class="menu-title">Busca Rápida</li>
-
+    <div class="sidebar-left">
+        <div data-simplebar class="h-100">
+            <div id="sidebar-menu">
+                <!-- Left Menu Start -->
+                <ul class="left-menu list-unstyled" id="side-menu">
+                    <li class="menu-title">Busca Rápida</li>
                     <li>
                         <a class="nav-link text-dark fw-semibold" asp-controller="Clientes" asp-action="Index">
+                            <i class="bi bi-people"></i>
                             <span>Clientes</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="nav-link text-dark fw-semibold" asp-controller="Reportes" asp-action="Index">
+                            <i class="bi bi-bar-chart"></i>
                             <span>Reportes</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="nav-link text-dark fw-semibold" asp-controller="ListaOrdenes" asp-action="Index">
+                            <i class="bi bi-list-task"></i>
                             <span>Órdenes</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="nav-link text-dark fw-semibold" asp-controller="Usuarios" asp-action="Index">
+                            <i class="bi bi-person"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
-
-                    </ul>
-                </div>
+                </ul>
+            </div>
                 <!-- Sidebar -->
             </div>
         </div>
+
         <!-- Left Sidebar End -->
-        <div class="main-content">
-            <div class="page-content">
-                    @RenderBody()       
-            </div>
+    <div class="main-content">
+        <div class="page-content">
+            @RenderBody()
         </div>
+    </div>
 
         <footer class="border-top footer text-muted text-center w-100" style="position: relative; z-index: 1;">  
            <div class="container">  
@@ -165,14 +243,28 @@
            </div>  
         </footer>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/libs/jquery/jquery.min.js"></script>
     <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/libs/simplebar/simplebar.min.js"></script>
     <script src="~/libs/node-waves/waves.min.js"></script>
-    <script src="~/libs/node-waves/waves.min.js"></script>
+
+
+    <script src="~/js/pages/apexcharts-area.init.js"></script>
+
+    <script>
+                document.addEventListener('DOMContentLoaded', function() {
+            const sidebarBtn = document.getElementById('sidebar-btn');
+            const sidebar = document.querySelector('.sidebar-left');
+            const mainContent = document.querySelector('.main-content');
+
+            sidebarBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('minimized');
+                mainContent.classList.toggle('minimized');
+            });
+        });
+
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

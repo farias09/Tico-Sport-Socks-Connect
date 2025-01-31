@@ -296,7 +296,7 @@ body[data-layout=horizontal] .footer {
 }
 
 .sidebar-left {
-  width: 255px;
+  width: 200px;
   z-index: 1001;
   background: var(--bs-white);
   bottom: 0;
@@ -306,7 +306,7 @@ body[data-layout=horizontal] .footer {
 }
 
 .main-content {
-    margin-left: 140px;
+    margin-left: 120px;
     width: calc(100% - 140px); 
     overflow: hidden;
 }
@@ -577,7 +577,7 @@ body[data-sidebar-size=small] .sidebar-left .badge {
   display: none !important;
 }
 body[data-sidebar-size=small] .main-content {
-  margin-right: 160px;
+  margin-right: 120px;
 }
 body[data-sidebar-size=small] .footer {
   right: 160px;
