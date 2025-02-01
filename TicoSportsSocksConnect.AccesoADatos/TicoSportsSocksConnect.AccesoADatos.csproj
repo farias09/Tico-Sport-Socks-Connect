@@ -10,7 +10,6 @@
     <Folder Include="Caja\" />
     <Folder Include="Clientes\" />
     <Folder Include="Factura\" />
-    <Folder Include="Inventario\" />
     <Folder Include="ListaOrdenes\" />
     <Folder Include="Usuarios\" />
     <Folder Include="Reportes\" />

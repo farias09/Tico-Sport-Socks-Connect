@@ -178,7 +178,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TicoSportsSocksConnect.AccesoADatos\TicoSportsSocksConnect.AccesoADatos.csproj" />
+    <ProjectReference Include="..\TicoSportSocksConnect.Abstracciones\TicoSportSocksConnect.Abstracciones.csproj" />
+    <ProjectReference Include="..\TicoSportsSocksConnect.LN\TicoSportsSocksConnect.LN.csproj" />
   </ItemGroup>
 
   <ItemGroup>
