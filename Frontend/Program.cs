@@ -1,6 +1,6 @@
 using Frontend.Extenciones;
 using System;
-using TicoSportsSocksConnect.AccesoADatos;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
