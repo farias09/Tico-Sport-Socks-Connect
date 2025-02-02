@@ -1,33 +1,559 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!doctype html>
+<html lang="en">
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+
+    <!-- dark layout js -->
+    <script src="~/Scripts/js/pages/layout.js"></script>
+
+    <!-- Bootstrap and app CSS -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+</head>
+
+<body>
+    <!-- Start right Content here -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="fs-16 fw-semibold mb-1 mb-md-2">Hola, David!</></h4>
+                                <p class="text-muted mb-0">¿Listo para un día productivo en Tico Sport Socks?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--    end row -->
+
+                <div class="row">
+                    <div class="col-xxl-9">
+                        <div class="card">
+                            <div class="card-header">
+
+                                <h4 class="card-title mb-0">Ventas Generales - Echa un vistazo a cómo está el negocio actualmente</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex justify-content-between align-content-end shadow-lg p-3">
+                                            <div>
+                                                <p class="text-muted text-truncate mb-2">Ventas Totales</p>
+                                                <h5 class="mb-0">¢100.000</h5>
+                                            </div>
+                                            <div class="text-success float-end">
+                                                <i class="mdi mdi-menu-up"> </i>2.2%
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="d-flex justify-content-between align-content-end shadow-lg p-3">
+                                            <div>
+                                                <p class="text-muted text-truncate mb-2">Últimas Ventas</p>
+                                                <h5 class="mb-0">¢54.200</h5>
+                                            </div>
+                                            <div class="text-success float-end">
+                                                <i class="mdi mdi-menu-up"> </i>2.1%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="d-flex justify-content-between align-content-end shadow-lg p-3">
+                                            <div>
+                                                <p class="text-muted text-truncate mb-2">Promedio Mensual</p>
+                                                <h5 class="mb-0">¢450.000</h5>
+                                            </div>
+                                            <div class="text-success float-end">
+                                                <i class="mdi mdi-menu-up"> </i>1.8%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="sales_figures" data-colors='["--bs-info", "--bs-success"]' class="apex-charts" dir="ltr"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card" style="height: 495px; overflow: hidden auto;" data-simplebar="init">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Compras Recientes</h3>
+
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive-md">
+                                            <table class="table text-nowrap mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Numero de Orden</th>
+                                                        <th>Estado</th>
+                                                        <th>Comprador</th>
+                                                        <th>Envío</th>
+                                                        <th>Fecha de Orden</th>
+                                                        <th>Fecha de Entrega</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="align-middle">837563</td>
+                                                        <td class="align-middle"><i class="marker marker-dot m-0 me-2 text-primary"></i> Entregada</td>
+                                                        <td class="align-middle">
+                                                            <div class="avatar-group">
+                                                                <div class="avatar avatar-circle">
+                                                                    <img src="~/Content/images/users/avatar-1.png" alt="Avatar image" class="avatar-2xs">
+                                                                </div>
+                                                        </td>
+                                                        <td class="align-middle">Desamparados</td>
+                                                        <td class="align-middle">22/11/2024</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle">837562</td>
+                                                        <td class="align-middle"><i class="marker marker-dot m-0 me-2 text-primary"></i> Entregada</td>
+                                                        <td class="align-middle">
+                                                            <div class="avatar-group">
+                                                                <div class="avatar avatar-circle">
+                                                                    <img src="~/Content/images/users/avatar-2.png" alt="Avatar image" class="avatar-2xs">
+                                                                </div>
+                                                        </td>
+                                                        <td class="align-middle">Tibás</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle">837562</td>
+                                                        <td class="align-middle"><i class="marker marker-dot m-0 me-2 text-primary"></i> Entregada</td>
+                                                        <td class="align-middle">
+                                                            <div class="avatar-group">
+                                                                <div class="avatar avatar-circle">
+                                                                    <img src="~/Content/images/users/avatar-3.png" alt="Avatar image" class="avatar-2xs">
+                                                                </div>
+                                                        </td>
+                                                        <td class="align-middle">Tibás</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle">837562</td>
+                                                        <td class="align-middle"><i class="marker marker-dot m-0 me-2 text-primary"></i> Entregada</td>
+                                                        <td class="align-middle">
+                                                            <div class="avatar-group">
+                                                                <div class="avatar avatar-circle">
+                                                                    <img src="~/images/users/avatar-4.png" alt="Avatar image" class="avatar-2xs">
+                                                                </div>
+                                                        </td>
+                                                        <td class="align-middle">Tibás</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle">837562</td>
+                                                        <td class="align-middle"><i class="marker marker-dot m-0 me-2 text-primary"></i> Entregada</td>
+                                                        <td class="align-middle">
+                                                            <div class="avatar-group">
+                                                                <div class="avatar avatar-circle">
+                                                                    <img src="~/images/users/avatar-5.png" alt="Avatar image" class="avatar-2xs">
+                                                                </div>
+                                                        </td>
+                                                        <td class="align-middle">Tibás</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                        <td class="align-middle">23/11/2024</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3">
+                        <div class="row">
+                            <div class="col-xxl-12 col-xl-6 order-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <select class="form-select form-select-sm">
+                                                <option selected>Abril</option>
+                                                <option value="1">Marzo</option>
+                                                <option value="2">Febrero</option>
+                                                <option value="3">Enero</option>
+                                            </select>
+                                        </div>
+                                        <h4 class="card-title mb-4">Datos de ventas</h4>
+                                        <div id="pattern_chart" data-colors='["--bs-primary", "--bs-success", "--bs-warning", "--bs-danger", "--bs-info"]' class="apex-charts" dir="ltr"></div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="text-center mt-4">
+                                                    <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-primary font-size-10 me-1"></i>Medias Antideslizantes</p>
+                                                    <h5>42 %</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center mt-4">
+                                                    <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-success font-size-10 me-1"></i> Calcetas</p>
+                                                    <h5>26 %</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center mt-4">
+                                                    <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-warning font-size-10 me-1"></i> Espinilleras</p>
+                                                    <h5>42 %</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-12 order-4 order-xxl-2">
+                                <div class="card">
+                                    <div class="card-header">
+
+                                        <h3 class="card-title">Notificaciones</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="rich-list rich-list-bordered rich-list-action">
+                                            <div class="rich-list-item">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-xs avatar-label-info">
+                                                        <div class=""><i class="fa fa-file-invoice"></i></div>
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h4 class="rich-list-title mb-1">Un nuevo reporte ha sido creado</h4>
+                                                    <p class="rich-list-subtitle mb-0">Hace 3 minutos</p>
+                                                </div>
+                                                <div class="rich-list-append">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-label-secondary btn-icon" data-bs-toggle="dropdown"><i class="fa fa-ellipsis-h fs-12"></i></button>
+                                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-check"></i></div>
+                                                                <span class="dropdown-content">Mark as read</span>
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-trash-alt"></i></div>
+                                                                <span class="dropdown-content">Delete</span>
+                                                            </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div>
+                                                                <span class="dropdown-content">Settings</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="rich-list-item">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-xs avatar-label-success">
+                                                        <div class=""><i class="fa fa-shopping-basket"></i></div>
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h4 class="rich-list-title mb-1">Orden Completada</h4>
+                                                    <p class="rich-list-subtitle mb-0">Hace 1 hora</p>
+                                                </div>
+                                                <div class="rich-list-append">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-label-secondary btn-icon" data-bs-toggle="dropdown"><i class="fa fa-ellipsis-h fs-12"></i></button>
+                                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-check"></i></div>
+                                                                <span class="dropdown-content">Mark as read</span>
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-trash-alt"></i></div>
+                                                                <span class="dropdown-content">Delete</span>
+                                                            </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div>
+                                                                <span class="dropdown-content">Settings</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="rich-list-item">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-xs avatar-label-danger">
+                                                        <div class=""><i class="fa fa-users"></i></div>
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h4 class="rich-list-title mb-1">Caja de venta abierta</h4>
+                                                    <p class="rich-list-subtitle mb-0">Hace 2 horas</p>
+                                                </div>
+                                                <div class="rich-list-append">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-label-secondary btn-icon" data-bs-toggle="dropdown"><i class="fa fa-ellipsis-h fs-12"></i></button>
+                                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-check"></i></div>
+                                                                <span class="dropdown-content">Mark as read</span>
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-trash-alt"></i></div>
+                                                                <span class="dropdown-content">Delete</span>
+                                                            </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#">
+                                                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div>
+                                                                <span class="dropdown-content">Settings</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- End Page-content -->
+
+        </div>
+        <!-- end main content-->
     </div>
-</main>
+    <!-- end layout-wrapper -->
+    <!--
+    <div class="custom-setting bg-primary pe-0 d-flex flex-column rounded-start">
+        <button type="button" class="btn btn-wide border-0 text-white fs-20 avatar-sm rounded-end-0" id="light-dark-mode">
+            <i class="mdi mdi-brightness-7 align-middle"></i>
+            <i class="mdi mdi-white-balance-sunny align-middle"></i>
+        </button>
+        <button type="button" class="btn btn-wide border-0 text-white fs-20 avatar-sm" data-toggle="fullscreen">
+            <i class="mdi mdi-arrow-expand-all align-middle"></i>
+        </button>
+        <button type="button" class="btn btn-wide border-0 text-white fs-16 avatar-sm" id="layout-dir-btn">
+            <span>RTL</span>
+        </button>
+    </div>
+    -->
+    <!-- Rightbar Sidebar -->
+    <div class="offcanvas offcanvas-end" id="offcanvas-rightsidabar">
+        <div class="card h-100 rounded-0" data-simplebar="init">
+            <div class="card-header bg-light">
+                <h6 class="card-title text-uppercase">Activities</h6>
+                <div class="card-addon">
+                    <button class="btn btn-label-danger" data-bs-dismiss="offcanvas">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <h3 class="card-title">Company summary</h3>
+                    <div class="border rounded p-2">
+                        <p class="text-muted mb-2">Server Load</p>
+                        <h4 class="fs-16 mb-2">489</h4>
+                        <div class="progress progress-sm" style="height:4px;">
+                            <div class="progress-bar bg-success" style="width: 49.4%"></div>
+                        </div>
+                        <p class="text-muted mb-0 mt-1">49.4% <span>Avg</span></p>
+                    </div>
+                    <div class="border rounded p-2">
+                        <p class="text-muted mb-2">Members online</p>
+                        <h4 class="fs-16 mb-2">3,450</h4>
+                        <div class="progress progress-sm" style="height:4px;">
+                            <div class="progress-bar bg-danger" style="width: 34.6%"></div>
+                        </div>
+                        <p class="text-muted mb-0 mt-1">34.6% <span>Avg</span></p>
+                    </div>
+                    <div class="border rounded p-2">
+                        <p class="text-muted mb-2">Today's revenue</p>
+                        <h4 class="fs-16 mb-2">$18,390</h4>
+                        <div class="progress progress-sm" style="height:4px;">
+                            <div class="progress-bar bg-warning" style="width: 20%"></div>
+                        </div>
+                        <p class="text-muted mb-0 mt-1">$37,578 <span>Avg</span></p>
+                    </div>
+                    <div class="border rounded p-2">
+                        <p class="text-muted mb-2">Expected profit</p>
+                        <h4 class="fs-16 mb-2">$23,461</h4>
+                        <div class="progress progress-sm" style="height:4px;">
+                            <div class="progress-bar bg-info" style="width: 60%"></div>
+                        </div>
+                        <p class="text-muted mb-0 mt-1">$23,461 <span>Avg</span></p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h3 class="card-title">Latest log</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-primary"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">12 new users registered</p>
+                                    <span class="text-muted">Just now</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-success"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">System shutdown <span class="badge badge-label-success">pending</span></p>
+                                    <span class="text-muted">2 mins</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-primary"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">New invoice received</p>
+                                    <span class="text-muted">3 mins</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-danger"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">New order received <span class="badge badge-label-danger">urgent</span></p>
+                                    <span class="text-muted">10 mins</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-warning"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Production server down</p>
+                                    <span class="text-muted">1 hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-info"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">System error <a href="#">check</a></p>
+                                    <span class="text-muted">2 hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-secondary"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">DB overloaded 80%</p>
+                                    <span class="text-muted">5 hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-pin"><i class="marker marker-dot text-success"></i></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Production server up</p>
+                                    <span class="text-muted">6 hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h3 class="card-title">Upcoming activities</h3>
+                    <div class="timeline timeline-timed">
+                        <div class="timeline-item">
+                            <span class="timeline-time">10:00</span>
+                            <div class="timeline-pin"><i class="marker marker-circle text-primary"></i></div>
+                            <div class="timeline-content">
+                                <div>
+                                    <span>Meeting with</span>
+                                    <div class="avatar-group ms-2">
+                                        <div class="avatar avatar-circle">
+                                            <img src="~/Content/images/users/avatar-1.png" alt="Avatar image" class="avatar-2xs" />
+                                        </div>
+                                        <div class="avatar avatar-circle">
+                                            <img src="~/Content/images/users/avatar-2.png" alt="Avatar image" class="avatar-2xs" />
+                                        </div>
+                                        <div class="avatar avatar-circle">
+                                            <img src="~/Content/images/users/avatar-3.png" alt="Avatar image" class="avatar-2xs" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">12:45</span>
+                            <div class="timeline-pin"><i class="marker marker-circle text-warning"></i></div>
+                            <div class="timeline-content">
+                                <p class="mb-0">Lorem ipsum dolor sit amit,consectetur eiusmdd tempor incididunt ut labore et dolore magna elit enim at minim veniam quis nostrud</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">14:00</span>
+                            <div class="timeline-pin"><i class="marker marker-circle text-danger"></i></div>
+                            <div class="timeline-content">
+                                <p class="mb-0">Received a new feedback on <a href="#">GoFinance</a> App product.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">15:20</span>
+                            <div class="timeline-pin"><i class="marker marker-circle text-success"></i></div>
+                            <div class="timeline-content">
+                                <p class="mb-0">Lorem ipsum dolor sit amit,consectetur eiusmdd tempor incididunt ut labore et dolore magna.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">17:00</span>
+                            <div class="timeline-pin"><i class="marker marker-circle text-info"></i></div>
+                            <div class="timeline-content">
+                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end card-->
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+
+    <!-- apexcharts -->
+    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="~/Scripts/js/app.js"></script>
+
+</body>
+
+</html>
