@@ -20,5 +20,19 @@ namespace TicoSportsSocksConnect.AccesoADatos
         public DbSet<UsuariosTabla> Usuarios { get; set; }
         public DbSet<VentasTabla> Ventas { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Como la tabla de Clientes y Ordenes no tenian entidades tuve que generarselas pero seria bueno poder corregir eso mas adelante
+            modelBuilder.Entity<ClientesTabla>()
+                .HasKey(c => c.Cliente_ID); // Especifica que Cliente_ID es la clave primaria
+
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<OrdenesTabla>()
+                .HasKey(o => o.Orden_ID); // Especifica que Orden_ID es la clave primaria
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

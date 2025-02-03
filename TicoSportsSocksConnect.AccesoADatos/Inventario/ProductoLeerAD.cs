@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore; // Usar EF Core, no System.Data.Entity
 using TicoSportSocksConnect.Abstracciones.AD.Interfaces.Inventario;
 using TicoSportSocksConnect.Abstracciones.Modelos.Inventario;
+using TicoSportSocksConnect.Abstracciones.ModelosBaseDeDatos;
 
 namespace TicoSportsSocksConnect.AccesoADatos.Inventario
 {
@@ -20,18 +19,21 @@ namespace TicoSportsSocksConnect.AccesoADatos.Inventario
 
         public async Task<List<ProductosDto>> ObtenerTodosAsync()
         {
-            return await _contexto.Productos
-                .Select(p => new ProductosDto
-                {
-                    Producto_ID = p.Producto_ID,
-                    nombre = p.nombre,
-                    descripcion = p.descripcion,
-                    precio = p.precio,
-                    stock = p.stock,
-                    imagen = p.imagen,
-                    Categoria_ID = p.Categoria_ID
-                })
+            var productos = await _contexto.Productos
+                .Include(p => p.Categoria)
                 .ToListAsync();
+
+            return productos.Select(p => new ProductosDto
+            {
+                Producto_ID = p.Producto_ID,
+                nombre = p.nombre,
+                descripcion = p.descripcion,
+                precio = p.precio,
+                stock = p.stock,
+                imagen = p.imagen,
+                Categoria_ID = p.Categoria_ID,
+                CategoriaNombre = p.Categoria.nombre // Nueva propiedad
+            }).ToList();
         }
 
         public async Task<ProductosDto> ObtenerPorIdAsync(int id)
