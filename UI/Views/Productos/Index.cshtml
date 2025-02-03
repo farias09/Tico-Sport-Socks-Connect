@@ -2,6 +2,9 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var ordenStockActual = Request.QueryString["ordenStock"];
+    var categorias = ViewBag.Categorias as List<SelectListItem>;
+
 }
 <!doctype html>
 <html lang="en">
@@ -31,29 +34,45 @@
                 </div>
 
                 <!-- Panel superior: Filtros y acciones -->
-                <div class="row mb-4">
+                <form method="get" action="@Url.Action("Index")" class="row mb-4">
                     <div class="col-md-4">
-                        @Html.ActionLink("Registrar Nuevo Producto", "CrearProducto", null, new { @class = "btn btn-primary btn-lg w-100" })
+                        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre..." value="@ViewBag.Nombre" />
                     </div>
                     <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre..." />
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-select">
-                            <option value="">Filtrar por categoría</option>
-                            <option value="categoria1">Medias Antideslizantes</option>
-                            <option value="categoria2">Medias Cortadas</option>
-                            <option value="categoria3">Medias de Compresión</option>
-                            <option value="categoria4">Espinilleras</option>
-                            <option value="categoria5">Portaespinilleras</option>
+                        <select name="categoriaId" class="form-select">
+                            <option value="0">Filtrar por categoría</option>
+                            @if (categorias != null)
+                            {
+                                foreach (var categoria in categorias)
+                                {
+                                    <option value="@categoria.Value" @(ViewBag.CategoriaId.ToString() == categoria.Value ? "selected" : "")>@categoria.Text</option>
+                                }
+                            }
                         </select>
                     </div>
-                </div>
+                    <div class="col-md-2">
+                        <select name="estado" class="form-select">
+                            <option value="true" @(ViewBag.Estado == true ? "selected" : "")>Activo</option>
+                            <option value="false" @(ViewBag.Estado == false ? "selected" : "")>Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                    </div>
+                </form>
 
                 <!-- Tabla de productos -->
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Productos en Inventario</h5>
+                        <div class="position-absolute" style="left: 80%">
+                            <select id="ordenStock" class="form-select form-select-sm" style="width: auto;">
+                                <option value="desc" @(ordenStockActual == "desc" ? "selected" : "")>Stock Mayor a Menor</option>
+                                <option value="asc" @(ordenStockActual == "asc" ? "selected" : "")>Stock Menor a Mayor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body position-relative">
                         <p class="text-muted">Consulta, actualiza o inactiva productos en el inventario</p>
                         <table class="table table-bordered table-hover">
                             <thead class="table-light">
@@ -174,7 +193,13 @@
             });
         });
     </script>
-
+    <script>
+        document.getElementById("ordenStock").addEventListener("change", function () {
+            let ordenSeleccionado = this.value;
+            window.location.href = "@Url.Action("Index")" + "?ordenStock=" + ordenSeleccionado;
+        });
+    </script>
+    
 </body>
 
 </html>

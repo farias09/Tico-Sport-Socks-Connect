@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AD\Interfaces\Categorias\ListarCategorias\IListarCategoriasAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\CrearCaja\ICrearCajaAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\ListarCaja\IListarCajaAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
@@ -51,6 +52,9 @@
     <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IListarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\ListarVenta\IListarVentaAD.cs" />
+    <Compile Include="LN\Interfaces\Categorias\ListarCategorias\IListarCategoriasLN.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Categorias\ConvertirACategoriasDto\IConvertirACategoriasDto.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Categorias\ConvertirACategoriasTabla\IConvertirACategoriasTabla.cs" />
     <Compile Include="LN\Interfaces\Cajas\CrearCaja\ICrearCajaLN.cs" />
     <Compile Include="LN\Interfaces\Cajas\ListarCaja\IListarCajaLN.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Cajas\ConvertirACajasDto\IConvertirACajasDto.cs" />
@@ -89,8 +93,6 @@
     <Compile Include="Modelos\Ventas\VentasDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AccesoADatos\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

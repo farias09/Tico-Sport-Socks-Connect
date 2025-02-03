@@ -1,6 +1,8 @@
-﻿using Abstracciones.LN.Interfaces.Productos.CrearProducto;
+﻿using Abstracciones.LN.Interfaces.Categorias.ListarCategorias;
+using Abstracciones.LN.Interfaces.Productos.CrearProducto;
 using Abstracciones.LN.Interfaces.Productos.ListarProducto;
 using Abstracciones.Modelos.Productos;
+using LN.Categorias.ListarCategorias;
 using LN.Productos.CrearProducto;
 using LN.Productos.ListarProductos;
 using System;
@@ -16,16 +18,62 @@ namespace UI.Controllers
     {
         ICrearProductoLN _crearProducto;
         IListarProductoLN _listarProducto;
-
+        IListarCategoriasLN _listarCategorias;
         public ProductosController() 
         {
             _crearProducto = new CrearProductoLN();
             _listarProducto = new ListarProductoLN();
+            _listarCategorias = new ListarCategoriasLN();
         }
         // GET: Productos
-        public ActionResult Index()
+        public ActionResult Index(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
             List<ProductosDto> laListaDeProductos = _listarProducto.Listar();
+
+            var categorias = _listarCategorias.Listar() 
+        .Select(c => new SelectListItem
+        {
+            Value = c.Categoria_ID.ToString(),
+            Text = c.nombre
+        }).ToList();
+
+            ViewBag.Categorias = categorias;
+
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                laListaDeProductos = laListaDeProductos
+                    .Where(p => p.nombre.ToLower().Contains(nombre.ToLower()))
+                    .ToList();
+            }
+
+            if (categoriaId > 0) 
+            {
+                laListaDeProductos = laListaDeProductos
+                    .Where(p => p.Categoria_ID == categoriaId)
+                    .ToList();
+            }
+
+            laListaDeProductos = laListaDeProductos
+                .Where(p => p.Estado == estado)
+                .ToList();
+
+            if (!string.IsNullOrEmpty(ordenStock))
+            {
+                if (ordenStock == "asc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderBy(p => p.stock).ToList();
+                }
+                else if (ordenStock == "desc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderByDescending(p => p.stock).ToList();
+                }
+            }
+
+            ViewBag.Nombre = nombre;
+            ViewBag.CategoriaId = categoriaId;
+            ViewBag.Estado = estado;
+            ViewBag.OrdenStock = ordenStock;
+
             return View(laListaDeProductos);
         }
 

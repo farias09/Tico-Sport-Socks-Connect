@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categorias\ListarCategorias\ListarCategoriasAD.cs" />
     <Compile Include="Cajas\CrearCaja\CrearCajaAD.cs" />
     <Compile Include="Cajas\ListarCaja\ListarCajaAD.cs" />
     <Compile Include="Contexto.cs" />
