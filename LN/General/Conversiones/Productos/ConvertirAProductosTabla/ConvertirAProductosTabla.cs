@@ -13,16 +13,17 @@ namespace LN.General.Conversiones.Productos.ProductosTablaAProductosDto
     {
         public ProductosTabla ConvertirObjetoAProductosTabla(ProductosDto elProducto)
         {
-            return new ProductosTabla { 
+            return new ProductosTabla
+            {
                 nombre = elProducto.nombre,
                 descripcion = elProducto.descripcion,
-                precio = (decimal?)elProducto.precio,
+                precio = elProducto.precio,
                 stock = elProducto.stock,
                 imagen = elProducto.imagen,
                 CodigoDelProducto = elProducto.CodigoDelProducto,
                 Estado = elProducto.Estado,
                 Categoria_ID = elProducto.Categoria_ID
-                };
+            };
         }
     }
 }

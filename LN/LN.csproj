@@ -55,8 +55,11 @@
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
+    <Compile Include="Productos\ActualizarProducto\ActualizarProductoLN.cs" />
+    <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoLN.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoLN.cs" />
     <Compile Include="Productos\ListarProducto\ListarProductoLN.cs" />
+    <Compile Include="Productos\ObtenerPorId\ObtenerProductoPorIdLN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usuarios\CrearUsuario\CrearUsuarioLN.cs" />
     <Compile Include="Usuarios\ListarUsuario\ListarUsuarioLN.cs" />

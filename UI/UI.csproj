@@ -596,6 +596,7 @@
     <Content Include="Scripts\libs\slick-carousel\slick.jquery.json" />
     <Content Include="Views\Ventas\CrearVenta.cshtml" />
     <Content Include="Views\Ventas\Index.cshtml" />
+    <Content Include="Views\Productos\ActualizarProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -25,7 +25,7 @@ namespace Abstracciones.Modelos.Productos
         [Required(ErrorMessage = "El precio es obligatorio.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor a 0.")]
         [Display(Name = "Precio", Prompt = "Ingrese el precio del producto", Description = "Precio del Producto")]
-        public float precio { set; get; }
+        public double precio { set; get; }
 
         [Required(ErrorMessage = "El stock es obligatorio.")]
         [Range(0, int.MaxValue, ErrorMessage = "El stock debe ser un número positivo.")]
