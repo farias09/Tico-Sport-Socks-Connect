@@ -178,6 +178,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Unity.Mvc" Version="5.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\libs\apexcharts\locales\area_chart_irregular.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

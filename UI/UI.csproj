@@ -571,6 +571,8 @@
     <Content Include="Scripts\libs\slick-carousel\Makefile" />
     <Content Include="Scripts\libs\slick-carousel\README.markdown" />
     <Content Include="Scripts\libs\slick-carousel\slick.jquery.json" />
+    <Content Include="Views\Ventas\CrearVenta.cshtml" />
+    <Content Include="Views\Ventas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
