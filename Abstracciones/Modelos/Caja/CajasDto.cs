@@ -30,7 +30,7 @@ namespace Abstracciones.Modelos.Caja
         public decimal? total_gastos { get; set; }
 
         [Required]
-        public string estado {  get; set; }
+        public bool estado {  get; set; }
 
         [Required]
         public int Usuario_ID { get; set; }

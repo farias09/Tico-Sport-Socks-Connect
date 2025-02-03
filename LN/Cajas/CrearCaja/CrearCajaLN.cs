@@ -23,7 +23,7 @@ namespace LN.Cajas.CrearCaja
 
         public int Crear(CajasDto modelo)
         {
-            modelo.estado = "Abierta";
+            modelo.estado = true;
             int cantidadDeDatosGuardados =  _caja.Crear(_convertirACajasTabla.ConvertirObjetoACajasTabla(modelo));
             return cantidadDeDatosGuardados;
         }
