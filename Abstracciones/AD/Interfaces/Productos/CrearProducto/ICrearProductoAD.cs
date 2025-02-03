@@ -9,6 +9,6 @@ namespace Abstracciones.AD.Interfaces.Productos.CrearProducto
 {
     public interface ICrearProductoAD
     {
-        Task<int> Crear(ProductosTabla elProductoAGuardar);
+        Task<int> Guardar(ProductosTabla elProductoAGuardar);
     }
 }
