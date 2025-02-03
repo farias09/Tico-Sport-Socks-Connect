@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categorias\ListarCategorias\ListarCategoriasLN.cs" />
+    <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasDto\ConvertirACategoriasDto.cs" />
+    <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasTabla\ConvertirACategoriasTabla.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosDto\ConvertirAProductosDto.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosTabla\ConvertirAProductosTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
