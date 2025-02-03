@@ -14,7 +14,7 @@ namespace Abstracciones.Modelos.Ventas
 
         [Required]
         [Display(Name = "Fecha de Venta")]
-        public string fecha { get; set; }
+        public DateTime fecha { get; set; }
 
         [Required]
         [Display(Name = "Subtotal de la compra")]
@@ -25,6 +25,7 @@ namespace Abstracciones.Modelos.Ventas
         public decimal? total { get; set; }
 
         [Required]
+        [Display(Name = "Cliente que hizo la compra")]
         public int Usuario_ID { get; set; }
 
         [Required]
@@ -32,7 +33,7 @@ namespace Abstracciones.Modelos.Ventas
         public int Caja_ID { get; set; }
 
         [Required]
-        [Display(Name = "Estado")]
+        [Display(Name = "Cancelada")]
         public bool estado { get; set; }
     }
 }

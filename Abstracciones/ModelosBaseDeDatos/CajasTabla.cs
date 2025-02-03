@@ -13,8 +13,10 @@ namespace Abstracciones.ModelosBaseDeDatos
     {
         [Key]
         public int Caja_ID { get; set; }
+        public string nombre_caja { get; set; } 
+
         public DateTime fecha_apertura { get; set; }
-        public DateTime fecha_cierre { get; set; }
+        public DateTime? fecha_cierre { get; set; }
         public decimal? monto_inicial { get; set; }
         public decimal? monto_final {  get; set; }
         public decimal? total_ventas { get; set; }

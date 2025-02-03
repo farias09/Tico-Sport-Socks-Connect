@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosTabla
 {
-    internal class ConvertirAUsuarioTabla : IConvertirAUsuariosTabla
+    public class ConvertirAUsuarioTabla : IConvertirAUsuariosTabla
     {
-        public UsuariosTabla ConvertirAUsuariosDTO(UsuarioDto elUsuario)
+        public UsuariosTabla ConvertirObjetoAUsuariosTabla(UsuarioDto elUsuario)
         {
             return new UsuariosTabla
             {
@@ -20,7 +20,7 @@ namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosTabla
                 Telefono = elUsuario.Telefono,
                 Direccion = elUsuario.Direccion,
                 Provincia = elUsuario.Provincia,
-                Rol = elUsuario.Rol
+                Rol_ID = elUsuario.Rol_ID
             };
         }
     }
