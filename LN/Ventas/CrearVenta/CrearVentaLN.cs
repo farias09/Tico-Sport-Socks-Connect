@@ -26,7 +26,7 @@ namespace LN.Ventas.CrearVenta
 
         public async Task<int> Crear(VentasDto modelo)
         {
-            modelo.estado = true;
+            modelo.estado = "1";
             int cantidadDeDatosGuardados = await _crearVentaAD.Crear(_convertirAVentasTabla.ConvertirObjetoAVentasTabla(modelo));
             return cantidadDeDatosGuardados;
         }

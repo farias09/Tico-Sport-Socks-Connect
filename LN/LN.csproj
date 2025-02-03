@@ -42,24 +42,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cajas\CrearCaja\CrearCajaLN.cs" />
+    <Compile Include="Cajas\ListarCaja\ListarCajaLN.cs" />
+    <Compile Include="General\Conversiones\Cajas\ConvertirACajasDto\ConvertirACajasDto.cs" />
+    <Compile Include="General\Conversiones\Cajas\ConvertirACajasTabla\ConvertirACajasTabla.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosDto\ConvertirAProductosDto.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosTabla\ConvertirAProductosTabla.cs" />
+    <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosDto\ConvertirAUsuarioDto.cs" />
+    <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoLN.cs" />
     <Compile Include="Productos\ListarProducto\ListarProductoLN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Usuarios\CrearUsuario\CrearUsuarioLN.cs" />
+    <Compile Include="Usuarios\ListarUsuario\ListarUsuarioLN.cs" />
     <Compile Include="Ventas\CrearVenta\CrearVentaLN.cs" />
     <Compile Include="Ventas\ListarVenta\ListarVentaLN.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Caja\" />
     <Folder Include="Clientes\" />
     <Folder Include="Factura\" />
     <Folder Include="ListaOrdenes\" />
     <Folder Include="Ordenes\" />
     <Folder Include="Reportes\" />
-    <Folder Include="Usuarios\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">

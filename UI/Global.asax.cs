@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Unity;
+using Unity.AspNet.Mvc;
+using Unity.Mvc5;
 
 namespace UI
 {
@@ -16,6 +15,10 @@ namespace UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // 🚀 Configurar Unity en la Aplicación
+            UnityConfig.RegisterTypes(UnityConfig.Container);
+            DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(UnityConfig.Container));
         }
     }
 }
