@@ -13,7 +13,7 @@ namespace Abstracciones.ModelosBaseDeDatos
     {
         [Key]
         public int Venta_ID { get; set; }
-        public string fecha { get; set; }
+        public DateTime fecha { get; set; }
         public decimal? subtotal { get; set; }
         public decimal? total { get; set; }
         public int Usuario_ID { get; set; }

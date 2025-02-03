@@ -12,11 +12,13 @@ namespace Abstracciones.Modelos.Caja
         [Key]
         public int Caja_ID { get; set; }
 
-        [Required]
-        public string fecha_apertura { get; set; }
+        public string nombre_caja { get; set; }
 
         [Required]
-        public string fecha_cierre { get; set; }
+        public DateTime fecha_apertura { get; set; }
+
+        [Required]
+        public DateTime? fecha_cierre { get; set; }
 
         [Required]
         public decimal? monto_inicial { get; set; }

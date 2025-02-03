@@ -3,69 +3,90 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<meta charset="utf-8" />
+<title>Dashboard | Clivax - Admin & Dashboard Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+<meta content="Codebucks" name="author" />
 
-<!DOCTYPE html>
+<!-- Favicon -->
+<link rel="shortcut icon" href="~/Content/images/favicon.ico">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.subtotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario_ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Caja_ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.estado)
-            </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.subtotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Usuario_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Caja_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.estado)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Venta_ID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Venta_ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Venta_ID })
-            </td>
-        </tr>
-    }
-    
-    </table>
-</body>
-</html>
+<!-- dark layout js -->
+<script src="~/Scripts/js/pages/layout.js"></script>
+
+<!-- Bootstrap and app CSS -->
+<link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+<link rel="stylesheet" href="~/Content/css/app.css" />
+<link rel="stylesheet" href="~/Content/css/icons.css" />
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Ventas en Puntos de Venta Físicos</h2>
+                        <p>
+                            @Html.ActionLink("Create New", "Create")
+                        </p>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.fecha)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.subtotal)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.total)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Usuario_ID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Caja_ID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.estado)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fecha)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.subtotal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.total)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Usuario_ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Caja_ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.estado)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Venta_ID }) |
+                                        @Html.ActionLink("Details", "Details", new { id = item.Venta_ID }) |
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Venta_ID })
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

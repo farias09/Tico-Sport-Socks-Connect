@@ -14,7 +14,7 @@ namespace Abstracciones.Modelos.Usuarios
         public string Telefono { get; set; }
         public string Direccion { get; set; }
         public string Provincia { get; set; }
-        public int Rol { get; set; }
+        public int Rol_ID { get; set; }
         public bool estado { get; set; }
     }
 }

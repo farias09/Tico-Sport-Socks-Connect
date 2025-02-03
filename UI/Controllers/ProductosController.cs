@@ -1,9 +1,11 @@
-﻿using Abstracciones.LN.Interfaces.Productos.ActualizarProducto;
+using Abstracciones.LN.Interfaces.Categorias.ListarCategorias;
+using Abstracciones.LN.Interfaces.Productos.ActualizarProducto;
 using Abstracciones.LN.Interfaces.Productos.CambiarEstado;
 using Abstracciones.LN.Interfaces.Productos.CrearProducto;
 using Abstracciones.LN.Interfaces.Productos.ListarProducto;
 using Abstracciones.LN.Interfaces.Productos.ObtenerPorId;
 using Abstracciones.Modelos.Productos;
+using LN.Categorias.ListarCategorias;
 using LN.Productos.ActualizarProducto;
 using LN.Productos.CambiarEstado;
 using LN.Productos.CrearProducto;
@@ -22,22 +24,70 @@ namespace UI.Controllers
     {
         ICrearProductoLN _crearProducto;
         IListarProductoLN _listarProducto;
+        IListarCategoriasLN _listarCategorias;
         IActualizarProductoLN _actualizarProducto;
         IObtenerProductoPorIdLN _obtenerPorId;
         ICambiarEstadoProductoLN _cambiarEstado;
 
-        public ProductosController()
+        public ProductosController() 
         {
             _crearProducto = new CrearProductoLN();
             _listarProducto = new ListarProductoLN();
+            _listarCategorias = new ListarCategoriasLN();
             _actualizarProducto = new ActualizarProductoLN();
             _obtenerPorId = new ObtenerProductoPorIdLN();
             _cambiarEstado = new CambiarEstadoProductoLN();
         }
+        
         // GET: Productos
-        public ActionResult Index()
+        public ActionResult Index(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
             List<ProductosDto> laListaDeProductos = _listarProducto.Listar();
+
+            var categorias = _listarCategorias.Listar() 
+        .Select(c => new SelectListItem
+        {
+            Value = c.Categoria_ID.ToString(),
+            Text = c.nombre
+        }).ToList();
+
+            ViewBag.Categorias = categorias;
+
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                laListaDeProductos = laListaDeProductos
+                    .Where(p => p.nombre.ToLower().Contains(nombre.ToLower()))
+                    .ToList();
+            }
+
+            if (categoriaId > 0) 
+            {
+                laListaDeProductos = laListaDeProductos
+                    .Where(p => p.Categoria_ID == categoriaId)
+                    .ToList();
+            }
+
+            laListaDeProductos = laListaDeProductos
+                .Where(p => p.Estado == estado)
+                .ToList();
+
+            if (!string.IsNullOrEmpty(ordenStock))
+            {
+                if (ordenStock == "asc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderBy(p => p.stock).ToList();
+                }
+                else if (ordenStock == "desc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderByDescending(p => p.stock).ToList();
+                }
+            }
+
+            ViewBag.Nombre = nombre;
+            ViewBag.CategoriaId = categoriaId;
+            ViewBag.Estado = estado;
+            ViewBag.OrdenStock = ordenStock;
+
             return View(laListaDeProductos);
         }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosDto
 {
-    public class AgregarAUsuarioDto : IConvertirAUsuariosDto
+    public class ConvertirAUsuarioDto : IConvertirAUsuariosDto
     {
         public UsuarioDto ConvertirObjetoAUsuarioDto(UsuariosTabla elUsuario)
         {
@@ -20,7 +20,7 @@ namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosDto
                 Telefono = elUsuario.Telefono,
                 Direccion = elUsuario.Direccion,
                 Provincia = elUsuario.Provincia,
-                Rol = elUsuario.Rol
+                Rol_ID = elUsuario.Rol_ID
             };
         }
     }
