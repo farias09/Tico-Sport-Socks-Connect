@@ -30,7 +30,7 @@ namespace AcessoADatos.Usuarios.ListarUsuario
                                                     Telefono = elUsuario.Telefono,
                                                     Direccion = elUsuario.Direccion,
                                                     Provincia = elUsuario.Provincia,
-                                                    Rol = elUsuario.Rol,
+                                                    Rol_ID = elUsuario.Rol_ID,
                                                     estado = elUsuario.estado           
                                                   }).ToList();
             return laListaDeUsuarios;
