@@ -1,10 +1,16 @@
-﻿using Abstracciones.LN.Interfaces.Categorias.ListarCategorias;
+using Abstracciones.LN.Interfaces.Categorias.ListarCategorias;
+using Abstracciones.LN.Interfaces.Productos.ActualizarProducto;
+using Abstracciones.LN.Interfaces.Productos.CambiarEstado;
 using Abstracciones.LN.Interfaces.Productos.CrearProducto;
 using Abstracciones.LN.Interfaces.Productos.ListarProducto;
+using Abstracciones.LN.Interfaces.Productos.ObtenerPorId;
 using Abstracciones.Modelos.Productos;
 using LN.Categorias.ListarCategorias;
+using LN.Productos.ActualizarProducto;
+using LN.Productos.CambiarEstado;
 using LN.Productos.CrearProducto;
 using LN.Productos.ListarProductos;
+using LN.Productos.ObtenerPorId;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +25,20 @@ namespace UI.Controllers
         ICrearProductoLN _crearProducto;
         IListarProductoLN _listarProducto;
         IListarCategoriasLN _listarCategorias;
+        IActualizarProductoLN _actualizarProducto;
+        IObtenerProductoPorIdLN _obtenerPorId;
+        ICambiarEstadoProductoLN _cambiarEstado;
+
         public ProductosController() 
         {
             _crearProducto = new CrearProductoLN();
             _listarProducto = new ListarProductoLN();
             _listarCategorias = new ListarCategoriasLN();
+            _actualizarProducto = new ActualizarProductoLN();
+            _obtenerPorId = new ObtenerProductoPorIdLN();
+            _cambiarEstado = new CambiarEstadoProductoLN();
         }
+        
         // GET: Productos
         public ActionResult Index(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
@@ -114,20 +128,31 @@ namespace UI.Controllers
         }
 
         // GET: Productos/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult ActualizarProducto(int id)
         {
-            return View();
+            ProductosDto elProducto = _obtenerPorId.Obtener(id);
+            return View(elProducto);
         }
 
         // POST: Productos/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> ActualizarProducto(ProductosDto elProducto)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                var existeProducto = _listarProducto.Listar();
+                bool codigoDuplicado = existeProducto
+                    .Any(elProductoValido => elProductoValido.CodigoDelProducto == elProducto.CodigoDelProducto && elProductoValido.Producto_ID != elProducto.Producto_ID);
+                if (codigoDuplicado)
+                {
+                    ModelState.AddModelError("CodigoDelProducto", "Ya existe ese codigo de producto.");
+                    return View(elProducto);
+                }
+                else
+                {
+                    int cantidadDeDatosActualizados = await _actualizarProducto.Editar(elProducto);
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
@@ -154,6 +179,51 @@ namespace UI.Controllers
             catch
             {
                 return View();
+            }
+        }
+        public async Task<ActionResult> Activar(int id)
+        {
+            try
+            {
+                bool resultado = await _cambiarEstado.CambiarEstado(id, true);
+
+                if (resultado)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Mensaje = "No se pudo activar el producto.";
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Mensaje = "Ocurrió un error inesperado.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        public async Task<ActionResult> Inactivar(int id)
+        {
+            try
+            {
+                bool resultado = await _cambiarEstado.CambiarEstado(id, false);
+
+                if (resultado)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Mensaje = "No se pudo inactivar el producto.";
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Mensaje = "Ocurrió un error inesperado.";
+                return RedirectToAction("Index");
             }
         }
     }

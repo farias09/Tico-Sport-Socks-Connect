@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,8 +46,11 @@
     <Compile Include="AD\Interfaces\Categorias\ListarCategorias\IListarCategoriasAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\CrearCaja\ICrearCajaAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\ListarCaja\IListarCajaAD.cs" />
+    <Compile Include="AD\Interfaces\Productos\ActualizarProducto\IActualizarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\ListarProducto\IListarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Productos\ObtenerPorId\IObtenerProductoPorIdAD.cs" />
     <Compile Include="AD\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IListarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
@@ -65,8 +68,11 @@
     <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosTabla\IConvertirAUsuariosTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
+    <Compile Include="LN\Interfaces\Productos\ActualizarProducto\IActualizarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\ListarProducto\IListarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Productos\ObtenerPorId\IObtenerProductoPorIdLN.cs" />
     <Compile Include="LN\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\Usuarios\ListarUsuario\IListarUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\Ventas\CrearVenta\ICrearVentaLN.cs" />
