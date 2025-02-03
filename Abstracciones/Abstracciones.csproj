@@ -45,14 +45,20 @@
   <ItemGroup>
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\ListarProducto\IListarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioAD.cs" />
+    <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IlistarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\ListarVenta\IListarVentaAD.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosDto\IConvertirAProductosDto.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosTabla\IConvertirAProductosTabla.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosDto\IConvertirAUsuariosDto.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosTabla\IConvertirAUsuariosTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\ListarProducto\IListarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioLN.cs" />
+    <Compile Include="LN\Interfaces\Usuarios\ListarUsuario\IListarUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\Ventas\CrearVenta\ICrearVentaLN.cs" />
     <Compile Include="LN\Interfaces\Ventas\ListarVenta\IListarVentaLN.cs" />
     <Compile Include="ModelosBaseDeDatos\AuditoriaTabla.cs" />
@@ -63,6 +69,7 @@
     <Compile Include="ModelosBaseDeDatos\PagosTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\ProductosTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\ReportesTabla.cs" />
+    <Compile Include="ModelosBaseDeDatos\UsuariosTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\VentasTabla.cs" />
     <Compile Include="Modelos\Auditoria\AuditoriaDto.cs" />
     <Compile Include="Modelos\Caja\CajasDto.cs" />
@@ -72,6 +79,7 @@
     <Compile Include="Modelos\Pagos\PagosDto.cs" />
     <Compile Include="Modelos\Productos\ProductosDto.cs" />
     <Compile Include="Modelos\Reportes\ReportesDto.cs" />
+    <Compile Include="Modelos\Usuarios\UsuarioDto.cs" />
     <Compile Include="Modelos\Ventas\VentasDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

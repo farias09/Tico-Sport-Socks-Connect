@@ -26,7 +26,7 @@ namespace AcessoADatos.Productos.ListarProductos
                                                          Producto_ID = elProducto.Producto_ID,
                                                          nombre = elProducto.nombre,
                                                          descripcion = elProducto.descripcion,
-                                                         precio = elProducto.precio,
+                                                         precio = (float)elProducto.precio,
                                                          stock = elProducto.stock,
                                                          imagen = elProducto.imagen,
                                                          Categoria_ID = elProducto.Categoria_ID,

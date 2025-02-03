@@ -17,10 +17,12 @@ namespace LN.General.Conversiones.Productos.ConvertirAProductosDto
             {
                 nombre = elProducto.nombre,
                 descripcion = elProducto.descripcion,
-                precio = elProducto.precio,
+                precio = (float)elProducto.precio,
                 stock = elProducto.stock,
                 imagen = elProducto.imagen,
-                CodigoDelProducto = elProducto.CodigoDelProducto
+                CodigoDelProducto = elProducto.CodigoDelProducto,
+                Estado = elProducto.Estado,
+                Categoria_ID = elProducto.Categoria_ID
             };
         }
     }

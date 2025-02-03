@@ -23,10 +23,10 @@ namespace LN.Productos.CrearProducto
             _convertirAProductosTabla = new ConvertirAProductosTabla();
         }
 
-        public async Task<int> Crear(ProductosDto modelo)
+        public async Task<int> Guardar(ProductosDto modelo)
         {
             modelo.Estado = true;
-            int cantidadDeDatosGuardados = await _crearProductoAD.Crear(_convertirAProductosTabla.ConvertirObjetoAProductosTabla(modelo));
+            int cantidadDeDatosGuardados = await _crearProductoAD.Guardar(_convertirAProductosTabla.ConvertirObjetoAProductosTabla(modelo));
             return cantidadDeDatosGuardados;
         }
     }

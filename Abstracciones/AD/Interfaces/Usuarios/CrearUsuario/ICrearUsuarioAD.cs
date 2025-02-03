@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Abstracciones.AD.Interfaces.Productos.CrearProducto
+namespace Abstracciones.AD.Interfaces.Usuarios.CrearUsuario
 {
-    public interface ICrearProductoAD
+    public interface ICrearUsuarioAD
     {
-        Task<int> Guardar(ProductosTabla elProductoAGuardar);
+        int Crear(UsuariosTabla elUsuarioAGuardar);
     }
 }

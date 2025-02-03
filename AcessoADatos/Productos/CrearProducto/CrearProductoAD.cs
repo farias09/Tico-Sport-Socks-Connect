@@ -19,7 +19,7 @@ namespace AcessoADatos.Productos.CrearProducto
             _elContexto = new Contexto();
         }
 
-        public async Task<int> Crear(ProductosTabla elProductoAGuardar)
+        public async Task<int> Guardar(ProductosTabla elProductoAGuardar)
         {
             try
             {
