@@ -9,6 +9,6 @@ namespace Abstracciones.LN.Interfaces.Productos.CrearProducto
 {
     public interface ICrearProductoLN
     {
-        Task<int> Crear(ProductosDto modelo);
+        Task<int> Guardar(ProductosDto modelo);
     }
 }

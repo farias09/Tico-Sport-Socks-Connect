@@ -1,75 +1,180 @@
 ﻿@model IEnumerable<Abstracciones.Modelos.Productos.ProductosDto>
 
 @{
-    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!doctype html>
+<html lang="en">
 
-<h2>Index</h2>
+<head>
+    <meta charset="utf-8" />
+    <title>Gestión de Inventarios | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
 
-<p>
-    @Html.ActionLink("Create New", "CrearProducto")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.precio)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.stock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.imagen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Categoria_ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CodigoDelProducto)
-        </th>
-        <th></th>
-    </tr>
+    <script src="~/Scripts/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+</head>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.precio)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.stock)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.imagen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria_ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CodigoDelProducto)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Producto_ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Producto_ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Producto_ID })
-        </td>
-    </tr>
-}
+<body>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container mt-4">
+                <!-- Encabezado principal -->
+                <div class="text-center mb-4">
+                    <h1>Gestión de Inventarios</h1>
+                    <p class="text-muted">Administra y organiza los productos de tu inventario</p>
+                </div>
 
-</table>
+                <!-- Panel superior: Filtros y acciones -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        @Html.ActionLink("Registrar Nuevo Producto", "CrearProducto", null, new { @class = "btn btn-primary btn-lg w-100" })
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="Buscar por nombre..." />
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select">
+                            <option value="">Filtrar por categoría</option>
+                            <option value="categoria1">Medias Antideslizantes</option>
+                            <option value="categoria2">Medias Cortadas</option>
+                            <option value="categoria3">Medias de Compresión</option>
+                            <option value="categoria4">Espinilleras</option>
+                            <option value="categoria5">Portaespinilleras</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla de productos -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos en Inventario</h5>
+                        <p class="text-muted">Consulta, actualiza o inactiva productos en el inventario</p>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Imagen</th>
+                                    <th>Categoría</th>
+                                    <th>Estado</th>
+                                    <th>Código</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.nombre</td>
+                                        <td>@item.descripcion</td>
+                                        <td>@item.precio.ToString("C")</td>
+                                        <td><span class="badge bg-primary">@item.stock</span></td>
+                                        <td>@item.imagen</td>
+                                        <td>@item.Categoria_ID</td>
+                                        <td>
+                                            <span class="badge @(item.Estado ? "bg-success" : "bg-danger")">
+                                                @(item.Estado ? "Activo" : "Inactivo")
+                                            </span>
+                                        </td>
+                                        <td>@item.CodigoDelProducto</td>
+                                        <td>
+                                            @Html.ActionLink("Editar", "Edit", new { id = item.Producto_ID }, new { @class = "btn btn-sm btn-secondary" })
+                                            <button class="btn btn-sm btn-danger btn-toggle-status">@(item.Estado ? "Inactivar" : "Activar")</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Exportar inventario -->
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100">Exportar a PDF</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-secondary w-100">Exportar a Excel</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-success w-100">Exportar a CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleButtons = document.querySelectorAll(".btn-toggle-status");
+
+            toggleButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    }).fire({
+                        title: "¿Estás seguro?",
+                        text: "¡No podrás revertir este cambio!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cambiar estado",
+                        cancelButtonText: "No, cancelar",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const row = button.closest("tr");
+                            const statusCell = row.querySelector("td:nth-child(7) span");
+
+                            if (button.classList.contains("btn-danger")) {
+                                button.classList.remove("btn-danger");
+                                button.classList.add("btn-success");
+                                button.textContent = "Activar";
+
+                                statusCell.textContent = "Inactivo";
+                                statusCell.classList.remove("bg-success");
+                                statusCell.classList.add("bg-danger");
+                            } else {
+                                button.classList.remove("btn-success");
+                                button.classList.add("btn-danger");
+                                button.textContent = "Inactivar";
+
+                                statusCell.textContent = "Activo";
+                                statusCell.classList.remove("bg-danger");
+                                statusCell.classList.add("bg-success");
+                            }
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "El cambio de estado ha sido cancelado.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -56,7 +56,7 @@ namespace UI.Controllers
                     return View(modeloDelProducto);
                 }
 
-                int cantidadDeDatosGuardados = await _crearProducto.Crear(modeloDelProducto);
+                int cantidadDeDatosGuardados = await _crearProducto.Guardar(modeloDelProducto);
                 return RedirectToAction("Index");
             }
             catch
