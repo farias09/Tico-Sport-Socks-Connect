@@ -20,6 +20,8 @@ namespace UI.Controllers
             _listarVenta = listarVenta;
         }
 
+        public VentasController() { }
+
         // GET: Ventas
         public ActionResult Index()
         {

@@ -22,6 +22,7 @@ namespace AccesoADatos
             modelBuilder.Entity<ProductosTabla>().ToTable("Productos");
             modelBuilder.Entity<ReportesTabla>().ToTable("Reportes");
             modelBuilder.Entity<VentasTabla>().ToTable("Ventas");
+            modelBuilder.Entity<UsuariosTabla>().ToTable("Usuarios");
         }
 
         public DbSet<AuditoriaTabla> AuditoriaTabla { get; set; }
@@ -33,6 +34,7 @@ namespace AccesoADatos
         public DbSet<ProductosTabla> ProductosTabla { get; set; }
         public DbSet<ReportesTabla> ReportesTabla { get; set; }
         public DbSet<VentasTabla> VentasTabla { get; set; }
+        public DbSet<UsuariosTabla> UsuariosTabla { get; set; }
 
     }
 }
