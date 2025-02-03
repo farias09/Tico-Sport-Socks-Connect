@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abstracciones</RootNamespace>
     <AssemblyName>Abstracciones</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,10 +45,16 @@
   <ItemGroup>
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\ListarProducto\IListarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
+    <Compile Include="AD\Interfaces\Ventas\ListarVenta\IListarVentaAD.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosDto\IConvertirAProductosDto.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosTabla\IConvertirAProductosTabla.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
+    <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\ListarProducto\IListarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Ventas\CrearVenta\ICrearVentaLN.cs" />
+    <Compile Include="LN\Interfaces\Ventas\ListarVenta\IListarVentaLN.cs" />
     <Compile Include="ModelosBaseDeDatos\AuditoriaTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\CajasTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\CarritoTabla.cs" />
