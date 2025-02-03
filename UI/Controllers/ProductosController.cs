@@ -23,9 +23,22 @@ namespace UI.Controllers
             _listarProducto = new ListarProductoLN();
         }
         // GET: Productos
-        public ActionResult Index()
+        public ActionResult Index(string ordenStock)
         {
             List<ProductosDto> laListaDeProductos = _listarProducto.Listar();
+
+            if (!string.IsNullOrEmpty(ordenStock))
+            {
+                if (ordenStock == "asc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderBy(p => p.stock).ToList();
+                }
+                else if (ordenStock == "desc")
+                {
+                    laListaDeProductos = laListaDeProductos.OrderByDescending(p => p.stock).ToList();
+                }
+            }
+
             return View(laListaDeProductos);
         }
 

@@ -2,6 +2,8 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var ordenStockActual = Request.QueryString["ordenStock"]; 
+
 }
 <!doctype html>
 <html lang="en">
@@ -52,8 +54,16 @@
 
                 <!-- Tabla de productos -->
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Productos en Inventario</h5>
+                        <div class="position-absolute" style="left: 80%">
+                            <select id="ordenStock" class="form-select form-select-sm" style="width: auto;">
+                                <option value="desc" @(ordenStockActual == "desc" ? "selected" : "")>Stock Mayor a Menor</option>
+                                <option value="asc" @(ordenStockActual == "asc" ? "selected" : "")>Stock Menor a Mayor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body position-relative">
                         <p class="text-muted">Consulta, actualiza o inactiva productos en el inventario</p>
                         <table class="table table-bordered table-hover">
                             <thead class="table-light">
@@ -172,6 +182,12 @@
                     });
                 });
             });
+        });
+    </script>
+    <script>
+        document.getElementById("ordenStock").addEventListener("change", function () {
+            let ordenSeleccionado = this.value;
+            window.location.href = "@Url.Action("Index")" + "?ordenStock=" + ordenSeleccionado;
         });
     </script>
 
