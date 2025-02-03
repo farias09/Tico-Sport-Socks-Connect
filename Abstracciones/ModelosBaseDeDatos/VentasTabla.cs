@@ -18,6 +18,6 @@ namespace Abstracciones.ModelosBaseDeDatos
         public decimal? total { get; set; }
         public int Usuario_ID { get; set; }
         public int Caja_ID { get; set; }
-        public string estado { get; set; }
+        public bool estado { get; set; }
     }
 }

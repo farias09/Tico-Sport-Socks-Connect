@@ -33,7 +33,7 @@ namespace Abstracciones.Modelos.Ventas
         public int Caja_ID { get; set; }
 
         [Required]
-        [Display(Name = "Estado")]
-        public string estado { get; set; }
+        [Display(Name = "Cancelada")]
+        public bool estado { get; set; }
     }
 }
