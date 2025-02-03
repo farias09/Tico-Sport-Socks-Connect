@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AD\Interfaces\Productos\ActualizarProducto\IActualizarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\ListarProducto\IListarProductoAD.cs" />
+    <Compile Include="AD\Interfaces\Productos\ObtenerPorId\IObtenerProductoPorIdAD.cs" />
     <Compile Include="AD\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IlistarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
@@ -55,8 +58,11 @@
     <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosTabla\IConvertirAUsuariosTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
+    <Compile Include="LN\Interfaces\Productos\ActualizarProducto\IActualizarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\ListarProducto\IListarProductoLN.cs" />
+    <Compile Include="LN\Interfaces\Productos\ObtenerPorId\IObtenerProductoPorIdLN.cs" />
     <Compile Include="LN\Interfaces\Usuarios\CrearUsuario\ICrearUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\Usuarios\ListarUsuario\IListarUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\Ventas\CrearVenta\ICrearVentaLN.cs" />
