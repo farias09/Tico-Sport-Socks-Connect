@@ -3,38 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Owin;
 
 namespace UI.Controllers
 {
     public class OrdenesController : Controller
     {
-        // GET: Ordenes
+        // GET: OrdenesController
         public ActionResult Index()
         {
             return View();
         }
+        public ActionResult DetallesChat()
+        {
+            return View();
+        }
 
-        // GET: Ordenes/Details/5
+        public ActionResult VentaFisica()
+        {
+            return View();
+        }
+
+        public ActionResult DetalleProducto()
+        {
+            return View();
+        }
+
+        public ActionResult OrdenesPendientes()
+        {
+            return View();
+        }
+
+        // GET: OrdenesController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Ordenes/Create
+        // GET: OrdenesController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Ordenes/Create
+        // POST: OrdenesController/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -42,21 +61,20 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Ordenes/Edit/5
+        // GET: OrdenesController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Ordenes/Edit/5
+        // POST: OrdenesController/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -64,21 +82,20 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Ordenes/Delete/5
+        // GET: OrdenesController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Ordenes/Delete/5
+        // POST: OrdenesController/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

@@ -158,11 +158,14 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\CajaController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
+    <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
+    <Compile Include="Controllers\ListaOrdenesController.cs" />
     <Compile Include="Controllers\OrdenesController.cs" />
     <Compile Include="Controllers\ProductosController.cs" />
     <Compile Include="Controllers\ReportesController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Controllers\VentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -597,15 +600,22 @@
     <Content Include="Views\Ventas\CrearVenta.cshtml" />
     <Content Include="Views\Ventas\Index.cshtml" />
     <Content Include="Views\Productos\ActualizarProducto.cshtml" />
+    <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Clientes\Index.cshtml" />
+    <Content Include="Views\ListaOrdenes\Index.cshtml" />
+    <Content Include="Views\Factura\Index.cshtml" />
+    <Content Include="Views\Caja\Index.cshtml" />
+    <Content Include="Views\Ordenes\DetalleProducto.cshtml" />
+    <Content Include="Views\Ordenes\DetallesChat.cshtml" />
+    <Content Include="Views\Ordenes\Index.cshtml" />
+    <Content Include="Views\Ordenes\OrdenesPendientes.cshtml" />
+    <Content Include="Views\Ordenes\VentaFisica.cshtml" />
+    <Content Include="Views\Usuarios\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Caja\" />
-    <Folder Include="Views\Factura\" />
     <Folder Include="Views\Inventario\" />
-    <Folder Include="Views\Ordenes\" />
-    <Folder Include="Views\Reportes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
