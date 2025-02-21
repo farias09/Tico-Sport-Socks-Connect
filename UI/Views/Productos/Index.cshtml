@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Abstracciones.Modelos.Productos.ProductosDto>
+@model IEnumerable<Abstracciones.Modelos.Productos.ProductosDto>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +10,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <title>Gestión de Inventarios | Clivax - Admin & Dashboard Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
@@ -29,7 +29,7 @@
             <div class="container mt-4">
                 <!-- Encabezado principal -->
                 <div class="text-center mb-4">
-                    <h1>Gestión de Inventarios</h1>
+                    <h1>Gestion de Inventarios</h1>
                     <p class="text-muted">Administra y organiza los productos de tu inventario</p>
                 </div>
 
@@ -94,9 +94,12 @@
                                     <tr>
                                         <td>@item.nombre</td>
                                         <td>@item.descripcion</td>
-                                        <td>@item.precio.ToString("C")</td>
+                                        <td>@item.precio.ToString("₡#,##0.00")</td>
                                         <td><span class="badge bg-primary">@item.stock</span></td>
-                                        <td>@item.imagen</td>
+                                        <td>
+                                            <img src="@item.imagen" alt="Imagen de @item.nombre" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                        </td>
+
                                         <td>@item.Categoria_ID</td>
                                         <td>
                                             <span class="badge @(item.Estado ? "bg-success" : "bg-danger")">
@@ -105,8 +108,22 @@
                                         </td>
                                         <td>@item.CodigoDelProducto</td>
                                         <td>
-                                            @Html.ActionLink("Editar", "Edit", new { id = item.Producto_ID }, new { @class = "btn btn-sm btn-secondary" })
-                                            <button class="btn btn-sm btn-danger btn-toggle-status">@(item.Estado ? "Inactivar" : "Activar")</button>
+                                            @Html.ActionLink("Editar", "ActualizarProducto", new { id = item.Producto_ID }, new { @class = "btn btn-sm btn-secondary" })
+
+                                            @if (item.Estado)
+                                            {
+                                                <a href="#" class="btn btn-danger btn-sm btn-toggle-status"
+                                                   data-url="@Url.Action("Inactivar", "Productos", new { id = item.Producto_ID })">
+                                                    Inactivar
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="btn btn-success btn-sm btn-toggle-status"
+                                                   data-url="@Url.Action("Activar", "Productos", new { id = item.Producto_ID })">
+                                                    Activar
+                                                </a>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -144,49 +161,29 @@
             const toggleButtons = document.querySelectorAll(".btn-toggle-status");
 
             toggleButtons.forEach(button => {
-                button.addEventListener("click", () => {
-                    Swal.mixin({
+                button.addEventListener("click", (event) => {
+                    event.preventDefault(); // Evita la redirección inmediata
+
+                    const url = button.getAttribute("data-url");
+                    const accion = button.classList.contains("btn-danger") ? "inactivar" : "activar";
+
+                    Swal.fire({
+                        title: "¿Estás seguro?",
+                        text: `Vas a ${accion} este producto. ¡No podrás revertir este cambio!`,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: `Sí, ${accion}`,
+                        cancelButtonText: "No, cancelar",
                         customClass: {
                             confirmButton: "btn btn-success",
                             cancelButton: "btn btn-danger"
                         },
                         buttonsStyling: false
-                    }).fire({
-                        title: "¿Estás seguro?",
-                        text: "¡No podrás revertir este cambio!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Sí, cambiar estado",
-                        cancelButtonText: "No, cancelar",
-                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const row = button.closest("tr");
-                            const statusCell = row.querySelector("td:nth-child(7) span");
-
-                            if (button.classList.contains("btn-danger")) {
-                                button.classList.remove("btn-danger");
-                                button.classList.add("btn-success");
-                                button.textContent = "Activar";
-
-                                statusCell.textContent = "Inactivo";
-                                statusCell.classList.remove("bg-success");
-                                statusCell.classList.add("bg-danger");
-                            } else {
-                                button.classList.remove("btn-success");
-                                button.classList.add("btn-danger");
-                                button.textContent = "Inactivar";
-
-                                statusCell.textContent = "Activo";
-                                statusCell.classList.remove("bg-danger");
-                                statusCell.classList.add("bg-success");
-                            }
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            Swal.fire({
-                                title: "Cancelado",
-                                text: "El cambio de estado ha sido cancelado.",
-                                icon: "error"
-                            });
+                            window.location.href = url; // Redirigir a la acción correspondiente
+                        } else {
+                            Swal.fire("Cancelado", "El estado del producto no ha cambiado.", "error");
                         }
                     });
                 });
@@ -199,7 +196,7 @@
             window.location.href = "@Url.Action("Index")" + "?ordenStock=" + ordenSeleccionado;
         });
     </script>
-    
+   
 </body>
 
 </html>

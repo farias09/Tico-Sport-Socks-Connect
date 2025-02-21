@@ -15,7 +15,7 @@ namespace Abstracciones.ModelosBaseDeDatos
         public int Producto_ID { get; set; }
         public string nombre { get; set; }
         public string descripcion { get; set; }
-        public decimal? precio { get; set; }
+        public double precio { get; set; }
         public int stock { get; set; }
         public string imagen { get; set; }
         public int Categoria_ID { get; set; }
