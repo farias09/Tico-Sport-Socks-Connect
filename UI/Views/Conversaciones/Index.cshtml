@@ -1,0 +1,180 @@
+﻿@model UI.Models.ConversacionesChatViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Conversaciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <script src="~/Scripts/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+
+    <style>
+
+        .chat-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+            .chat-placeholder i {
+                font-size: 50px;
+                color: #bbb;
+                margin-bottom: 10px;
+            }
+
+        .contenedor-chat {
+            display: flex;
+            height: 80vh;
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        .lista-conversaciones {
+            width: 30%;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            background: #fff;
+            margin-left: 65px;
+            border-radius: 8px;
+        }
+
+        .chat-panel {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f9f9f9;
+            margin-left: 30px;
+            border-radius: 8px;
+        }
+
+
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .mensaje {
+            max-width: 60%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+            /* Mensajes enviados por el usuario */
+            .mensaje.mio {
+                align-self: flex-end;
+                background-color: #4CAF50;
+                color: white;
+                text-align: right;
+            }
+
+            /* Mensajes recibidos */
+            .mensaje.otro {
+                align-self: flex-start;
+                background-color: #E5E5E5;
+                color: black;
+                text-align: left;
+            }
+
+            /* Formato para la fecha debajo del mensaje */
+            .mensaje .fecha {
+                display: block;
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.7);
+                margin-top: 5px;
+                text-align: right;
+            }
+
+            .mensaje.otro .fecha {
+                color: rgba(0, 0, 0, 0.5);
+            }
+    </style>
+
+</head>
+<body>
+    <div class="contenedor-chat">
+        <!-- Panel Izquierdo: Lista de conversaciones -->
+        <div class="lista-conversaciones">
+            <h4>Conversaciones</h4>
+            <ul class="list-group">
+                @foreach (var conversacion in Model.Conversaciones)
+                {
+                    <li class="list-group-item">
+                        <a href="@Url.Action("Index", "Conversaciones", new { id = conversacion.UsuarioId })"
+                           class="abrir-chat"
+                           data-id="@conversacion.UsuarioId">
+                            <strong>@conversacion.Nombre</strong><br>
+                            <small>@conversacion.Numero</small>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Panel Derecho: Chat -->
+        <div class="chat-panel" id="chat-container">
+            @if (Model.Chat != null)
+            {
+                @Html.Partial("_Chat", Model.Chat)
+            }
+            else
+            {
+                <div class="chat-placeholder">
+                    <i class="fas fa-comments"></i>
+                    <p>Seleccione una conversación para ver los mensajes.</p>
+                </div>
+            }
+        </div>
+
+    </div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".abrir-chat").click(function (e) {
+            e.preventDefault();
+            var chatUrl = $(this).attr("href");
+
+            $("#chat-container").load(chatUrl + " #chat-container > *");
+        });
+    });
+</script>

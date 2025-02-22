@@ -1,0 +1,135 @@
+﻿@model UI.Models.ChatViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Chat</title>
+</head>
+<body>
+    <h2>Chat con @Model.Nombre (@Model.Numero)</h2>
+
+    <div class="chat-box">
+        @foreach (var mensaje in Model.Mensajes)
+        {
+            <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
+                <p>@mensaje.Contenido</p>
+                <span class="fecha">@mensaje.Fecha.ToString("g")</span>
+            </div>
+        }
+    </div>
+
+    <!-- Formulario de envío -->
+    <form id="chatForm">
+        <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
+        <textarea id="mensaje" placeholder="Escribe tu mensaje..." class="form-control"></textarea>
+        <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+
+    <style>
+        .chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .mensaje {
+            padding: 5px;
+            margin: 5px 0;
+        }
+
+        .mio {
+            background-color: lightgreen;
+            text-align: right;
+        }
+
+        .otro {
+            background-color: lightgray;
+            text-align: left;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .mensaje {
+            max-width: 60%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+            /* Mensajes enviados por el usuario */
+            .mensaje.mio {
+                align-self: flex-end;
+                background-color: #4CAF50;
+                color: white;
+                text-align: right;
+            }
+
+            /* Mensajes recibidos */
+            .mensaje.otro {
+                align-self: flex-start;
+                background-color: #E5E5E5;
+                color: black;
+                text-align: left;
+            }
+
+            /* Formato para la fecha debajo del mensaje */
+            .mensaje .fecha {
+                display: block;
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.7);
+                margin-top: 5px;
+                text-align: right;
+            }
+
+            .mensaje.otro .fecha {
+                color: rgba(0, 0, 0, 0.5);
+            }
+    </style>
+</body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Definir la función en el ámbito global
+    function actualizarMensajes() {
+        var usuarioId = $("#usuarioId").val();
+        console.log("Actualizando mensajes para el usuario:", usuarioId);
+
+        $.ajax({
+            url: '/Conversaciones/ObtenerMensajes', // Asegúrate de que la URL sea correcta
+            type: 'GET',
+            data: { id: usuarioId },
+            success: function (data) {
+                console.log("Mensajes actualizados correctamente.");
+                $("#mensajes-container").html(data); // Reemplaza el contenido del chat con los mensajes nuevos
+            },
+            error: function () {
+                console.log("Error al obtener mensajes.");
+            }
+        });
+    }
+
+    // Cuando el documento está listo, inicia la actualización automática
+    $(document).ready(function () {
+        actualizarMensajes(); // Llamada inicial para que cargue los mensajes al abrir el chat
+        setInterval(actualizarMensajes, 5000); // Se ejecuta cada 5 segundos
+    });
+</script>
