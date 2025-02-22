@@ -114,12 +114,12 @@
         console.log("Actualizando mensajes para el usuario:", usuarioId);
 
         $.ajax({
-            url: '/Conversaciones/ObtenerMensajes', // Asegúrate de que la URL sea correcta
+            url: '/Conversaciones/ObtenerMensajes', 
             type: 'GET',
             data: { id: usuarioId },
             success: function (data) {
                 console.log("Mensajes actualizados correctamente.");
-                $("#mensajes-container").html(data); // Reemplaza el contenido del chat con los mensajes nuevos
+                $("#mensajes-container").html(data); 
             },
             error: function () {
                 console.log("Error al obtener mensajes.");
@@ -127,9 +127,9 @@
         });
     }
 
-    // Cuando el documento está listo, inicia la actualización automática
+    
     $(document).ready(function () {
-        actualizarMensajes(); // Llamada inicial para que cargue los mensajes al abrir el chat
+        actualizarMensajes(); 
         setInterval(actualizarMensajes, 5000); // Se ejecuta cada 5 segundos
     });
 </script>

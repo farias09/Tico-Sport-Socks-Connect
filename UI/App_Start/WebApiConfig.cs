@@ -14,25 +14,20 @@ namespace UI
     {
         public static void Register(HttpConfiguration config)
         {
-            // ✅ Habilitar CORS para aceptar solicitudes externas
             var cors = new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
 
-            // Configurar rutas de atributos
             config.MapHttpAttributeRoutes();
 
-            // Configurar rutas por defecto
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            // Configurar Unity como el resolver de dependencias
             var container = UnityConfig.Container;
             config.DependencyResolver = new UnityDependencyResolver(container);
 
-            // Agregar manejo de errores global
             config.Filters.Add(new GlobalExceptionHandler());
         }
 

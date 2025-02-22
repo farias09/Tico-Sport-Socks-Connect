@@ -97,7 +97,7 @@ namespace UI.Controllers
                 {
                     Contenido = m.contenido,
                     Fecha = m.fecha,
-                    EsMio = m.emisor_ID != id // Para diferenciar quién envió el mensaje
+                    EsMio = m.emisor_ID != id 
                 }).ToList()
             };
 
@@ -121,7 +121,7 @@ namespace UI.Controllers
 
             var nuevoMensaje = new MensajesTabla
             {
-                emisor_ID = 1, // Aquí iría el ID del usuario autenticado en tu sistema
+                emisor_ID = 1, 
                 receptor_ID = usuario.Usuario_ID,
                 contenido = contenido,
                 fecha = DateTime.UtcNow
