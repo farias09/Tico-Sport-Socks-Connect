@@ -1,0 +1,90 @@
+﻿@model UI.Models.ChatViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <!-- dark layout js -->
+    <script src="~/Scripts/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+</head>
+<body>
+    <h2>Chat con @Model.Nombre (@Model.Numero)</h2>
+
+    <div class="chat-box">
+        @foreach (var mensaje in Model.Mensajes)
+        {
+            <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
+                <p>@mensaje.Contenido</p>
+                <span class="fecha">@mensaje.Fecha.ToString("g")</span>
+            </div>
+        }
+    </div>
+
+    <form id="chatForm">
+        <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
+        <textarea id="mensaje" placeholder="Escribe un mensaje..." class="form-control"></textarea>
+        <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+
+    <style>
+        .chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+        }
+
+        .mensaje {
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .mio {
+            background-color: #d1e7dd;
+            text-align: right;
+        }
+
+        .otro {
+            background-color: #f8d7da;
+        }
+
+        .fecha {
+            font-size: 0.8em;
+            color: #555;
+        }
+    </style>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $("#chatForm").submit(function (e) {
+            e.preventDefault();
+
+            var usuarioId = $("#usuarioId").val();
+            var mensaje = $("#mensaje").val();
+
+            $.post("@Url.Action("EnviarMensaje", "Conversaciones")", { id: usuarioId, contenido: mensaje }, function (data) {
+                location.reload();
+            });
+        });
+    });
+</script>
