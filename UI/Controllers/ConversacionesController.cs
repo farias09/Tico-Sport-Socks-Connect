@@ -41,11 +41,26 @@ namespace UI.Controllers
                 })
                 .ToList();
 
+            // Asumiendo que tienes una tabla o método para obtener productos,
+            // mapea los datos a tu ProductosDto.
+            var productos = _contexto.ProductosTabla
+                .Select(p => new Abstracciones.Modelos.Productos.ProductosDto
+                {
+                    // Ajusta los nombres de las propiedades según tu modelo
+                    Producto_ID = p.Producto_ID,
+                    nombre = p.nombre,
+                    imagen = p.imagen,
+                    precio = p.precio,
+                    stock = p.stock
+                })
+                .ToList();
+
             // Crear el modelo combinado
             var modelo = new ConversacionesChatViewModel
             {
                 Conversaciones = listaConversaciones,
-                Chat = null
+                Chat = null,
+                Productos = productos 
             };
 
             // Si hay un ID de usuario seleccionado, cargar los mensajes
@@ -73,6 +88,7 @@ namespace UI.Controllers
 
             return View(modelo);
         }
+
 
         public ActionResult Chat(int id)
         {
