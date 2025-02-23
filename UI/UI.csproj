@@ -246,6 +246,7 @@
     <Compile Include="Models\ChatViewModel.cs" />
     <Compile Include="Models\ConversacionesChatViewModel.cs" />
     <Compile Include="Models\ConversacionViewModel.cs" />
+    <Compile Include="Models\OrdenViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -691,6 +692,10 @@
     <Content Include="Views\Conversaciones\Chat.cshtml" />
     <Content Include="Views\Conversaciones\_Chat.cshtml" />
     <Content Include="Views\Conversaciones\_Mensajes.cshtml" />
+    <Content Include="Views\Shared\_Productos.cshtml" />
+    <Content Include="Views\Ordenes\VerCarrito.cshtml" />
+    <Content Include="Views\Ordenes\Create.cshtml" />
+    <Content Include="Views\Ordenes\Confirmacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,5 +10,6 @@ namespace Abstracciones.LN.Interfaces.Usuarios.ListarUsuario
     public interface IListarUsuarioLN
     {
         List<UsuarioDto> Listar();
+        UsuarioDto ObtenerUsuarioPorId(int usuarioId);
     }
 }
