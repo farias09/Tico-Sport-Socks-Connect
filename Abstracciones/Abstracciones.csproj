@@ -46,6 +46,7 @@
     <Compile Include="AD\Interfaces\Categorias\ListarCategorias\IListarCategoriasAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\CrearCaja\ICrearCajaAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\ListarCaja\IListarCajaAD.cs" />
+    <Compile Include="AD\Interfaces\Mensajes\IMensajeRepositorio.cs" />
     <Compile Include="AD\Interfaces\Productos\ActualizarProducto\IActualizarProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosTabla\IConvertirAUsuariosTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
+    <Compile Include="LN\Interfaces\Mensajes\IMensajeService.cs" />
     <Compile Include="LN\Interfaces\Productos\ActualizarProducto\IActualizarProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />

@@ -13,10 +13,25 @@ namespace UI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes();
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+
+            );
+
+            routes.MapRoute(
+            name: "Conversaciones",
+            url: "Conversaciones",
+            defaults: new { controller = "Conversaciones", action = "Index" }
+            );
+
+            routes.MapRoute(
+            name: "Chat",
+            url: "Conversaciones/Chat/{id}",
+            defaults: new { controller = "Mensajes", action = "Chat", id = UrlParameter.Optional }
             );
         }
     }

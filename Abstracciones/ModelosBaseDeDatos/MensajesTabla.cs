@@ -16,6 +16,7 @@ namespace Abstracciones.ModelosBaseDeDatos
         public int emisor_ID { get; set; }
         public int receptor_ID { get; set; }
         public string contenido { get; set; }
+        public string numeroRemitente { get; set; }
         public DateTime fecha { get; set; }
     }
 }

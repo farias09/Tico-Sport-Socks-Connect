@@ -55,6 +55,7 @@
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
+    <Compile Include="Mensajes\MensajeService.cs" />
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoLN.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoLN.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoLN.cs" />
