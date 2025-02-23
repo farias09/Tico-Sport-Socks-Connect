@@ -1,0 +1,184 @@
+﻿@model UI.Models.OrdenViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Crear Orden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <script src="~/Scripts/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+
+    <style>
+        .contenedor-orden {
+            margin-left: 260px; 
+            padding-top: 80px; 
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        /* Estilos de la tabla de productos */
+        .tabla-productos {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .tabla-productos th, .tabla-productos td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .tabla-productos th {
+                background-color: #f8f9fa;
+            }
+
+        /* Botón de Crear Orden */
+        .boton-crear {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .select-producto {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-orden">
+        @using (Html.BeginForm("Create", "Ordenes", FormMethod.Post))
+        {
+            <h2>Crear Orden</h2>
+
+            <div class="form-group">
+                <label for="Usuario_ID">Seleccionar Usuario</label>
+                @Html.DropDownListFor(m => m.Orden.Usuario_ID, ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control" })
+            </div>
+
+
+            <!-- Dropdown para seleccionar productos -->
+            <div class="form-group">
+                <label>Seleccionar Productos</label>
+                <select id="select-producto" class="form-control">
+                    <option value="">Seleccione un producto</option>
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <option value="@producto.Producto_ID" data-nombre="@producto.nombre" data-precio="@producto.precio">
+                            @producto.nombre - @producto.precio
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Entrada para la cantidad -->
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" id="cantidad-producto" class="form-control" placeholder="Ingrese la cantidad" min="1">
+            </div>
+
+            <!-- Botón para agregar productos -->
+            <button type="button" id="agregar-producto" class="btn btn-success">Agregar Producto</button>
+
+            <!-- Tabla de productos seleccionados -->
+            <h3 class="mt-3">Productos Seleccionados</h3>
+            <table class="table table-bordered mt-2">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-seleccionados">
+                    <!-- Aquí se insertarán dinámicamente los productos -->
+                </tbody>
+            </table>
+
+            <!-- Campo oculto para almacenar los productos seleccionados -->
+            <input type="hidden" name="ProductosSeleccionadosJson" id="ProductosSeleccionadosJson">
+
+            <button type="submit" class="btn btn-primary mt-2">Crear Orden</button>
+        }
+    </div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var productosSeleccionados = [];
+
+        $("#agregar-producto").click(function () {
+            var productoID = $("#select-producto").val();
+            var nombre = $("#select-producto option:selected").data("nombre");
+            var precio = $("#select-producto option:selected").data("precio");
+            var cantidad = $("#cantidad-producto").val();
+
+            if (!productoID || cantidad <= 0) {
+                alert("Seleccione un producto y una cantidad válida.");
+                return;
+            }
+
+            // Verificar si el producto ya está en la lista
+            var existe = productosSeleccionados.find(p => p.Producto_ID == productoID);
+            if (existe) {
+                alert("Este producto ya ha sido agregado.");
+                return;
+            }
+
+            // Agregar producto a la lista
+            var subtotal = precio * cantidad;
+            productosSeleccionados.push({
+                Producto_ID: productoID,
+                Nombre: nombre,
+                Precio: precio,
+                Cantidad: cantidad,
+                Subtotal: subtotal
+            });
+
+            // Actualizar la tabla
+            actualizarTabla();
+        });
+
+        function actualizarTabla() {
+            var tabla = $("#productos-seleccionados");
+            tabla.empty();
+            productosSeleccionados.forEach((producto, index) => {
+                tabla.append(`
+                    <tr>
+                        <td>${producto.Nombre}</td>
+                        <td>${producto.Precio}</td>
+                        <td>${producto.Cantidad}</td>
+                        <td>${producto.Subtotal}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button></td>
+                    </tr>
+                `);
+            });
+
+            // Convertir lista a JSON y guardarla en un campo oculto
+            $("#ProductosSeleccionadosJson").val(JSON.stringify(productosSeleccionados));
+        }
+
+        window.eliminarProducto = function (index) {
+            productosSeleccionados.splice(index, 1);
+            actualizarTabla();
+        };
+    });
+</script>
+
