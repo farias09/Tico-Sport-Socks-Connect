@@ -1,77 +1,42 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using TicoSportSocksConnect.Abstracciones.LN.Interfaces.Inventario;
+using TicoSportSocksConnect.Abstracciones.Modelos.Inventario;
 
 namespace Frontend.Controllers
 {
     public class InventarioController : Controller
     {
-        // GET: InventarioController
-        public ActionResult Index()
+        private readonly IProductoCrearLN _productoCrearLN;
+        private readonly IProductoLeerLN _productoLeerLN;
+        private readonly IProductoActualizarLN _productoActualizarLN;
+        private readonly IProductoEliminarLN _productoEliminarLN;
+
+        public InventarioController(
+            IProductoCrearLN productoCrearLN,
+            IProductoLeerLN productoLeerLN,
+            IProductoActualizarLN productoActualizarLN,
+            IProductoEliminarLN productoEliminarLN)
         {
-            return View();
+            _productoCrearLN = productoCrearLN;
+            _productoLeerLN = productoLeerLN;
+            _productoActualizarLN = productoActualizarLN;
+            _productoEliminarLN = productoEliminarLN;
         }
 
-        // GET: InventarioController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var productos = await _productoLeerLN.ObtenerTodosAsync();
+            return View(productos);
         }
 
-        // GET: InventarioController/Create
-        public ActionResult RegistrarProducto()
-        {
-            return View();
-        }
-
-        // POST: InventarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RegistrarProducto(IFormCollection collection)
+        public async Task<ActionResult> RegistrarProducto(ProductosDto producto)
         {
             try
             {
-                return RedirectToAction(nameof(RegistrarProducto));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: InventarioController/Edit/5
-        public ActionResult EditarProducto()
-        {
-            return View();
-        }
-
-        // POST: InventarioController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditarProducto(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: InventarioController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: InventarioController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
+                await _productoCrearLN.CrearAsync(producto);
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -10,7 +10,6 @@
     <Folder Include="AD\Interfaces\Caja\" />
     <Folder Include="AD\Interfaces\Clientes\" />
     <Folder Include="AD\Interfaces\Factura\" />
-    <Folder Include="AD\Interfaces\Inventario\" />
     <Folder Include="AD\Interfaces\ListaOrdenes\" />
     <Folder Include="AD\Interfaces\Ordenes\" />
     <Folder Include="AD\Interfaces\Reportes\" />
@@ -18,7 +17,6 @@
     <Folder Include="LN\Interfaces\Caja\" />
     <Folder Include="LN\Interfaces\Clientes\" />
     <Folder Include="LN\Interfaces\Factura\" />
-    <Folder Include="LN\Interfaces\Inventario\" />
     <Folder Include="LN\Interfaces\ListaOrdenes\" />
     <Folder Include="LN\Interfaces\Ordenes\" />
     <Folder Include="LN\Interfaces\Reportes\" />
