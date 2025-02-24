@@ -1,14 +1,10 @@
 ﻿using Abstracciones.AD.Interfaces.Cajas.CrearCaja;
 using Abstracciones.ModelosBaseDeDatos;
-using AccesoADatos;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AcessoADatos.Cajas.CrearCaja
+namespace AccesoADatos.Cajas.CrearCaja
 {
     public class CrearCajaAD : ICrearCajaAD
     {
@@ -33,6 +29,11 @@ namespace AcessoADatos.Cajas.CrearCaja
 
                 throw new Exception("Error al crear la caja en la base de datos.", ex);
             }
+        }
+
+        public bool HayCajaAbierta()
+        {
+            return _elContexto.CajasTabla.Any(c => c.estado == true);
         }
     }
 }
