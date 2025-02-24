@@ -10,5 +10,7 @@ namespace Abstracciones.LN.Interfaces.Cajas.CrearCaja
     public interface ICrearCajaLN
     {
         int Crear(CajasDto modelo);
+
+        bool VerificarCajaAbierta();
     }
 }

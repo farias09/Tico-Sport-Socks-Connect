@@ -2,11 +2,6 @@
 using Abstracciones.LN.Interfaces.Cajas.CrearCaja;
 using Abstracciones.LN.Interfaces.General.Conversiones.Usuarios.ConvertirAUsuariosTabla;
 using Abstracciones.Modelos.Caja;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LN.Cajas.CrearCaja
 {
@@ -26,6 +21,11 @@ namespace LN.Cajas.CrearCaja
             modelo.estado = true;
             int cantidadDeDatosGuardados =  _caja.Crear(_convertirACajasTabla.ConvertirObjetoACajasTabla(modelo));
             return cantidadDeDatosGuardados;
+        }
+
+        public bool VerificarCajaAbierta()
+        {
+            return _caja.HayCajaAbierta(); // Llama a la capa de acceso a datos
         }
     }
 }
