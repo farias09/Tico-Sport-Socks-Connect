@@ -1,8 +1,10 @@
 ﻿using Abstracciones.LN.Interfaces.Cajas.CrearCaja;
+using Abstracciones.LN.Interfaces.Cajas.ListarCaja;
 using Abstracciones.LN.Interfaces.MovimientosCaja;
 using Abstracciones.Modelos.Caja;
 using Abstracciones.Modelos.MovimientosCaja;
 using LN.Cajas.CrearCaja;
+using LN.Cajas.ListarCaja;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +19,20 @@ namespace UI.Controllers
     {
         private readonly ICrearCajaLN _crearCajaLN;
         private readonly ICrearMovimientoLN _crearMovimientoLN;
+        private readonly IListarCajaLN _listarCajaLN;
 
-        public CajaController(ICrearMovimientoLN crearMovimientoLN, ICrearCajaLN crearCajaLN)
+        public CajaController(ICrearMovimientoLN crearMovimientoLN, ICrearCajaLN crearCajaLN, IListarCajaLN listarCajaLN)
         {
             _crearCajaLN = crearCajaLN;
             _crearMovimientoLN = crearMovimientoLN;
+            _listarCajaLN = listarCajaLN;
         }
 
         // GET: Caja
         public ActionResult Index()
         {
-            return View();
+            List<CajasDto> laListaDeCajas = _listarCajaLN.Listar();
+            return View(laListaDeCajas);
         }
 
         // GET: Caja/Details/5
