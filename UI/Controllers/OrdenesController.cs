@@ -15,6 +15,8 @@ using UI.Models;
 using LN.Usuarios.ListarUsuario;
 using AccesoADatos;
 using Newtonsoft.Json;
+using System.Net.Mail;
+using System.Net;
 
 namespace UI.Controllers
 {
@@ -35,6 +37,25 @@ namespace UI.Controllers
         {
             var ordenes = _ordenService.ObtenerOrdenes();
             return View(ordenes);
+        }
+
+        // GET: OrdenesController
+
+        public ActionResult DetallesChat()
+        {
+            return View();
+        }
+
+        public ActionResult VentaFisica()
+        {
+            var productosActivos = _listarProductoLN.Listar().Where(p => p.Estado).ToList();
+            ViewBag.ProductosActivos = productosActivos;
+            return View();
+        }
+
+        public ActionResult DetalleProducto()
+        {
+            return View();
         }
 
         public ActionResult Create()
@@ -100,6 +121,42 @@ namespace UI.Controllers
             };
 
             return View(viewModel);
+        }
+
+        // Método para enviar la factura por correo
+        [HttpPost]
+        public ActionResult EnviarFactura(string correo, string facturaHtml)
+        {
+            try
+            {
+                // Configuración del servidor SMTP
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("brianvargas570@gmail.com", "vvpudyarvqzjaafk "),
+                    EnableSsl = true,
+                };
+
+                // Crear el mensaje de correo
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("brianvargas570@gmail.com"),
+                    Subject = "Factura de Compra - Tico Sport Socks",
+                    Body = facturaHtml,
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add(correo);
+
+                // Enviar el correo
+                smtpClient.Send(mailMessage);
+
+                return Json(new { success = true, message = "Factura enviada correctamente." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al enviar la factura: " + ex.Message });
+            }
         }
 
     }
