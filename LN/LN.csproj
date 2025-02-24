@@ -49,12 +49,15 @@
     <Compile Include="Cajas\ListarCaja\ListarCajaLN.cs" />
     <Compile Include="General\Conversiones\Cajas\ConvertirACajasDto\ConvertirACajasDto.cs" />
     <Compile Include="General\Conversiones\Cajas\ConvertirACajasTabla\ConvertirACajasTabla.cs" />
+    <Compile Include="General\Conversiones\MovimientosCaja\ConvertirObjetoAMovimientosCajaDto.cs" />
+    <Compile Include="General\Conversiones\MovimientosCaja\ConvertirObjetoAMovimientosCajaTabla.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosDto\ConvertirAProductosDto.cs" />
     <Compile Include="General\Conversiones\Productos\ConvertirAProductosTabla\ConvertirAProductosTabla.cs" />
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosDto\ConvertirAUsuarioDto.cs" />
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
+    <Compile Include="MovimientosCaja\CrearMovimientoLN.cs" />
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoLN.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoLN.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoLN.cs" />
