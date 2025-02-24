@@ -1,0 +1,12 @@
+﻿@model IEnumerable<UI.Models.MensajeViewModel>
+
+<div id="mensajes-container">
+    @foreach (var mensaje in Model)
+    {
+        <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
+            <p>@mensaje.Contenido</p>
+            <span class="fecha">@mensaje.Fecha.ToString("g")</span>
+        </div>
+    }
+</div>
+

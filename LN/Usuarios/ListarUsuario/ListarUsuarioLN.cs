@@ -27,5 +27,10 @@ namespace LN.Usuarios.ListarUsuario
             List<UsuarioDto> laListaDeUsuarios = _listarUsuarioAD.Listar();
             return laListaDeUsuarios;
         }
+        public UsuarioDto ObtenerUsuarioPorId(int usuarioId)
+        {
+            var usuario = _listarUsuarioAD.Listar().FirstOrDefault(u => u.Usuario_ID == usuarioId);
+            return usuario;
+        }
     }
 }

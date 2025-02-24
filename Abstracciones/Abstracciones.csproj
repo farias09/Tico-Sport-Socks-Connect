@@ -46,7 +46,13 @@
     <Compile Include="AD\Interfaces\Categorias\ListarCategorias\IListarCategoriasAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\CrearCaja\ICrearCajaAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\ListarCaja\IListarCajaAD.cs" />
+
     <Compile Include="AD\Interfaces\MoviemientosCaja\ICrearMovimientoAD.cs" />
+
+    <Compile Include="AD\Interfaces\Carrito\ICarritoRepository.cs" />
+    <Compile Include="AD\Interfaces\Mensajes\IMensajeRepositorio.cs" />
+    <Compile Include="AD\Interfaces\Ordenes\IOrdenRepositorio.cs" />
+
     <Compile Include="AD\Interfaces\Productos\ActualizarProducto\IActualizarProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CrearProducto\ICrearProductoAD.cs" />
@@ -56,6 +62,7 @@
     <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IListarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\ListarVenta\IListarVentaAD.cs" />
+    <Compile Include="LN\Interfaces\Carrito\ICarritoLN.cs" />
     <Compile Include="LN\Interfaces\Categorias\ListarCategorias\IListarCategoriasLN.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Categorias\ConvertirACategoriasDto\IConvertirACategoriasDto.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Categorias\ConvertirACategoriasTabla\IConvertirACategoriasTabla.cs" />
@@ -71,7 +78,11 @@
     <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosTabla\IConvertirAUsuariosTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\ConvertirAVentasTabla\IConvertirAVentasTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Ventas\CovertirAVentasDto\IConvertirAVentasDto.cs" />
+
     <Compile Include="LN\Interfaces\MovimientosCaja\ICrearMovimientoLN.cs" />
+
+    <Compile Include="LN\Interfaces\Mensajes\IMensajeService.cs" />
+
     <Compile Include="LN\Interfaces\Productos\ActualizarProducto\IActualizarProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoLN.cs" />
     <Compile Include="LN\Interfaces\Productos\CrearProducto\ICrearProductoLN.cs" />
@@ -85,8 +96,13 @@
     <Compile Include="ModelosBaseDeDatos\CajasTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\CarritoTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\CategoriasTabla.cs" />
+    <Compile Include="ModelosBaseDeDatos\DetalleOrdenesTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\MensajesTabla.cs" />
+
     <Compile Include="ModelosBaseDeDatos\MovimientosCajaTabla.cs" />
+
+    <Compile Include="ModelosBaseDeDatos\OrdenesTabla.cs" />
+
     <Compile Include="ModelosBaseDeDatos\PagosTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\ProductosTabla.cs" />
     <Compile Include="ModelosBaseDeDatos\ReportesTabla.cs" />
@@ -97,7 +113,12 @@
     <Compile Include="Modelos\Carrito\CarritoDto.cs" />
     <Compile Include="Modelos\Categorias\CategoriasDto.cs" />
     <Compile Include="Modelos\Mensajes\MensajesDto.cs" />
+
     <Compile Include="Modelos\MovimientosCaja\MovimientosCajaDto.cs" />
+
+    <Compile Include="Modelos\Ordenes\DetalleOrdenesDto.cs" />
+    <Compile Include="Modelos\Ordenes\OrdenesDto.cs" />
+
     <Compile Include="Modelos\Pagos\PagosDto.cs" />
     <Compile Include="Modelos\Productos\ProductosDto.cs" />
     <Compile Include="Modelos\Reportes\ReportesDto.cs" />

@@ -22,6 +22,9 @@ namespace Abstracciones.Modelos.Mensajes
         public string contenido {  get; set; }
 
         [Required]
+        public string numeroRemitente { get; set; }
+
+        [Required]
         public string fecha { get; set; }
     }
 }

@@ -1,0 +1,153 @@
+﻿@model UI.Models.ConversacionesChatViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Conversaciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <script src="~/Scripts/js/pages/layout.js"></script>
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+
+    <style>
+        /* Contenedor principal con tres columnas */
+        .contenedor-chat {
+            display: flex;
+            height: 80vh;
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        /* Panel Izquierdo: Lista de conversaciones */
+        .lista-conversaciones {
+            width: 25%;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        /* Panel Central: Chat */
+        .chat-panel {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f9f9f9;
+            margin: 0 15px;
+            border-radius: 8px;
+        }
+
+        /* Panel Derecho: Inventario y botón de crear orden */
+        .inventory-panel {
+            width: 25%;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Estilos existentes para el chat */
+        .chat-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+            .chat-placeholder i {
+                font-size: 50px;
+                color: #bbb;
+                margin-bottom: 10px;
+            }
+
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-chat">
+        <!-- Panel Izquierdo: Lista de conversaciones -->
+        <div class="lista-conversaciones">
+            <h4>Conversaciones</h4>
+            <ul class="list-group">
+                @foreach (var conversacion in Model.Conversaciones)
+                {
+                    <li class="list-group-item">
+                        <a href="@Url.Action("Index", "Conversaciones", new { id = conversacion.UsuarioId })"
+                           class="abrir-chat"
+                           data-id="@conversacion.UsuarioId">
+                            <strong>@conversacion.Nombre</strong><br>
+                            <small>@conversacion.Numero</small>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Panel Central: Chat -->
+        <div class="chat-panel" id="chat-container">
+            @if (Model.Chat != null)
+            {
+                @Html.Partial("_Chat", Model.Chat)
+            }
+            else
+            {
+                <div class="chat-placeholder">
+                    <i class="fas fa-comments"></i>
+                    <p>Seleccione una conversación para ver los mensajes.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Panel Derecho: Inventario y botón de crear orden -->
+        <div class="inventory-panel">
+            <h4>Inventario de Productos</h4>
+
+            <button type="button" class="btn btn-primary mb-3" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                Crear Orden
+            </button>
+
+            <div class="productos-scroll" style="max-height: 600px; overflow-y: auto;">
+                @Html.Partial("_productos", Model.Productos)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".abrir-chat").click(function (e) {
+            e.preventDefault();
+            var chatUrl = $(this).attr("href");
+
+            $("#chat-container").load(chatUrl + " #chat-container > *");
+        });
+    });
+</script>

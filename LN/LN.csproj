@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carrito\CarritoLN.cs" />
     <Compile Include="Categorias\ListarCategorias\ListarCategoriasLN.cs" />
     <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasDto\ConvertirACategoriasDto.cs" />
     <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasTabla\ConvertirACategoriasTabla.cs" />
@@ -57,7 +58,12 @@
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
+
     <Compile Include="MovimientosCaja\CrearMovimientoLN.cs" />
+
+    <Compile Include="Mensajes\MensajeService.cs" />
+    <Compile Include="Ordenes\OrdenService\OrdenService.cs" />
+
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoLN.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoLN.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoLN.cs" />
@@ -73,7 +79,6 @@
     <Folder Include="Clientes\" />
     <Folder Include="Factura\" />
     <Folder Include="ListaOrdenes\" />
-    <Folder Include="Ordenes\" />
     <Folder Include="Reportes\" />
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@ using LN.General.Conversiones.Cajas.ConvertirACajasTabla;
 using LN.General.Conversiones.MovimientosCaja;
 using LN.General.Conversiones.Usuarios.ConvertirAUsuariosDto;
 using LN.General.Conversiones.Usuarios.ConvertirAUsuariosTabla;
+
 using LN.General.Conversiones.Ventas.ConvertirAVentasDto;
 using LN.General.Conversiones.Ventas.ConvertirAVentasTabla;
 using LN.MovimientosCaja;
@@ -39,6 +40,18 @@ using LN.Ventas.ListarVenta;
 using System;
 using Unity;
 using Unity.Lifetime;
+
+using Abstracciones.AD.Interfaces.Mensajes;
+using Abstracciones.LN.Interfaces.Mensajes;
+using AcessoADatos.Mensajes;
+using LN.Mensajes;
+using System.Web.Http;
+using Unity.Lifetime;
+using Unity.Mvc5;
+using Unity.WebApi;
+using System.Configuration;
+using AccesoADatos;
+
 namespace UI
 {
     public static class UnityConfig
@@ -47,7 +60,7 @@ namespace UI
         private static Lazy<IUnityContainer> container =
           new Lazy<IUnityContainer>(() =>
           {
-              var container = new UnityContainer();
+              var container = new UnityContainer().AddExtension(new Diagnostic());
               RegisterTypes(container);
               return container;
           });
@@ -57,10 +70,14 @@ namespace UI
 
         public static void RegisterTypes(IUnityContainer container)
         {
+            // Registrar tipos en el contenedor de Unity
+
+            container.RegisterType<Contexto>(new HierarchicalLifetimeManager());
+
             container.RegisterType<ICrearVentaLN, CrearVentaLN>();
             container.RegisterType<ICrearVentaAD, CrearVentaAD>();
 
-            container.RegisterType<IListarVentaLN, ListarVentaLN>();       
+            container.RegisterType<IListarVentaLN, ListarVentaLN>();
             container.RegisterType<IListarVentaAD, ListarVentaAD>();
 
             container.RegisterType<IConvertirAVentasTabla, ConvertirAVentasTabla>();
@@ -78,6 +95,7 @@ namespace UI
             container.RegisterType<IConvertirACajasDto, ConvertirACajasDto>();
             container.RegisterType<IConvertirACajasTabla, ConvertirACajasTabla>();
 
+
             container.RegisterType<ICrearCajaLN, CrearCajaLN>();
             container.RegisterType<ICrearCajaAD, CrearCajaAD>();
 
@@ -87,6 +105,10 @@ namespace UI
             container.RegisterType<Contexto>(new HierarchicalLifetimeManager());
 
             container.RegisterType<IConvertirObjetoAMovimientosCajaTabla, ConvertirObjetoAMovimientosCajaTabla>();
+
+
+            container.RegisterType<IMensajeRepositorio, MensajeRepositorio>();
+            container.RegisterType<IMensajeService, MensajeService>();
 
         }
     }

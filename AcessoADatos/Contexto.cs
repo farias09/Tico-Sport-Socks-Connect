@@ -24,6 +24,8 @@ namespace AccesoADatos
             modelBuilder.Entity<ReportesTabla>().ToTable("Reportes");
             modelBuilder.Entity<VentasTabla>().ToTable("Ventas");
             modelBuilder.Entity<UsuariosTabla>().ToTable("Usuarios");
+            modelBuilder.Entity<OrdenesTabla>().ToTable("Ordenes");
+            modelBuilder.Entity<DetalleOrdenesTabla>().ToTable("DetalleOrdenes");
         }
 
         public DbSet<AuditoriaTabla> AuditoriaTabla { get; set; }
@@ -37,6 +39,8 @@ namespace AccesoADatos
         public DbSet<ReportesTabla> ReportesTabla { get; set; }
         public DbSet<VentasTabla> VentasTabla { get; set; }
         public DbSet<UsuariosTabla> UsuariosTabla { get; set; }
+        public DbSet<OrdenesTabla> OrdenesTabla { get; set; }
+        public DbSet<DetalleOrdenesTabla> DetalleOrdenesTabla { get; set; }
 
         public System.Data.Entity.DbSet<Abstracciones.Modelos.MovimientosCaja.MovimientosCajaDto> MovimientosCajaDtoes { get; set; }
     }
