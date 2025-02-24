@@ -57,7 +57,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: #192840; border-color: black;">Filtrar</button>
                     </div>
                 </form>
 
@@ -135,13 +135,13 @@
                 <!-- Exportar inventario -->
                 <div class="row mt-4">
                     <div class="col-md-4">
-                        <button class="btn btn-primary w-100">Exportar a PDF</button>
+                        <button class="btn btn-success w-100" style=" background-color: steelblue;">Exportar a PDF</button>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-secondary w-100">Exportar a Excel</button>
+                        <button class="btn btn-primary w-100" style=" background-color: mediumseagreen;">Exportar a Excel</button>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-success w-100">Exportar a CSV</button>
+                        <button class="btn btn-secondary w-100">Exportar a CSV</button>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@
 
             toggleButtons.forEach(button => {
                 button.addEventListener("click", (event) => {
-                    event.preventDefault(); // Evita la redirección inmediata
+                    event.preventDefault();
 
                     const url = button.getAttribute("data-url");
                     const accion = button.classList.contains("btn-danger") ? "inactivar" : "activar";
@@ -181,7 +181,7 @@
                         buttonsStyling: false
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = url; // Redirigir a la acción correspondiente
+                            window.location.href = url;
                         } else {
                             Swal.fire("Cancelado", "El estado del producto no ha cambiado.", "error");
                         }
