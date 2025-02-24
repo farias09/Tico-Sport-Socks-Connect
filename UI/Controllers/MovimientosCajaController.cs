@@ -1,10 +1,5 @@
-﻿using Abstracciones.LN.Interfaces.Cajas.CrearCaja;
-using Abstracciones.LN.Interfaces.Cajas.ListarCaja;
-using Abstracciones.LN.Interfaces.MovimientosCaja;
-using Abstracciones.Modelos.Caja;
+﻿using Abstracciones.LN.Interfaces.MovimientosCaja;
 using Abstracciones.Modelos.MovimientosCaja;
-using LN.Cajas.CrearCaja;
-using LN.Cajas.ListarCaja;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,87 +10,33 @@ using System.Web.Mvc;
 
 namespace UI.Controllers
 {
-    public class CajaController : Controller
+    public class MovimientosCajaController : Controller
     {
-        private readonly ICrearCajaLN _crearCajaLN;
         private readonly ICrearMovimientoLN _crearMovimientoLN;
-        private readonly IListarCajaLN _listarCajaLN;
 
-        public CajaController(ICrearMovimientoLN crearMovimientoLN, ICrearCajaLN crearCajaLN, IListarCajaLN listarCajaLN)
+        public MovimientosCajaController(ICrearMovimientoLN crearMovimientoLN)
         {
-            _crearCajaLN = crearCajaLN;
-            _crearMovimientoLN = crearMovimientoLN;
-            _listarCajaLN = listarCajaLN;
+            _crearMovimientoLN = crearMovimientoLN; 
         }
-
-        // GET: Caja
+        // GET: MovimientosCaja
         public ActionResult Index()
         {
-            List<CajasDto> laListaDeCajas = _listarCajaLN.Listar();
-            return View(laListaDeCajas);
+            return View();
         }
 
-        // GET: Caja/Details/5
+        // GET: MovimientosCaja/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Caja/Create
+        // GET: MovimientosCaja/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Caja/Create
-        [HttpPost]
-        public ActionResult Create(CajasDto modelo)
-        {
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Los datos ingresados no son válidos.";
-                return View(modelo);
-            }
-
-            try
-            {
-                // -------------------------------------------------------------------
-                // Validar que la caja no esté duplicada (Opcional, si se necesita)
-                var cajaExistente = _crearCajaLN.VerificarCajaAbierta();
-                if (cajaExistente)
-                {
-                    TempData["Error"] = "Ya existe una caja abierta.";
-                    return RedirectToAction("Index");
-                }
-                // -------------------------------------------------------------------
-
-                // Establecer estado inicial
-                modelo.estado = true;
-                modelo.fecha_apertura = DateTime.Now;
-
-                // -------------------------------------------------------------------
-                // Guardar la caja en la base de datos
-                int idCaja = _crearCajaLN.Crear(modelo);
-                // -------------------------------------------------------------------
-
-                if (idCaja > 0)
-                {
-                    TempData["Success"] = "Caja registrada correctamente.";
-                    return RedirectToAction("Details", new { id = idCaja });
-                }
-                else
-                {
-                    TempData["Error"] = "No se pudo registrar la caja.";
-                    return View(modelo);
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Ocurrió un error al procesar la solicitud: " + ex.Message;
-                return View(modelo);
-            }
-        }
-
+        // POST: MovimientosCaja/Create
         [HttpPost]
         public async Task<ActionResult> CreateMovimiento(MovimientosCajaDto modelo)
         {
@@ -143,13 +84,13 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Caja/Edit/5
+        // GET: MovimientosCaja/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Caja/Edit/5
+        // POST: MovimientosCaja/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -165,13 +106,13 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Caja/Delete/5
+        // GET: MovimientosCaja/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Caja/Delete/5
+        // POST: MovimientosCaja/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

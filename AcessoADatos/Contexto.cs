@@ -18,6 +18,7 @@ namespace AccesoADatos
             modelBuilder.Entity<CarritoTabla>().ToTable("Carrito");
             modelBuilder.Entity<CategoriasTabla>().ToTable("Categorias");
             modelBuilder.Entity<MensajesTabla>().ToTable("Mensajes");
+            modelBuilder.Entity<MovimientosCajaTabla>().ToTable("MovimientosCaja");
             modelBuilder.Entity<PagosTabla>().ToTable("Pagos");
             modelBuilder.Entity<ProductosTabla>().ToTable("Productos");
             modelBuilder.Entity<ReportesTabla>().ToTable("Reportes");
@@ -32,6 +33,7 @@ namespace AccesoADatos
         public DbSet<CarritoTabla> CarritoTabla { get; set; }
         public DbSet<CategoriasTabla> CategoriaTabla { get; set; }
         public DbSet<MensajesTabla> MensajesTabla { get; set; }
+        public DbSet<MovimientosCajaTabla> MovimientosCajaTabla { get; set; }
         public DbSet<PagosTabla> PagosTabla { get; set; }
         public DbSet<ProductosTabla> ProductosTabla { get; set; }
         public DbSet<ReportesTabla> ReportesTabla { get; set; }
@@ -40,5 +42,6 @@ namespace AccesoADatos
         public DbSet<OrdenesTabla> OrdenesTabla { get; set; }
         public DbSet<DetalleOrdenesTabla> DetalleOrdenesTabla { get; set; }
 
+        public System.Data.Entity.DbSet<Abstracciones.Modelos.MovimientosCaja.MovimientosCajaDto> MovimientosCajaDtoes { get; set; }
     }
 }
