@@ -15,6 +15,7 @@ namespace LN.General.Conversiones.Productos.ProductosTablaAProductosDto
         {
             return new ProductosTabla
             {
+                Producto_ID = elProducto.Producto_ID,
                 nombre = elProducto.nombre,
                 descripcion = elProducto.descripcion,
                 precio = elProducto.precio,

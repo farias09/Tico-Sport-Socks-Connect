@@ -3,104 +3,104 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Abstracciones.LN.Interfaces.Carrito;
+using Abstracciones.Modelos.Carrito;
+using Abstracciones.Modelos.Ordenes;
+using Abstracciones.Modelos.Productos;
+using AcessoADatos;
+using LN.Ordenes.OrdenService;
 using Microsoft.Owin;
+using LN.Productos.ListarProductos;
+using UI.Models;
+using LN.Usuarios.ListarUsuario;
+using AccesoADatos;
+using Newtonsoft.Json;
 
 namespace UI.Controllers
 {
     public class OrdenesController : Controller
     {
-        // GET: OrdenesController
+        private readonly OrdenService _ordenService;
+        private readonly ListarProductoLN _listarProductoLN;
+        private readonly ListarUsuarioLN _listarUsuarioLN;
+
+        public OrdenesController()
+        {
+            _ordenService = new OrdenService(new AcessoADatos.Ordenes.OrdenRepositorio());
+            _listarProductoLN = new ListarProductoLN();
+            _listarUsuarioLN = new ListarUsuarioLN(new AcessoADatos.Usuarios.ListarUsuario.ListarUsuarioAD(new Contexto()), null);
+        }
+
         public ActionResult Index()
         {
-            return View();
-        }
-        public ActionResult DetallesChat()
-        {
-            return View();
+            var ordenes = _ordenService.ObtenerOrdenes();
+            return View(ordenes);
         }
 
-        public ActionResult VentaFisica()
-        {
-            return View();
-        }
-
-        public ActionResult DetalleProducto()
-        {
-            return View();
-        }
-
-        public ActionResult OrdenesPendientes()
-        {
-            return View();
-        }
-
-        // GET: OrdenesController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: OrdenesController/Create
         public ActionResult Create()
         {
-            return View();
+            var usuarios = _listarUsuarioLN.Listar();
+            ViewBag.Usuarios = new SelectList(usuarios, "Usuario_ID", "Nombre");
+
+            var productos = _listarProductoLN.Listar(); 
+            var modelo = new OrdenViewModel
+            {
+                Orden = new OrdenesDto(),
+                Productos = productos
+            };
+            return View(modelo);
         }
 
-        // POST: OrdenesController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(OrdenesDto orden, string ProductosSeleccionadosJson)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                // Deserializar los productos seleccionados
+                var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(ProductosSeleccionadosJson);
+
+                // Crear la orden y obtener la instancia creada con su ID
+                var ordenCreada = _ordenService.CrearOrden(orden, detalles);
+
+                // Verificar si la orden fue creada exitosamente
+                if (ordenCreada == null || ordenCreada.Orden_ID == 0)
+                {
+                    ModelState.AddModelError("", "Hubo un error al crear la orden.");
+                    return View(orden);
+                }
+
+                // Redirigir a la vista de confirmación con los detalles de la orden creada
+                return RedirectToAction("Confirmacion", new { id = ordenCreada.Orden_ID });
             }
-            catch
+
+            var usuarios = _listarUsuarioLN.Listar();
+            ViewBag.Usuarios = new SelectList(usuarios, "Usuario_ID", "Nombre");
+
+            var productos = _listarProductoLN.Listar();
+            var modelo = new OrdenViewModel
             {
-                return View();
-            }
+                Orden = orden,
+                Productos = productos
+            };
+
+            return View(modelo);
         }
 
-        // GET: OrdenesController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Confirmacion(int id)
         {
-            return View();
+            var orden = _ordenService.ObtenerOrdenPorId(id);
+            var detalles = _ordenService.ObtenerDetallesPorOrden(id);
+            var usuario = _listarUsuarioLN.ObtenerUsuarioPorId(orden.Usuario_ID);
+
+            var viewModel = new OrdenViewModel
+            {
+                Orden = orden,
+                Detalles = detalles,
+                Usuario = usuario
+            };
+
+            return View(viewModel);
         }
 
-        // POST: OrdenesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: OrdenesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OrdenesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

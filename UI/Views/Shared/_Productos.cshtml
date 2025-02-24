@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Abstracciones.Modelos.Productos.ProductosDto>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Productos</title>
+</head>
+<body>
+    <div class="productos-inventory">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Imagen</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model)
+                {
+                    <tr>
+                        <td>@producto.nombre</td>
+                        <td><img src="@producto.imagen" alt="Imagen de @producto.nombre" style="width:100px; height:auto;" /></td>
+                        <td>@producto.precio.ToString("C")</td>
+                        <td>@producto.stock</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
