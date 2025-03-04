@@ -49,6 +49,18 @@ using System.Web.Http;
 using Unity.Mvc5;
 using Unity.WebApi;
 using System.Configuration;
+using Abstracciones.AD.Interfaces.Usuarios.ActualizarUsuario;
+using Abstracciones.AD.Interfaces.Usuarios.EliminarUsuario;
+using Abstracciones.LN.Interfaces.Usuarios.ActualizarUsuario;
+using Abstracciones.LN.Interfaces.Usuarios.EliminarUsuario;
+using AccesoADatos.Usuarios.ActualizarUsuario;
+using AccesoADatos.Usuarios.EliminarUsuario;
+using LN.Usuarios.ActualizarUsuario;
+using LN.Usuarios.EliminarUsuario;
+using Abstracciones.LN.Interfaces.Usuarios.CrearUsuario;
+using LN.Usuarios.CrearUsuario;
+using AcessoADatos.Usuarios.CrearUsuario;
+using Abstracciones.AD.Interfaces.Usuarios.CrearUsuario;
 
 namespace UI
 {
@@ -81,12 +93,20 @@ namespace UI
             container.RegisterType<IConvertirAVentasTabla, ConvertirAVentasTabla>();
             container.RegisterType<IConvertirAVentasDto, ConvertirAVentaDto>();
 
+            //Usuarios
+            container.RegisterType<ICrearUsuarioLN, CrearUsuarioLN>();
+            container.RegisterType<ICrearUsuarioAD, CrearUsuarioAD>();
             container.RegisterType<IListarUsuarioLN, ListarUsuarioLN>();
             container.RegisterType<IListarUsuarioAD, ListarUsuarioAD>();
+            container.RegisterType<IActualizarUsuarioLN, ActualizarUsuarioLN>();
+            container.RegisterType<IActualizarUsuarioAD, ActualizarUsuarioAD>();
+            container.RegisterType<IEliminarUsuarioLN, EliminarUsuarioLN>();
+            container.RegisterType<IEliminarUsuarioAD, EliminarUsuarioAD>();
 
             container.RegisterType<IConvertirAUsuariosDto, ConvertirAUsuarioDto>();
             container.RegisterType<IConvertirAUsuariosTabla, ConvertirAUsuarioTabla>();
 
+            //Cajas
             container.RegisterType<IListarCajaLN, ListarCajaLN>();
             container.RegisterType<IListarCajaAD, ListarCajaAD>();
 
