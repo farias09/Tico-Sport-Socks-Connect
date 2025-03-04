@@ -176,7 +176,7 @@ namespace UI.Controllers
                     Port = 587,
                     Credentials = new NetworkCredential("brianvargas570@gmail.com", "vvpudyarvqzjaafk "),
                     EnableSsl = true,
-                    Timeout = 10000, // 10 segundos de timeout
+                    Timeout = 10000,
                     DeliveryMethod = SmtpDeliveryMethod.Network
                 };
 
