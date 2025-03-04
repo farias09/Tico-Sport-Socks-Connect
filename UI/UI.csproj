@@ -738,9 +738,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AesEncryption\" />
     <Folder Include="Views\Inventario\" />
-    <Folder Include="Views\UsuarioViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
