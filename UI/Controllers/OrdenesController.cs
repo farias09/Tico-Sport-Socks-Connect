@@ -57,9 +57,18 @@ namespace UI.Controllers
             return View();
         }
 
-        public ActionResult DetalleProducto()
+        public ActionResult DetalleProducto(int id)
         {
-            return View();
+            // Obtener el producto por su ID
+            var producto = _listarProductoLN.Listar().FirstOrDefault(p => p.Producto_ID == id);
+
+            if (producto == null)
+            {
+                return HttpNotFound(); // Si no se encuentra el producto, devuelve un error 404
+            }
+
+            // Pasar el producto a la vista
+            return View(producto);
         }
 
         public ActionResult Create()

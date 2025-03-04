@@ -3,6 +3,8 @@ using Abstracciones.LN.Interfaces.General.Conversiones.Usuarios.ConvertirAUsuari
 using Abstracciones.LN.Interfaces.General.Conversiones.Ventas.ConvertirAVentasTabla;
 using Abstracciones.LN.Interfaces.Usuarios.CrearUsuario;
 using Abstracciones.Modelos.Usuarios;
+using Abstracciones.Utilidades;
+using BCrypt.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,9 @@ namespace LN.Usuarios.CrearUsuario
 
         public int Crear(UsuarioDto modelo)
         {
+            // Encriptar la contraseña antes de guardarla
+            modelo.Contraseña = AesEncryption.Encrypt(modelo.Contraseña);
+
             modelo.estado = true;
             int cantidadDeDatosGuardados = _crearUsuarioAD.Crear(_convertirAUsuariosTabla.ConvertirObjetoAUsuariosTabla(modelo));
             return cantidadDeDatosGuardados;

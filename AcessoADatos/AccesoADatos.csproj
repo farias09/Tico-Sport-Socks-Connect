@@ -57,19 +57,18 @@
     <Compile Include="Cajas\CrearCaja\CrearCajaAD.cs" />
     <Compile Include="Cajas\ListarCaja\ListarCajaAD.cs" />
     <Compile Include="Contexto.cs" />
-
     <Compile Include="MovimientosCajas\CrearMovimiento\CrearMovimientoAD.cs" />
-
     <Compile Include="Mensajes\MensajeRepositorio.cs" />
     <Compile Include="Ordenes\OrdenRepositorio.cs" />
-
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoAD.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoAD.cs" />
     <Compile Include="Productos\CrearProducto\CrearProductoAD.cs" />
     <Compile Include="Productos\ListarProducto\ListarProductoAD.cs" />
     <Compile Include="Productos\ObtenerPorId\ObtenerProductoPorIdAD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Usuarios\ActualizarUsuario\ActualizarUsuarioAD.cs" />
     <Compile Include="Usuarios\CrearUsuario\CrearUsuarioAD.cs" />
+    <Compile Include="Usuarios\EliminarUsuario\EliminarUsuarioAD.cs" />
     <Compile Include="Usuarios\ListarUsuario\ListarUsuarioAD.cs" />
     <Compile Include="Ventas\CrearVenta\CrearVentaAD.cs" />
     <Compile Include="Ventas\ListarVenta\ListarVentaAD.cs" />

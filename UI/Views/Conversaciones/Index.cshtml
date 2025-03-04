@@ -173,7 +173,7 @@
                                                         <p class="mb-0">COD: @producto.Producto_ID | Stock: @producto.stock</p>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-sm btn-success">Detalles</button>
+                                                <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-success">Detalles</a>
                                             </div>
                                         }
                                     </div>

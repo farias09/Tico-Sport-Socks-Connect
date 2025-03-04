@@ -1,176 +1,223 @@
-﻿@{
+﻿@model List<UI.Models.UsuarioViewModel>
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <!doctype html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8" />
-    <title>Pricing | Clivax - Admin & Dashboard Template</title>
+    <title>Gestión de Usuarios</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Codebucks" name="author" />
-    <!-- App favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
-
-
-    <!-- dark layout js -->
     <script src="~/Scripts/js/pages/layout.js"></script>
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
-
 </head>
-
 <body>
     <div class="main-content">
         <div class="page-content">
-    <div class="container mt-4">
-        <!-- Encabezado principal -->
-        <div class="text-center mb-4">
-            <h1>Gestión de Usuarios</h1>
-            <p class="text-muted">Administra los usuarios y empleados de Tico Sport Socks</p>
-        </div>
-
-        <!-- Botón para agregar un nuevo usuario -->
-        <div class="mb-3">
-            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">Agregar Usuario</a>
-        </div>
-
-        <!-- Tabla para mostrar usuarios -->
-        <table class="table table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var usuario in Model)
-                {
-                    <tr>
-                        <td>@usuario.Id</td>
-                        <td>@usuario.Nombre</td>
-                        <td>@usuario.Email</td>
-                        <td>@usuario.Rol</td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal">Editar</button>
-                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal">Eliminar</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal para agregar usuario -->
-    <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="agregarUsuarioModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agregarUsuarioModalLabel">Agregar Usuario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="container mt-4">
+                <!-- Encabezado principal -->
+                <div class="text-center mb-4">
+                    <h1>Gestión de Usuarios</h1>
+                    <p class="text-muted">Administra los usuarios y empleados de Tico Sport Socks</p>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" placeholder="Nombre del usuario">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com">
-                        </div>
-                        <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
-                            <select class="form-select" id="rol">
-                                <option value="Administrador">Administrador</option>
-                                <option value="Usuario">Usuario</option>
-                            </select>
-                        </div>
-                    </form>
+
+                <!-- Botón para agregar un nuevo usuario -->
+                <div class="mb-3">
+                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">Agregar Usuario</a>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar Usuario</button>
+
+                <!-- Tabla para mostrar usuarios -->
+                <table class="table table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Provincia</th>
+                            <th>Número</th>
+                            <th>Contraseña</th>
+                            <th>Fecha de Registro</th>
+                            <th>Estado</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var usuario in Model)
+                        {
+                            <tr>
+                                <td>@usuario.Id</td>
+                                <td>@usuario.Nombre</td>
+                                <td>@usuario.Email</td>
+                                <td>@(usuario.Telefono ?? "N/A")</td>
+                                <td>@(usuario.Direccion ?? "N/A")</td>
+                                <td>@(usuario.Provincia ?? "N/A")</td>
+                                <td>@(usuario.Numero ?? "N/A")</td>
+                                <td>@usuario.Contraseña</td>
+                                <td>@usuario.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                                <td>@(usuario.Estado ? "Activo" : "Inactivo")</td>
+                                <td>@usuario.Rol</td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal" data-id="@usuario.Id" data-nombre="@usuario.Nombre" data-email="@usuario.Email" data-rol="@usuario.Rol">Editar</button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal" data-id="@usuario.Id">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal para agregar usuario -->
+            <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="agregarUsuarioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarUsuarioModalLabel">Agregar Usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formCrearUsuario" action="@Url.Action("Crear", "Usuarios")" method="post">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="Nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rol" class="form-label">Rol</label>
+                                    <select class="form-select" id="rol" name="Rol" required>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Usuario">Usuario</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="contraseña" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="contraseña" name="Contraseña" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" form="formCrearUsuario" class="btn btn-primary">Guardar Usuario</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Modal para editar usuario -->
-    <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" placeholder="Nombre del usuario">
+            <!-- Modal para editar usuario -->
+            <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com">
+                        <div class="modal-body">
+                            <form id="formEditarUsuario" action="@Url.Action("Editar", "Usuarios")" method="post">
+                                <input type="hidden" id="editarId" name="Id" />
+                                <div class="mb-3">
+                                    <label for="editarNombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="editarNombre" name="Nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarEmail" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="editarEmail" name="Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarRol" class="form-label">Rol</label>
+                                    <select class="form-select" id="editarRol" name="Rol" required>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Usuario">Usuario</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarTelefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="editarTelefono" name="Telefono">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarDireccion" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="editarDireccion" name="Direccion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarProvincia" class="form-label">Provincia</label>
+                                    <input type="text" class="form-control" id="editarProvincia" name="Provincia">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editarNumero" class="form-label">Número</label>
+                                    <input type="text" class="form-control" id="editarNumero" name="Numero" required>
+                                </div>
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
-                            <select class="form-select" id="rol">
-                                <option value="Administrador">Administrador</option>
-                                <option value="Usuario">Usuario</option>
-                            </select>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" form="formEditarUsuario" class="btn btn-primary">Guardar Cambios</button>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Modal para eliminar usuario -->
-    <div class="modal fade" id="eliminarUsuarioModal" tabindex="-1" aria-labelledby="eliminarUsuarioModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eliminarUsuarioModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Estás seguro de que deseas eliminar este usuario?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Eliminar Usuario</button>
+            <!-- Modal para eliminar usuario -->
+            <div class="modal fade" id="eliminarUsuarioModal" tabindex="-1" aria-labelledby="eliminarUsuarioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarUsuarioModalLabel">Confirmar Eliminación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form id="formEliminarUsuario" action="@Url.Action("Eliminar", "Usuarios")" method="post">
+                                <input type="hidden" id="eliminarId" name="id" />
+                                <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT -->
     <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
     <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
-    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
-    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Llenar el modal de editar con los datos del usuario
+            $('#editarUsuarioModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Botón que activó el modal
+                var id = button.data('id');
+                var nombre = button.data('nombre');
+                var email = button.data('email');
+                var rol = button.data('rol');
 
-    <script src="~/Scripts/js/app.js"></script>
+                var modal = $(this);
+                modal.find('#editarId').val(id);
+                modal.find('#editarNombre').val(nombre);
+                modal.find('#editarEmail').val(email);
+                modal.find('#editarRol').val(rol);
+            });
 
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+            // Llenar el modal de eliminar con el ID del usuario
+            $('#eliminarUsuarioModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Botón que activó el modal
+                var id = button.data('id');
 
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
+                var modal = $(this);
+                modal.find('#eliminarId').val(id);
+            });
+        });
+    </script>
 </body>
-
 </html>
