@@ -44,7 +44,7 @@ namespace UI.Controllers
                 Contraseña = u.Contraseña, // Contraseña desencriptada
                 FechaRegistro = u.FechaRegistro,
                 Estado = u.estado,
-                Rol = u.Rol_ID == 1 ? "Administrador" : "Usuario" // Asumiendo que el Rol_ID 1 es Administrador
+                Rol = u.Rol_ID == 1 ? "Administrador" : "Usuario"
             }).ToList();
 
             return View(usuariosViewModel);
