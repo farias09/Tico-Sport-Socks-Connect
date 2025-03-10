@@ -17,10 +17,11 @@ namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosTabla
             {
                 Nombre = elUsuario.Nombre,
                 Email = elUsuario.Email,
-                Telefono = elUsuario.Telefono,
-                Direccion = elUsuario.Direccion,
-                Provincia = elUsuario.Provincia,
-                Rol_ID = elUsuario.Rol_ID
+                Rol_ID = elUsuario.Rol_ID,
+                estado = elUsuario.estado,
+                FechaRegistro = elUsuario.FechaRegistro,
+                Contraseña = elUsuario.Contraseña,
+                Numero = elUsuario.Numero ?? "N/A" // Asignar un valor por defecto si es nulo
             };
         }
     }

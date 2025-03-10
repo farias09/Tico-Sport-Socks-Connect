@@ -2,6 +2,7 @@
 using Abstracciones.LN.Interfaces.General.Conversiones.Usuarios.ConvertirAUsuariosDto;
 using Abstracciones.LN.Interfaces.Usuarios.ListarUsuario;
 using Abstracciones.Modelos.Usuarios;
+using Abstracciones.Utilidades;
 using LN.Cajas.ListarCaja;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,23 @@ namespace LN.Usuarios.ListarUsuario
         public List<UsuarioDto> Listar()
         {
             List<UsuarioDto> laListaDeUsuarios = _listarUsuarioAD.Listar();
+
+            // Desencriptar la contraseña para cada usuario
+            foreach (var usuario in laListaDeUsuarios)
+            {
+                if (!string.IsNullOrEmpty(usuario.Contraseña))
+                {
+                    usuario.Contraseña = AesEncryption.Decrypt(usuario.Contraseña);
+                }
+                else
+                {
+                    usuario.Contraseña = "Sin contraseña";
+                }
+            }
+
             return laListaDeUsuarios;
         }
+
         public UsuarioDto ObtenerUsuarioPorId(int usuarioId)
         {
             var usuario = _listarUsuarioAD.Listar().FirstOrDefault(u => u.Usuario_ID == usuarioId);

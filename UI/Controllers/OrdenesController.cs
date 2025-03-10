@@ -15,6 +15,14 @@ using UI.Models;
 using LN.Usuarios.ListarUsuario;
 using AccesoADatos;
 using Newtonsoft.Json;
+using System.Net.Mail;
+using System.Net;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UI.Controllers
 {
@@ -37,12 +45,38 @@ namespace UI.Controllers
             return View(ordenes);
         }
 
+        public ActionResult DetallesChat()
+        {
+            return View();
+        }
+
+        public ActionResult VentaFisica()
+        {
+            var productosActivos = _listarProductoLN.Listar().Where(p => p.Estado).ToList();
+            ViewBag.ProductosActivos = productosActivos;
+            return View();
+        }
+
+        public ActionResult DetalleProducto(int id)
+        {
+            // Obtener el producto por su ID
+            var producto = _listarProductoLN.Listar().FirstOrDefault(p => p.Producto_ID == id);
+
+            if (producto == null)
+            {
+                return HttpNotFound(); // Si no se encuentra el producto, devuelve un error 404
+            }
+
+            // Pasar el producto a la vista
+            return View(producto);
+        }
+
         public ActionResult Create()
         {
             var usuarios = _listarUsuarioLN.Listar();
             ViewBag.Usuarios = new SelectList(usuarios, "Usuario_ID", "Nombre");
 
-            var productos = _listarProductoLN.Listar(); 
+            var productos = _listarProductoLN.Listar();
             var modelo = new OrdenViewModel
             {
                 Orden = new OrdenesDto(),
@@ -56,20 +90,16 @@ namespace UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Deserializar los productos seleccionados
                 var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(ProductosSeleccionadosJson);
 
-                // Crear la orden y obtener la instancia creada con su ID
                 var ordenCreada = _ordenService.CrearOrden(orden, detalles);
 
-                // Verificar si la orden fue creada exitosamente
                 if (ordenCreada == null || ordenCreada.Orden_ID == 0)
                 {
                     ModelState.AddModelError("", "Hubo un error al crear la orden.");
                     return View(orden);
                 }
 
-                // Redirigir a la vista de confirmación con los detalles de la orden creada
                 return RedirectToAction("Confirmacion", new { id = ordenCreada.Orden_ID });
             }
 
@@ -102,5 +132,90 @@ namespace UI.Controllers
             return View(viewModel);
         }
 
+        // Metodo para generar el PDF de la Factura
+        private byte[] GenerarPDF(string htmlContent)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document document = new Document(PageSize.A4, 25, 25, 25, 25);
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+
+                writer.SetFullCompression();
+
+                writer.CompressionLevel = PdfStream.BEST_SPEED;
+
+                document.Open();
+
+                using (StringReader sr = new StringReader(htmlContent))
+                {
+                    XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, sr);
+                }
+
+                document.Close();
+                return ms.ToArray();
+            }
+        }
+
+        // Metodo para enviar la factura por correo
+        [HttpPost]
+        public ActionResult EnviarFactura(string correo, string facturaHtml)
+        {
+            try
+            {
+                Task.Run(() => EnviarFacturaAsync(correo, facturaHtml));
+
+                return Json(new { success = true, message = "Procesando su factura. En breve recibirá un correo con el detalle de su compra." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al iniciar el proceso: " + ex.Message });
+            }
+        }
+
+        // Proceso asincronico
+        private async Task EnviarFacturaAsync(string correo, string facturaHtml)
+        {
+            try
+            {
+                byte[] pdfBytes = GenerarPDF(facturaHtml);
+
+                // Configuración del servidor SMTP
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("brianvargas570@gmail.com", "vvpudyarvqzjaafk "),
+                    EnableSsl = true,
+                    Timeout = 10000,
+                    DeliveryMethod = SmtpDeliveryMethod.Network
+                };
+
+                // Mensaje generico
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("brianvargas570@gmail.com"),
+                    Subject = "Factura de Compra - Tico Sport Socks",
+                    Body = "Estimado cliente,<br/><br/>Adjunto encontrarás la factura digital de tu compra reciente en Tico Sport Socks.<br/><br/>Gracias por tu preferencia.<br/><br/>Atentamente,<br/>Equipo de Tico Sport Socks",
+                    IsBodyHtml = true,
+                    Priority = MailPriority.High
+                };
+
+                mailMessage.To.Add(correo);
+
+                // Se adjunta el pdf de la factura
+                string nombreArchivo = "Factura_TicoSportSocks.pdf";
+                MemoryStream stream = new MemoryStream(pdfBytes);
+                mailMessage.Attachments.Add(new Attachment(stream, nombreArchivo, "application/pdf"));
+
+                await Task.Run(() => smtpClient.Send(mailMessage));
+
+                // Limpieza
+                mailMessage.Dispose();
+                stream.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en envío asíncrono: " + ex.Message);
+            }
+        }
     }
 }

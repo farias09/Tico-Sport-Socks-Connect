@@ -18,5 +18,6 @@ namespace Abstracciones.Modelos.Usuarios
         public int Rol_ID { get; set; }
         public bool estado { get; set; }
         public DateTime FechaRegistro { get; set; }
+        public string Contraseña { get; set; }
     }
 }

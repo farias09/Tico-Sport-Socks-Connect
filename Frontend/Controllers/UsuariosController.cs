@@ -12,6 +12,7 @@ namespace Frontend.Controllers
                 new UsuarioViewModel { Id = 2, Nombre = "Nichelle Arias", Email = "nichelle.arias@ticosportsocks.com", Rol = "Usuario" },
                 new UsuarioViewModel { Id = 3, Nombre = "Fabián Arias", Email = "fabian.arias@ticosportsocks.com", Rol = "Usuario" },
                 new UsuarioViewModel { Id = 4, Nombre = "Jose Ignacio Arias", Email = "ignacio.arias@ticosportsocks.com", Rol = "Usuario" },
+                new UsuarioViewModel { Id = 4, Nombre = "Brians Fernando Vargas", Email = "fernando.vargas@ticosportsocks.com", Rol = "Usuario" },
                 new UsuarioViewModel { Id = 5, Nombre = "Fabiola Chaves", Email = "fabiola.chaves@ticosportsocks.com", Rol = "Usuario" }
             };
 

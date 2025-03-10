@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<TicoSportSocksConnect.Abstracciones.Modelos.Inventario.ProductosDto>
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!doctype html>
@@ -58,141 +59,43 @@
             <div class="card-body">
                 <h5 class="card-title">Productos en Inventario</h5>
                 <p class="text-muted">Consulta, actualiza o inactiva productos en el inventario</p>
-                <table class="table table-bordered table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Código</th>
-                            <th>Stock</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medias Antideslizantes Blancas</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008776</td>
-                            <td><span class="badge bg-primary">300</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <a class="btn btn-sm btn-secondary" asp-controller="Inventario" asp-action="EditarProducto">Editar</a>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Negras</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008777</td>
-                            <td><span class="badge bg-primary">200</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Azules</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008778</td>
-                            <td><span class="badge bg-primary">150</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Rojas</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008779</td>
-                            <td><span class="badge bg-primary">200</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Azules Oscuro</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008780</td>
-                            <td><span class="badge bg-primary">50</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Naranjas</td>
-                            <td>Medias Antideslizantes</td>
-                            <td>00008781</td>
-                            <td><span class="badge bg-primary">230</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Espinilleras Blancas</td>
-                            <td>Espinilleras</td>
-                            <td>00008782</td>
-                            <td><span class="badge bg-primary">78</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Espinilleras Negras</td>
-                            <td>Espinilleras</td>
-                            <td>00008783</td>
-                            <td><span class="badge bg-primary">78</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Portaespinilleras Negras</td>
-                            <td>Portaespinilleras</td>
-                            <td>00008784</td>
-                            <td><span class="badge bg-primary">90</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Portaespinilleras Blancas</td>
-                            <td>Portaespinilleras</td>
-                            <td>00008785</td>
-                            <td><span class="badge bg-primary">87</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medias Cortadas Azules</td>
-                            <td>Medias Cortadas</td>
-                            <td>00008786</td>
-                            <td><span class="badge bg-primary">800</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary">Editar</button>
-                                <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Código</th>
+                                    <th>Stock</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var producto in Model)
+                                {
+                                    <tr>
+                                        <td>@producto.nombre</td>
+                                        <td>
+                                            @(producto.Categoria_ID == 1 ? "Medias Antideslizantes" :
+                                                producto.Categoria_ID == 2 ? "Medias Cortadas" :
+                                                producto.Categoria_ID == 3 ? "Medias de Compresión" :
+                                                producto.Categoria_ID == 4 ? "Espinilleras" :
+                                                producto.Categoria_ID == 5 ? "Portaespinilleras" : "Sin categoría")
+                                        </td>
+                                        <td>@($"0000{producto.Producto_ID}")</td>
+                                        <td><span class="badge bg-primary">@producto.stock</span></td>
+                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td>
+                                            <a class="btn btn-sm btn-secondary"
+                                               asp-controller="Inventario"
+                                               asp-action="EditarProducto"
+                                               asp-route-id="@producto.Producto_ID">Editar</a>
+                                            <button class="btn btn-sm btn-danger btn-toggle-status">Inactivar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
             </div>
         </div>
 

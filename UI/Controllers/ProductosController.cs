@@ -199,7 +199,7 @@ namespace UI.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Mensaje = "Ocurrió un error inesperado.";
+                ViewBag.Mensaje = "Ocurrió un error inesperado: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -222,7 +222,7 @@ namespace UI.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Mensaje = "Ocurrió un error inesperado.";
+                ViewBag.Mensaje = "Ocurrió un error inesperado: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
