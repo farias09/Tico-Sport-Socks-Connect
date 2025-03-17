@@ -15,12 +15,16 @@ namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosDto
         {
             return new UsuarioDto
             {
+                Usuario_ID = elUsuario.Usuario_ID,
                 Nombre = elUsuario.Nombre,
                 Email = elUsuario.Email,
                 Telefono = elUsuario.Telefono,
                 Direccion = elUsuario.Direccion,
                 Provincia = elUsuario.Provincia,
-                Rol_ID = elUsuario.Rol_ID
+                Numero = elUsuario.Numero,
+                Rol_ID = elUsuario.Rol_ID,
+                estado = elUsuario.estado,
+                FechaRegistro = elUsuario.FechaRegistro
             };
         }
     }

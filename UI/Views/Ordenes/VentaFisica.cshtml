@@ -45,99 +45,119 @@
 <body>
     <div class="main-content">
         <div class="page-content">
-    <div class="container mt-4">
-        <h1 class="text-center">Gestión de órdenes</h1>
-        <p class="text-muted text-center">Gestiona las órdenes que recibe Tico Sport Socks</p>
+            <div class="container mt-4">
+                <h1 class="text-center">Gestión de órdenes</h1>
+                <p class="text-muted text-center">Gestiona las órdenes que recibe Tico Sport Socks</p>
 
-        <div class="row">
-            <!-- Formulario y lista de productos -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header">Registrar Venta Física</div>
-                    <div class="card-body">
-                        <form id="ventaForm">
-                            <div class="mb-3">
-                                <label for="clienteNombre" class="form-label">Nombre del Cliente</label>
-                                <input type="text" class="form-control" id="clienteNombre" name="clienteNombre" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="correo" class="form-label">Correo Electrónico del Cliente</label>
-                                <input type="email" class="form-control" id="correo" name="correo" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="buscadorProducto" class="form-label">Buscar Producto</label>
-                                <input type="text" class="form-control" id="buscadorProducto" placeholder="Código o nombre del producto">
-                            </div>
-                            <div class="mb-3">
-                                <label for="producto" class="form-label">Producto</label>
-                                <select class="form-select" id="producto" name="producto">
-                                    <option value="">Selecciona un producto</option>
-                                    <option value="medias_blancas" data-price="5000">Medias Antideslizantes Blancas - ₡5,000</option>
-                                    <option value="medias_negras" data-price="5000">Medias Antideslizantes Negras - ₡5,000</option>
-                                    <option value="medias_negras2" data-price="4500">Medias Cortadas Negras - ₡4,500</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="cantidad" class="form-label">Cantidad</label>
-                                <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="1">
-                            </div>
-                            <button type="button" class="btn btn-success" id="agregarProducto">
-                                <i class="bi bi-plus-circle"></i> Agregar Producto
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Productos Agregados</div>
-                    <div class="card-body">
-                        <ul class="list-group product-list" id="listaProductos"></ul>
-                        <hr>
-                        <button type="button" class="btn btn-primary" id="registrarVenta">
-                            <i class="bi bi-check-circle"></i> Registrar Venta
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista previa de factura -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Vista Previa de Factura</div>
-                    <div class="card-body">
-                        <div class="rounded-lg border bg-light p-4">
-                            <div id="vistaFactura">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="text-sm fw-bold" id="facturaNumero">Factura #<span id="numeroFactura">---</span></p>
-                                        <p class="text-muted small" id="facturaFecha">Fecha: <span id="fechaActual">---</span></p>
+                <div class="row">
+                    <!-- Formulario y lista de productos -->
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">Registrar Venta Física</div>
+                            <div class="card-body">
+                                <form id="ventaForm">
+                                    <div class="mb-3">
+                                        <label for="clienteNombre" class="form-label">Nombre del Cliente</label>
+                                        <input type="text" class="form-control" id="clienteNombre" name="clienteNombre" required>
                                     </div>
-                                    <div class="text-end">
-                                        <p class="fw-bold">Tico Sport Socks</p>
-                                        <p class="text-muted small">Heredia, Costa Rica</p>
+                                    <div class="mb-3">
+                                        <label for="correo" class="form-label">Correo Electrónico del Cliente</label>
+                                        <input type="email" class="form-control" id="correo" name="correo" required>
                                     </div>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="buscadorProducto" class="form-label">Buscar Producto</label>
+                                        <input type="text" class="form-control" id="buscadorProducto" placeholder="Código o nombre del producto">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="producto" class="form-label">Producto</label>
+                                        <select class="form-select" id="producto" name="producto">
+                                            <option value="">Selecciona un producto</option>
+                                            @foreach (var producto in ViewBag.ProductosActivos)
+                                            {
+                                                <option value="@producto.Producto_ID" data-price="@producto.precio">@producto.nombre - ₡@producto.precio.ToString("N2")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cantidad" class="form-label">Cantidad</label>
+                                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="1">
+                                    </div>
+                                    <button type="button" class="btn btn-success" id="agregarProducto">
+                                        <i class="bi bi-plus-circle"></i> Agregar Producto
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">Productos Agregados</div>
+                            <div class="card-body">
+                                <ul class="list-group product-list" id="listaProductos"></ul>
                                 <hr>
-                                <p class="fw-bold">Detalles del Cliente</p>
-                                <p id="facturaCliente">Nombre: <span class="text-muted">N/A</span></p>
-                                <p id="facturaCorreo">Correo: <span class="text-muted">N/A</span></p>
-                                <hr>
-                                <p class="fw-bold">Productos</p>
-                                <div id="facturaProductos" class="mb-3">
-                                    <p class="text-muted">No hay productos agregados.</p>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold">Total:</p>
-                                    <p id="facturaTotal">₡0.00</p>
+                                <button type="button" class="btn btn-primary" id="registrarVenta">
+                                    <i class="bi bi-check-circle"></i> Registrar Venta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vista previa de factura -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Vista Previa de Factura</div>
+                            <div class="card-body">
+                                <div class="rounded-lg border bg-light p-4">
+                                    <div id="vistaFactura">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <p class="text-sm fw-bold" id="facturaNumero">Factura #<span id="numeroFactura">---</span></p>
+                                                <p class="text-muted small" id="facturaFecha">Fecha: <span id="fechaActual">---</span></p>
+                                            </div>
+                                            <div class="text-end">
+                                                <p class="fw-bold">Tico Sport Socks</p>
+                                                <p class="text-muted small">Heredia, Costa Rica</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p class="fw-bold">Detalles del Cliente</p>
+                                        <p id="facturaCliente">Nombre: <span class="text-muted">N/A</span></p>
+                                        <p id="facturaCorreo">Correo: <span class="text-muted">N/A</span></p>
+                                        <hr>
+                                        <p class="fw-bold">Productos</p>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered" id="tablaProductosFactura">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Producto</th>
+                                                        <th class="text-center">Cantidad</th>
+                                                        <th class="text-end">Precio Unit.</th>
+                                                        <th class="text-end">Subtotal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="facturaProductos">
+                                                    <tr>
+                                                        <td colspan="4" class="text-center text-muted">No hay productos agregados</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                                                        <td class="text-end fw-bold" id="facturaTotal">₡0.00</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <div class="mt-3 small text-muted">
+                                            <p class="mb-1">Pago realizado mediante venta física directa.</p>
+                                            <p class="mb-0">Una copia de esta factura será enviada a su correo electrónico.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
         </div>
     </div>
 
@@ -173,15 +193,13 @@
             const numeroFactura = document.getElementById('numeroFactura');
             const fechaActual = document.getElementById('fechaActual');
 
-            // Estado
             let productosAgregados = [];
             let totalFactura = 0;
 
-            // Inicializar fecha y número de factura
             numeroFactura.textContent = Math.floor(Math.random() * 9000) + 1000;
             fechaActual.textContent = new Date().toLocaleDateString();
 
-            // Búsqueda de productos
+            // Busqueda de productos
             buscadorProducto.addEventListener('input', function () {
                 const query = buscadorProducto.value.toLowerCase();
                 for (let option of productoSelect.options) {
@@ -194,12 +212,12 @@
 
             // Agregar producto
             agregarProductoBtn.addEventListener('click', function () {
-                const producto = productoSelect.value;
+                const productoId = productoSelect.value;
                 const productoNombre = productoSelect.options[productoSelect.selectedIndex]?.text;
                 const precioUnitario = parseFloat(productoSelect.options[productoSelect.selectedIndex].getAttribute('data-price'));
                 const cantidad = parseInt(cantidadInput.value, 10);
 
-                if (!producto || !cantidad || cantidad <= 0) {
+                if (!productoId || !cantidad || cantidad <= 0) {
                     alert('Seleccione un producto y una cantidad válida.');
                     return;
                 }
@@ -207,7 +225,7 @@
                 const subtotal = cantidad * precioUnitario;
 
                 productosAgregados.push({
-                    producto,
+                    productoId,
                     productoNombre,
                     cantidad,
                     precioUnitario,
@@ -228,11 +246,11 @@
                     const li = document.createElement('li');
                     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
                     li.innerHTML = `
-                                ${item.productoNombre} x ${item.cantidad} - ₡${item.subtotal.toLocaleString()}
-                                <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${index})">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            `;
+                                            ${item.productoNombre} x ${item.cantidad} - ₡${item.subtotal.toLocaleString()}
+                                            <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${index})">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        `;
                     listaProductos.appendChild(li);
                 });
             }
@@ -242,12 +260,23 @@
                 facturaCliente.innerHTML = `Nombre: <span class="text-muted">${clienteNombreInput.value || 'N/A'}</span>`;
                 facturaCorreo.innerHTML = `Correo: <span class="text-muted">${correoInput.value || 'N/A'}</span>`;
 
+                // Actualizar la tabla de productos
+                const tableBody = document.getElementById('facturaProductos');
+
                 if (productosAgregados.length === 0) {
-                    facturaProductos.innerHTML = '<p class="text-muted">No hay productos agregados.</p>';
+                    tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No hay productos agregados</td></tr>';
                 } else {
-                    facturaProductos.innerHTML = productosAgregados.map(item =>
-                        `<p>${item.productoNombre} x ${item.cantidad} - ₡${item.subtotal.toLocaleString()}</p>`
-                    ).join('');
+                    tableBody.innerHTML = '';
+                    productosAgregados.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${item.productoNombre}</td>
+                        <td class="text-center">${item.cantidad}</td>
+                        <td class="text-end">₡${item.precioUnitario.toLocaleString()}</td>
+                        <td class="text-end">₡${item.subtotal.toLocaleString()}</td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
                 }
 
                 facturaTotal.textContent = `₡${totalFactura.toLocaleString()}`;
@@ -261,7 +290,7 @@
                 actualizarFactura();
             };
 
-            // Registrar venta
+            // Registrar venta y enviar factura
             registrarVentaBtn.addEventListener('click', function () {
                 if (productosAgregados.length === 0) {
                     alert('Agregue al menos un producto antes de registrar la venta.');
@@ -279,8 +308,74 @@
                     fecha: fechaActual.textContent
                 };
 
-                console.log('Venta registrada:', ventaData);
-                alert('Venta registrada con éxito.');
+                // Generar el HTML de la factura
+                const facturaHtml = `
+<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <p style="text-align: center; font-size: 14px; color: #666;">Tico Sport Socks</p>
+            </div>
+            <h2 style="text-align: center; color: #007bff;">Factura de Compra</h2>
+            <p style="text-align: center; font-size: 14px; color: #666;">Número de Factura: ${ventaData.numeroFactura}</p>
+            <p style="text-align: center; font-size: 14px; color: #666;">Fecha: ${ventaData.fecha}</p>
+            <h3 style="color: #007bff;">Información del Cliente</h3>
+            <p><strong>Nombre:</strong> ${ventaData.cliente.nombre}</p>
+            <p><strong>Correo:</strong> ${ventaData.cliente.correo}</p>
+            <h3 style="color: #007bff;">Detalles de la Compra</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <thead>
+                    <tr style="background-color: #007bff; color: #fff;">
+                        <th style="padding: 10px; text-align: left;">Producto</th>
+                        <th style="padding: 10px; text-align: center;">Cantidad</th>
+                        <th style="padding: 10px; text-align: right;">Precio Unitario</th>
+                        <th style="padding: 10px; text-align: right;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${ventaData.productos.map(item => `
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">${item.productoNombre}</td>
+                            <td style="padding: 10px; text-align: center;">${item.cantidad}</td>
+                            <td style="padding: 10px; text-align: right;">₡${item.precioUnitario.toLocaleString()}</td>
+                            <td style="padding: 10px; text-align: right;">₡${item.subtotal.toLocaleString()}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+                <tfoot>
+                    <tr style="background-color: #f8f9fa;">
+                        <td colspan="3" style="padding: 10px; text-align: right; font-weight: bold;">Total:</td>
+                        <td style="padding: 10px; text-align: right; font-weight: bold;">₡${ventaData.total.toLocaleString()}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p style="text-align: center; font-size: 12px; color: #666; margin-top: 20px;">
+                Gracias por su compra en Tico Sport Socks. Para cualquier consulta, contáctenos a info@ticosportsocks.com.
+            </p>
+</div>
+`;
+
+                // Enviar la factura por correo
+                fetch('/Ordenes/EnviarFactura', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        correo: ventaData.cliente.correo,
+                        facturaHtml: facturaHtml
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Venta registrada y factura enviada correctamente.');
+                        } else {
+                            alert('Error al enviar la factura: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al enviar la factura.');
+                    });
             });
         });
     </script>

@@ -26,5 +26,6 @@ namespace TicoSportSocksConnect.Abstracciones.Modelos.Inventario
         public string imagen { get; set; }
 
         public int Categoria_ID { get; set; }
+        public string CategoriaNombre { get; set; }
     }
 }
