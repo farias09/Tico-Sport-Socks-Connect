@@ -22,8 +22,8 @@
 
     <style>
         .contenedor-orden {
-            margin-left: 260px; 
-            padding-top: 80px; 
+            margin-left: 260px;
+            padding-top: 80px;
             padding-left: 20px;
             padding-right: 20px;
         }
@@ -64,10 +64,55 @@
         {
             <h2>Crear Orden</h2>
 
-            <div class="form-group">
-                <label for="Usuario_ID">Seleccionar Usuario</label>
-                @Html.DropDownListFor(m => m.Orden.Usuario_ID, ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control" })
+            <div class="form-group d-flex align-items-center">
+                <label for="Usuario_ID" class="me-2">Seleccionar Usuario</label>
+                <div class="d-flex w-100">
+                    @Html.DropDownListFor(m => m.Orden.Usuario_ID, ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control me-2" })
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">
+                        +
+                    </button>
+                </div>
             </div>
+
+            <!-- Modal para agregar usuario -->
+            <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="agregarUsuarioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarUsuarioModalLabel">Agregar Usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formCrearUsuario">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="Nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rol" class="form-label">Rol</label>
+                                    <select class="form-select" id="rol" name="Rol" required>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Usuario">Usuario</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="contraseña" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="contraseña" name="Contraseña" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="guardarUsuario">Guardar Usuario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
             <!-- Dropdown para seleccionar productos -->
@@ -115,6 +160,7 @@
 
             <button type="submit" class="btn btn-primary mt-2">Crear Orden</button>
         }
+
     </div>
 </body>
 </html>
@@ -181,4 +227,50 @@
         };
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#guardarUsuario").click(function (e) {
+            e.preventDefault();
+
+            var nuevoUsuario = {
+                Nombre: $("#nombre").val(),
+                Email: $("#email").val(),
+                Rol: $("#rol").val(),
+                Contraseña: $("#contraseña").val()
+            };
+
+            $.ajax({
+                url: '@Url.Action("Crear", "Usuarios")',
+                type: 'POST',
+                data: nuevoUsuario,
+                dataType: "json", // Asegura que espera JSON
+                success: function (response) {
+                    if (response.success) {
+                        // Agregar el nuevo usuario al dropdown
+                        $("#Orden_Usuario_ID").append(new Option(response.nombre, response.id));
+
+                        // Seleccionar automáticamente el nuevo usuario
+                        $("#Orden_Usuario_ID").val(response.id);
+
+                        // Cerrar el modal con Bootstrap 5
+                        var modal = new bootstrap.Modal(document.getElementById('agregarUsuarioModal'));
+                        modal.hide();
+
+                        // Limpiar el formulario
+                        $("#formCrearUsuario")[0].reset();
+                    } else {
+                        alert("Error al agregar usuario: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                    alert("Hubo un error al conectar con el servidor.");
+                }
+            });
+        });
+    });
+</script>
+
 
