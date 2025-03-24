@@ -105,7 +105,7 @@
                     </div>
                     <div class="contenedor-chat">
                         <!-- Panel Izquierdo: Lista de conversaciones -->
-                        <div class="lista-conversaciones">
+                        <div class="lista-conversaciones" id="conversaciones-panel">
                             <div class="card">
                                 <div class="card-header bg-white d-flex justify-content-between">
                                     <h5 class="mb-0">Conversaciones</h5>
@@ -129,7 +129,7 @@
                         </div>
 
                         <!-- Panel Central: Chat -->
-                        <div class="chat-panel" id="chat-container">
+                        <div class="chat-panel" id="chat-container" data-usuario-id="@Model.Chat?.UsuarioId">
                             @if (Model.Chat != null)
                             {
                                 @Html.Partial("_Chat", Model.Chat)
@@ -186,31 +186,70 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
-    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
-    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
-    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
-    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    @section Scripts {
+        <script>
+            function actualizarMensajes() {
+                const chatPanel = document.getElementById("chat-container");
+                const usuarioId = chatPanel?.dataset.usuarioId;
 
-    <script src="~/Scripts/js/app.js"></script>
+                if (!usuarioId) return;
 
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+                fetch(`/Conversaciones/ObtenerMensajes/${usuarioId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error al obtener mensajes");
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        const mensajesContainer = document.getElementById("mensajes-container");
+                        if (mensajesContainer) {
+                            mensajesContainer.innerHTML = html;
+                        }
+                    })
+                    .catch(err => console.error("Error al actualizar mensajes:", err));
+            }
 
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
 
-</body>
-</html>
+            function actualizarConversaciones() {
+                fetch(window.location.href)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const nuevoPanel = doc.getElementById("chat-container")?.innerHTML;
+                        const actualPanel = document.getElementById("chat-container");
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $(".abrir-chat").click(function (e) {
-            e.preventDefault();
-            var chatUrl = $(this).attr("href");
+                        if (nuevoPanel && actualPanel) {
+                            actualPanel.innerHTML = nuevoPanel;
+                        }
+                    })
+                    .catch(err => console.error("Error al actualizar conversaciones:", err));
+            }
 
-            $("#chat-container").load(chatUrl + " #chat-container > *");
-        });
-    });
-</script>
+            function actualizarInbox() {
+                fetch(window.location.href)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const nuevoInbox = doc.getElementById("conversaciones-panel")?.innerHTML;
+                        const inboxActual = document.getElementById("conversaciones-panel");
+
+                        if (nuevoInbox && inboxActual) {
+                            inboxActual.innerHTML = nuevoInbox;
+                        }
+                    })
+                    .catch(err => console.error("Error al actualizar la lista de conversaciones:", err));
+            }
+
+
+            setInterval(() => {
+                actualizarMensajes();
+                actualizarConversaciones();
+                actualizarInbox();
+            }, 10000);
+
+        </script>
+    }
+

@@ -27,7 +27,7 @@ namespace UI.Controllers
          [System.Web.Http.Route("webhook")]
          public async Task<IHttpActionResult> ReceiveWhatsAppMessage()
          {
-             var form = await Request.Content.ReadAsFormDataAsync();
+            var form = await Request.Content.ReadAsFormDataAsync();
 
              string numeroRemitente = form["From"];
              string contenido = form["Body"];
@@ -39,9 +39,11 @@ namespace UI.Controllers
 
              try
              {
-                 await _mensajeService.GuardarMensajeAsync(numeroRemitente, contenido);
+                Console.WriteLine("Llamando al servicio para guardar el mensaje...");
+                await _mensajeService.GuardarMensajeAsync(numeroRemitente, contenido);
+                Console.WriteLine("✅ Mensaje guardado (o al menos el método fue ejecutado).");
 
-                 var response = new MessagingResponse();
+                var response = new MessagingResponse();
                  response.Message("Mensaje recibido y guardado correctamente.");
 
                  return Ok(response.ToString());
@@ -49,7 +51,8 @@ namespace UI.Controllers
              catch (Exception ex)
              {
                  Trace.TraceError($"❌ Error en el webhook: {ex.ToString()}");
-                 return InternalServerError(ex);
+                Console.WriteLine($"❌ ERROR guardando el mensaje: {ex.Message}");
+                return InternalServerError(ex);
              }
          } 
     }
