@@ -103,5 +103,55 @@ namespace UI.Controllers
             _eliminarUsuarioLN.Eliminar(id);
             return RedirectToAction("Index");
         }
+
+        public ActionResult Clientes()
+        {
+            var usuariosDto = _listarUsuarioLN.Listar();
+
+            var clientesViewModel = usuariosDto
+                .Where(u => u.Rol_ID == 2) // Solo clientes
+                .Select(u => new UsuarioViewModel
+                {
+                    Id = u.Usuario_ID,
+                    Nombre = u.Nombre,
+                    Email = u.Email,
+                    Telefono = u.Telefono,
+                    Direccion = u.Direccion,
+                    Provincia = u.Provincia,
+                    Numero = u.Numero,
+                    Contraseña = u.Contraseña,
+                    FechaRegistro = u.FechaRegistro,
+                    Estado = u.estado,
+                    Rol = "Cliente"
+                })
+                .ToList();
+
+            return View("Index", clientesViewModel); // Usa la misma vista de Index
+        }
+
+        public ActionResult Administradores()
+        {
+            var usuariosDto = _listarUsuarioLN.Listar();
+
+            var adminsViewModel = usuariosDto
+                .Where(u => u.Rol_ID == 1) 
+                .Select(u => new UsuarioViewModel
+                {
+                    Id = u.Usuario_ID,
+                    Nombre = u.Nombre,
+                    Email = u.Email,
+                    Telefono = u.Telefono,
+                    Direccion = u.Direccion,
+                    Provincia = u.Provincia,
+                    Numero = u.Numero,
+                    Contraseña = u.Contraseña,
+                    FechaRegistro = u.FechaRegistro,
+                    Estado = u.estado,
+                    Rol = "Administrador" 
+                })
+                .ToList();
+
+            return View("Index", adminsViewModel); 
+        }
     }
 }

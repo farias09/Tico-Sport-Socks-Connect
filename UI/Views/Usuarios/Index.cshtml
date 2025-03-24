@@ -23,7 +23,7 @@
                 <!-- Encabezado principal -->
                 <div class="text-center mb-4">
                     <h1>Gestión de Usuarios</h1>
-                    <p class="text-muted">Administra los usuarios y empleados de Tico Sport Socks</p>
+                    <p class="text-muted">Administra los clientes y empleados de Tico Sport Socks</p>
                 </div>
 
                 <!-- Botón para agregar un nuevo usuario -->
@@ -38,7 +38,6 @@
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Email</th>
-                            <th>Teléfono</th>
                             <th>Dirección</th>
                             <th>Provincia</th>
                             <th>Número</th>
@@ -56,7 +55,6 @@
                                 <td>@usuario.Id</td>
                                 <td>@usuario.Nombre</td>
                                 <td>@usuario.Email</td>
-                                <td>@(usuario.Telefono ?? "N/A")</td>
                                 <td>@(usuario.Direccion ?? "N/A")</td>
                                 <td>@(usuario.Provincia ?? "N/A")</td>
                                 <td>@(usuario.Numero ?? "N/A")</td>

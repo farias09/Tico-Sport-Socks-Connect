@@ -1,135 +1,143 @@
 ﻿@model UI.Models.ChatViewModel
 
-@{
-    Layout = null;
-}
+<h4>Chat con @Model.Nombre (@Model.Numero)</h4>
 
-<!DOCTYPE html>
+<div class="chat-box">
+    @foreach (var mensaje in Model.Mensajes)
+    {
+        <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
+            <p>@mensaje.Contenido</p>
+            <span class="fecha">@mensaje.Fecha.ToString("g")</span>
+        </div>
+    }
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>_Chat</title>
-</head>
-<body>
-    <h2>Chat con @Model.Nombre (@Model.Numero)</h2>
 
-    <div class="chat-box">
-        @foreach (var mensaje in Model.Mensajes)
-        {
-            <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
-                <p>@mensaje.Contenido</p>
-                <span class="fecha">@mensaje.Fecha.ToString("g")</span>
-            </div>
-        }
-    </div>
+<!-- Formulario de envío -->
+<form id="chatForm">
+    <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
+    <textarea id="mensaje" placeholder="Escribe tu mensaje..." class="form-control"></textarea>
+    <button type="submit" class="btn btn-success">Enviar</button>
+</form>
 
-    <!-- Formulario de envío -->
-    <form id="chatForm">
-        <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
-        <textarea id="mensaje" placeholder="Escribe tu mensaje..." class="form-control"></textarea>
-        <button type="submit" class="btn btn-success">Enviar</button>
-    </form>
+<style>
+    .chat-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-image: url('/Content/images/fondowhatsapp.png');
+        background-size: cover;
+        background-repeat: repeat;
+        background-position: center;
+    }
 
-    <style>
-        .chat-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 400px;
-            overflow-y: scroll;
-        }
+    .mensaje {
+        max-width: 60%;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
 
-        .mensaje {
-            padding: 5px;
-            margin: 5px 0;
-        }
+    .mio {
+        align-self: flex-end;
+        background-color: #d9fdd3;
+        color: black;
+        text-align: right;
+    }
 
-        .mio {
-            background-color: lightgreen;
+    .otro {
+        align-self: flex-start;
+        background-color: #fcfafa;
+        color: black;
+        text-align: left;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .mensaje {
+        max-width: 60%;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.4;
+        position: relative;
+        word-wrap: break-word;
+    }
+
+        /* Mensajes enviados por el usuario */
+        .mensaje.mio {
+            align-self: flex-end;
+            background-color: #d9fdd3;
+            color: black;
             text-align: right;
         }
 
-        .otro {
-            background-color: lightgray;
+        /* Mensajes recibidos */
+        .mensaje.otro {
+            align-self: flex-start;
+            background-color: #fcfafa;
+            color: black;
             text-align: left;
         }
 
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 15px;
-            max-height: 500px;
-            overflow-y: auto;
+        /* Formato para la fecha debajo del mensaje */
+        .mensaje .fecha {
+            display: block;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 5px;
+            text-align: right;
         }
 
-        .mensaje {
-            max-width: 60%;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.4;
-            position: relative;
-            word-wrap: break-word;
+        .mensaje.otro .fecha {
+            color: rgba(0, 0, 0, 0.5);
         }
+</style>
 
-            /* Mensajes enviados por el usuario */
-            .mensaje.mio {
-                align-self: flex-end;
-                background-color: #4CAF50;
-                color: white;
-                text-align: right;
-            }
-
-            /* Mensajes recibidos */
-            .mensaje.otro {
-                align-self: flex-start;
-                background-color: #E5E5E5;
-                color: black;
-                text-align: left;
-            }
-
-            /* Formato para la fecha debajo del mensaje */
-            .mensaje .fecha {
-                display: block;
-                font-size: 12px;
-                color: rgba(255, 255, 255, 0.7);
-                margin-top: 5px;
-                text-align: right;
-            }
-
-            .mensaje.otro .fecha {
-                color: rgba(0, 0, 0, 0.5);
-            }
-    </style>
-</body>
-</html>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Definir la función en el ámbito global
-    function actualizarMensajes() {
-        var usuarioId = $("#usuarioId").val();
-        console.log("Actualizando mensajes para el usuario:", usuarioId);
+    document.getElementById("chatForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-        $.ajax({
-            url: '/Conversaciones/ObtenerMensajes', 
-            type: 'GET',
-            data: { id: usuarioId },
-            success: function (data) {
-                console.log("Mensajes actualizados correctamente.");
-                $("#mensajes-container").html(data); 
-            },
-            error: function () {
-                console.log("Error al obtener mensajes.");
-            }
-        });
-    }
+        const usuarioId = document.getElementById("usuarioId").value;
+        const mensaje = document.getElementById("mensaje").value;
 
-    
-    $(document).ready(function () {
-        actualizarMensajes(); 
-        setInterval(actualizarMensajes, 5000); // Se ejecuta cada 5 segundos
+        if (mensaje.trim() === "") return;
+
+        const formData = new FormData();
+        formData.append("id", usuarioId);
+        formData.append("contenido", mensaje);
+
+        fetch(`/Conversaciones/EnviarMensaje/${usuarioId}`, {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("mensaje").value = "";
+                    actualizarMensajes();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error al enviar mensaje:", error);
+            });
     });
 </script>
+

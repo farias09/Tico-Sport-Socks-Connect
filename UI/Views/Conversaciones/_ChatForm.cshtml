@@ -1,0 +1,7 @@
+﻿@model UI.Models.ChatViewModel
+
+<form id="chatForm">
+    <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
+    <textarea id="mensaje" placeholder="Escribe tu mensaje..." class="form-control"></textarea>
+    <button type="submit" class="btn btn-success">Enviar</button>
+</form>

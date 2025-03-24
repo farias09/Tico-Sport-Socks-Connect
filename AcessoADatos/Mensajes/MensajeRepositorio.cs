@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace AcessoADatos.Mensajes
 {
@@ -21,12 +22,10 @@ namespace AcessoADatos.Mensajes
         }
         public async Task GuardarMensajeAsync(string numeroRemitente, string contenido, DateTime fecha)
         {
-            // 🔹 1️⃣ Removemos "whatsapp:" en caso de que el número lo tenga
             numeroRemitente = numeroRemitente.Replace("whatsapp:", "").Trim();
+            string numeroReceptor = "+14155238886"; // Ejemplo: el número del sandbox de Twilio
 
-            string numeroReceptor = "+506XXXXXXXX"; // 📌 Aquí pon el número del receptor predeterminado (si es necesario)
-
-            // 🔹 2️⃣ Verificar si el Emisor existe en la base de datos usando su número
+            // Verificar si el Emisor existe en la base de datos usando su número
             var usuarioEmisor = await _contexto.UsuariosTabla.FirstOrDefaultAsync(u => u.Numero == numeroRemitente);
 
             if (usuarioEmisor == null)
