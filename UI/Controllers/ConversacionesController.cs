@@ -3,9 +3,14 @@ using AccesoADatos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Twilio.Types;
+using Twilio;
 using UI.Models;
+using Twilio.Rest.Api.V2010.Account;
+
 
 namespace UI.Controllers
 {
@@ -41,12 +46,9 @@ namespace UI.Controllers
                 })
                 .ToList();
 
-            // Asumiendo que tienes una tabla o método para obtener productos,
-            // mapea los datos a tu ProductosDto.
             var productos = _contexto.ProductosTabla
                 .Select(p => new Abstracciones.Modelos.Productos.ProductosDto
                 {
-                    // Ajusta los nombres de las propiedades según tu modelo
                     Producto_ID = p.Producto_ID,
                     nombre = p.nombre,
                     imagen = p.imagen,
@@ -121,8 +123,10 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult EnviarMensaje(int id, string contenido)
+        public async Task<ActionResult> EnviarMensaje(int id, string contenido)
         {
+            Console.WriteLine($"📩 Enviando mensaje a ID: {id}, Contenido: {contenido}");
+
             if (string.IsNullOrEmpty(contenido))
             {
                 return Json(new { success = false, message = "El mensaje no puede estar vacío." });
@@ -130,14 +134,15 @@ namespace UI.Controllers
 
             var usuario = _contexto.UsuariosTabla.FirstOrDefault(u => u.Usuario_ID == id);
 
-            if (usuario == null)
+            if (usuario == null || string.IsNullOrEmpty(usuario.Numero))
             {
-                return Json(new { success = false, message = "Usuario no encontrado." });
+                return Json(new { success = false, message = "Usuario no encontrado o sin número." });
             }
 
+            // 1️⃣ Guardar el mensaje en la base de datos
             var nuevoMensaje = new MensajesTabla
             {
-                emisor_ID = 1, 
+                emisor_ID = 2,
                 receptor_ID = usuario.Usuario_ID,
                 contenido = contenido,
                 fecha = DateTime.UtcNow
@@ -146,7 +151,39 @@ namespace UI.Controllers
             _contexto.MensajesTabla.Add(nuevoMensaje);
             _contexto.SaveChanges();
 
+            try
+            {
+                // 2️⃣ Enviar mensaje por WhatsApp usando Twilio
+                await EnviarMensajeWhatsApp(usuario.Numero, contenido);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error al enviar mensaje por WhatsApp: {ex.Message}");
+                // El mensaje se guardó, pero no se pudo enviar por WhatsApp
+                return Json(new { success = false, message = "Mensaje guardado, pero no se pudo enviar por WhatsApp." });
+            }
+
             return Json(new { success = true });
+        }
+
+        private async Task EnviarMensajeWhatsApp(string numeroDestino, string contenido)
+        {
+            string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+            string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+            TwilioClient.Init(accountSid, authToken);
+
+            // Asegurarse de que el número venga con el formato correcto
+            if (!numeroDestino.StartsWith("+"))
+                numeroDestino = "+506" + numeroDestino;
+
+            var mensaje = await MessageResource.CreateAsync(
+                from: new PhoneNumber("whatsapp:+14155238886"), // Número de Twilio sandbox
+                to: new PhoneNumber($"whatsapp:{numeroDestino}"),
+                body: contenido
+            );
+
+            Console.WriteLine($"✅ Mensaje enviado a {numeroDestino}: {mensaje.Sid}");
         }
 
         [HttpGet]
