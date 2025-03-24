@@ -6,6 +6,17 @@
     var categorias = ViewBag.Categorias as List<SelectListItem>;
 
 }
+
+@{
+    var notificacion = TempData["Notificacion"] as string;
+    if (!string.IsNullOrEmpty(notificacion))
+    {
+        <br />
+        <br />
+        <div class="alert alert-info">@Html.Raw(notificacion)</div>
+    }
+}
+
 <!doctype html>
 <html lang="en">
 
@@ -196,7 +207,7 @@
             window.location.href = "@Url.Action("Index")" + "?ordenStock=" + ordenSeleccionado;
         });
     </script>
-   
+
 </body>
 
 </html>
