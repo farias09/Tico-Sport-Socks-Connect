@@ -115,7 +115,7 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item me-3">
                             <!-- Add margin-end to increase spacing -->
-                            <a class="nav-link active text-dark fw-semibold"  href="@Url.Action("Index", "Home")">Inicio</a>
+                            <a class="nav-link active text-dark fw-semibold" href="@Url.Action("Index", "Home")">Inicio</a>
                         </li>
                         <li class="nav-item me-3">
                             <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Conversaciones")">Gestión de Órdenes</a>
@@ -133,6 +133,9 @@
                             <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Productos")">Inventario</a>
                         </li>
                     </ul>
+                    <div class="d-flex justify-content-end">
+                        @Html.Partial("_LoginPartial")
+                    </div>
                 </nav>
                 <!-- End Navigation Links -->
                 <!-- App Search -->
