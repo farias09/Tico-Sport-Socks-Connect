@@ -23,6 +23,9 @@ using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using System.Text;
 using System.Threading.Tasks;
+using LN.Cajas.ListarCaja;
+using LN.General.Conversiones.Cajas.ConvertirACajasDto;
+
 
 namespace UI.Controllers
 {
@@ -31,12 +34,14 @@ namespace UI.Controllers
         private readonly OrdenService _ordenService;
         private readonly ListarProductoLN _listarProductoLN;
         private readonly ListarUsuarioLN _listarUsuarioLN;
+        private readonly ListarCajaLN _listarCajaLN;
 
         public OrdenesController()
         {
             _ordenService = new OrdenService(new AcessoADatos.Ordenes.OrdenRepositorio());
             _listarProductoLN = new ListarProductoLN();
             _listarUsuarioLN = new ListarUsuarioLN(new AcessoADatos.Usuarios.ListarUsuario.ListarUsuarioAD(new Contexto()), null);
+            _listarCajaLN = new ListarCajaLN(new AcessoADatos.Cajas.ListarCaja.ListarCajaAD(new Contexto()), new ConvertirACajasDto());
         }
 
         public ActionResult Index()
@@ -73,6 +78,9 @@ namespace UI.Controllers
 
         public ActionResult Create()
         {
+            var cajas = _listarCajaLN.Listar();
+            ViewBag.Cajas = new SelectList(cajas, "Caja_ID", "nombre_caja");
+
             var usuarios = _listarUsuarioLN.Listar();
             ViewBag.Usuarios = new SelectList(usuarios, "Usuario_ID", "Nombre");
 
@@ -86,18 +94,21 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(OrdenesDto orden, string ProductosSeleccionadosJson)
+        public ActionResult Create(OrdenViewModel model)
         {
+            var cajas = _listarCajaLN.Listar();
+            ViewBag.Cajas = new SelectList(cajas, "Caja_ID", "nombre_caja");
+
             if (ModelState.IsValid)
             {
-                var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(ProductosSeleccionadosJson);
+                var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(Request.Form["ProductosSeleccionadosJson"]);
 
-                var ordenCreada = _ordenService.CrearOrden(orden, detalles);
+                var ordenCreada = _ordenService.CrearOrden(model.Orden, detalles);
 
                 if (ordenCreada == null || ordenCreada.Orden_ID == 0)
                 {
                     ModelState.AddModelError("", "Hubo un error al crear la orden.");
-                    return View(orden);
+                    return View(model);
                 }
 
                 return RedirectToAction("Confirmacion", new { id = ordenCreada.Orden_ID });
@@ -106,14 +117,8 @@ namespace UI.Controllers
             var usuarios = _listarUsuarioLN.Listar();
             ViewBag.Usuarios = new SelectList(usuarios, "Usuario_ID", "Nombre");
 
-            var productos = _listarProductoLN.Listar();
-            var modelo = new OrdenViewModel
-            {
-                Orden = orden,
-                Productos = productos
-            };
-
-            return View(modelo);
+            model.Productos = _listarProductoLN.Listar();
+            return View(model);
         }
 
         public ActionResult Confirmacion(int id)
@@ -217,5 +222,83 @@ namespace UI.Controllers
                 System.Diagnostics.Debug.WriteLine("Error en envío asíncrono: " + ex.Message);
             }
         }
+        public ActionResult UltimasOrdenes()
+        {
+            Func<int, string> obtenerNombreUsuario = id =>
+            _listarUsuarioLN.ObtenerUsuarioPorId(id)?.Nombre ?? "Desconocido";
+
+            Func<int?, string> obtenerNombreCaja = id =>
+            {
+                if (id == null) return "N/A";
+                var caja = _listarCajaLN.ObtenerCajaPorId(id.Value);
+                return caja?.nombre_caja ?? "Desconocida";
+            };
+
+            var resumen = _ordenService.ObtenerUltimasOrdenesConDetalles(obtenerNombreUsuario, obtenerNombreCaja);
+            return View(resumen);
+        }
+
+        [HttpGet]
+        public ActionResult ConsultarFactura()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerFacturaOrden(int id)
+        {
+            var orden = _ordenService.ObtenerOrdenPorId(id);
+            if (orden == null) return Json(new { success = false, message = "Orden no encontrada" }, JsonRequestBehavior.AllowGet);
+
+            var detalles = _ordenService.ObtenerDetallesPorOrden(id);
+            var usuario = _listarUsuarioLN.ObtenerUsuarioPorId(orden.Usuario_ID);
+
+            return Json(new
+            {
+                success = true,
+                orden = new
+                {
+                    orden.Orden_ID,
+                    orden.FechaOrden,
+                    orden.Total,
+                    orden.Estado
+                },
+                cliente = new
+                {
+                    usuario.Nombre,
+                    usuario.Email
+                },
+                productos = detalles.Select(d => new {
+                    d.NombreProducto,
+                    d.Cantidad,
+                    d.PrecioUnitario,
+                    d.Subtotal
+                })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GestionFacturas()
+        {
+            var ordenes = _ordenService.ObtenerOrdenes();
+            var usuarios = _listarUsuarioLN.Listar();
+
+            var resumen = ordenes.Select(o => new OrdenResumenDto
+            {
+                Orden_ID = o.Orden_ID,
+                UsuarioNombre = usuarios.FirstOrDefault(u => u.Usuario_ID == o.Usuario_ID)?.Nombre ?? "Desconocido",
+                FechaOrden = o.FechaOrden,
+                Total = o.Total,
+                Estado = o.Estado
+            }).OrderByDescending(o => o.FechaOrden).ToList();
+
+            ViewBag.TotalOrdenes = resumen.Count;
+            ViewBag.Pendientes = resumen.Count(o => o.Estado == "Pendiente");
+            ViewBag.Completadas = resumen.Count(o => o.Estado == "Completado");
+            ViewBag.UltimaOrden = resumen.FirstOrDefault();
+
+            return View(resumen);
+        }
+
+
     }
 }

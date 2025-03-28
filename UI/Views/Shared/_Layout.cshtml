@@ -117,21 +117,25 @@
                             <!-- Add margin-end to increase spacing -->
                             <a class="nav-link active text-dark fw-semibold" href="@Url.Action("Index", "Home")">Inicio</a>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Conversaciones")">Gestión de Órdenes</a>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Caja")">Control de Cajas</a>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Factura")">Facturación</a>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Reportes")">Reportes</a>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Productos")">Inventario</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Conversaciones")">Gestión de Órdenes</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Caja")">Control de Cajas</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-dark fw-semibold" href="@Url.Action("GestionFacturas", "Ordenes")">Facturación</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Reportes")">Reportes</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Productos")">Inventario</a>
+                            </li>
+                        }
+
                     </ul>
                     <div class="d-flex justify-content-end">
                         @Html.Partial("_LoginPartial")
@@ -204,28 +208,54 @@
                 <ul class="left-menu list-unstyled" id="side-menu">
                     <li class="menu-title">Busca Rápida</li>
                     <li>
-                        <a class="nav-link text-dark fw-semibold" href="@Url.Action("Clientes", "Usuarios")">
-                            <i class="bi bi-people"></i>
-                            <span>Clientes</span>
-                        </a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Clientes", "Usuarios")">
+                                <i class="bi bi-people"></i>
+                                <span>Clientes</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Login", "Account")">
+                                <i class="bi bi-people"></i>
+                                <span>Clientes</span>
+                            </a>
+                        }
                     </li>
+
                     <li>
-                        <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Reportes")">
-                            <i class="bi bi-bar-chart"></i>
-                            <span>Reportes</span>
-                        </a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "ListaOrdenes")">
+                                <i class="bi bi-list-task"></i>
+                                <span>Órdenes</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Login", "Account")">
+                                <i class="bi bi-people"></i>
+                                <span>Órdenes</span>
+                            </a>
+                        }
                     </li>
+
                     <li>
-                        <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "ListaOrdenes")">
-                            <i class="bi bi-list-task"></i>
-                            <span>Órdenes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Usuarios")">
-                            <i class="bi bi-person"></i>
-                            <span>Usuarios</span>
-                        </a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Index", "Usuarios")">
+                                <i class="bi bi-person"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark fw-semibold" href="@Url.Action("Login", "Account")">
+                                <i class="bi bi-people"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        }
                     </li>
                 </ul>
             </div>
@@ -242,7 +272,7 @@
 
     <footer class="border-top footer text-muted text-center w-100" style="position: relative; z-index: 1;">
         <div class="container">
-            &copy; 2024 - Frontend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Tico Sports Socks - Todos los derechos reservados
         </div>
     </footer>
 

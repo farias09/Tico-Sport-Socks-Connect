@@ -68,52 +68,45 @@
                 <label for="Usuario_ID" class="me-2">Seleccionar Usuario</label>
                 <div class="d-flex w-100">
                     @Html.DropDownListFor(m => m.Orden.Usuario_ID, ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control me-2" })
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">
-                        +
-                    </button>
                 </div>
             </div>
 
-            <!-- Modal para agregar usuario -->
-            <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="agregarUsuarioModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="agregarUsuarioModalLabel">Agregar Usuario</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="formCrearUsuario">
-                                <div class="mb-3">
-                                    <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre" name="Nombre" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Correo Electrónico</label>
-                                    <input type="email" class="form-control" id="email" name="Email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="rol" class="form-label">Rol</label>
-                                    <select class="form-select" id="rol" name="Rol" required>
-                                        <option value="Administrador">Administrador</option>
-                                        <option value="Usuario">Usuario</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="contraseña" class="form-label">Contraseña</label>
-                                    <input type="password" class="form-control" id="contraseña" name="Contraseña" required>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" id="guardarUsuario">Guardar Usuario</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group mt-3">
+                <label for="TipoVenta">Tipo de Venta</label>
+                <select class="form-control" name="Orden.TipoVenta" id="TipoVenta">
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            // Mostramos/ocultamos según valor actual al cargar
+                            if ($("#TipoVenta").val() === "Fisica") {
+                                $("#CajaContainer").show();
+                            } else {
+                                $("#CajaContainer").hide();
+                                $("#Caja_ID").val("");
+                            }
+
+                            // Cambio dinámico cuando el usuario cambia
+                            $("#TipoVenta").change(function () {
+                                if ($(this).val() === "Fisica") {
+                                    $("#CajaContainer").show();
+                                } else {
+                                    $("#CajaContainer").hide();
+                                    $("#Caja_ID").val("");
+                                }
+                            });
+                        });
+                    </script>
+
+                    <option value="Virtual">Virtual</option>
+                    <option value="Fisica">Física</option>
+                </select>
             </div>
 
-
+            <div class="form-group mt-3" id="CajaContainer" style="display:none;">
+                <label for="Caja_ID">Caja</label>
+                @Html.DropDownListFor(m => m.Orden.Caja_ID, ViewBag.Cajas as SelectList, "Seleccione una caja", new { @class = "form-control" })
+            </div>
 
             <!-- Dropdown para seleccionar productos -->
             <div class="form-group">

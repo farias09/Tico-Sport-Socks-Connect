@@ -26,5 +26,9 @@ namespace LN.Cajas.ListarCaja
             List<CajasDto> laListaDeCajas = _listarCajaAD.Listar();
             return laListaDeCajas;
         }
+        public CajasDto ObtenerCajaPorId(int id)
+        {
+            return _listarCajaAD.ObtenerCajaPorId(id);
+        }
     }
 }
