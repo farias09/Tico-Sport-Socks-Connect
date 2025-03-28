@@ -1,0 +1,166 @@
+﻿@model List<Abstracciones.Modelos.Ordenes.OrdenResumenDto>
+@{
+    ViewBag.Title = "Gestión de Facturas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ultimaOrden = ViewBag.UltimaOrden as Abstracciones.Modelos.Ordenes.OrdenResumenDto;
+
+}
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+
+    <!-- dark layout js -->
+    <script src="~/Scripts/js/pages/layout.js"></script>
+
+    <!-- Bootstrap and app CSS -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container mt-4">
+
+                <!-- Encabezado -->
+                <div class="text-center mb-4">
+                    <h1>Gestión de Facturas</h1>
+                    <p class="text-muted">Administra y genera órdenes de compra de forma eficiente</p>
+                </div>
+
+                <!-- Estadísticas rápidas -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center shadow">
+                            <div class="card-body">
+                                <h5>Total Órdenes</h5>
+                                <h2 class="text-primary">@ViewBag.TotalOrdenes</h2>
+                                <p class="text-muted mb-0">Generadas en total</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow">
+                            <div class="card-body">
+                                <h5>Pendientes</h5>
+                                <h2 class="text-warning">@ViewBag.Pendientes</h2>
+                                <p class="text-muted mb-0">Por enviar</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow">
+                            <div class="card-body">
+                                <h5>Completadas</h5>
+                                <h2 class="text-success">@ViewBag.Completadas</h2>
+                                <p class="text-muted mb-0">Órdenes cerradas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow">
+                            <div class="card-body">
+                                <h5>Última Orden</h5>
+                                <h2 class="text-secondary">
+                                    @(ultimaOrden != null ? "#" + ultimaOrden.Orden_ID.ToString() : "—")
+                                </h2>
+                                <p class="text-muted mb-0">
+                                    @(ultimaOrden != null ? ultimaOrden.FechaOrden.ToString("dd/MM/yyyy") : "—")
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Atajos rápidos -->
+                <div class="row mb-4">
+                    <!-- Nueva factura -->
+                    <div class="col-md-6">
+                        <div class="card text-center shadow-sm border-0" style="transition: transform 0.3s;">
+                            <div class="card-body">
+                                <i class="bi bi-plus-circle-fill text-success" style="font-size: 2rem;"></i>
+                                <h5 class="fw-bold mt-2">Nueva Factura</h5>
+                                <p class="text-muted">Crea una factura para tu cliente</p>
+                                <a href="@Url.Action("ConsultarFacturas", "Ordenes")" class="btn btn-success w-75 mt-2 rounded-pill">
+                                    <i class="bi bi-pencil-square me-1"></i> Generar Orden
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Consultar órdenes -->
+                    <div class="col-md-6">
+                        <div class="card text-center shadow-sm border-0" style="transition: transform 0.3s;">
+                            <div class="card-body">
+                                <i class="bi bi-clipboard-data-fill text-primary" style="font-size: 2rem;"></i>
+                                <h5 class="fw-bold mt-2">Consultar Órdenes</h5>
+                                <p class="text-muted">Revisa y gestiona órdenes existentes</p>
+                                <a href="@Url.Action("GestionFacturas", "Ordenes")" class="btn btn-primary w-75 mt-2 rounded-pill">
+                                    <i class="bi bi-list-check me-1"></i> Ver Órdenes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Tabla de historial de órdenes -->
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="mb-3">Últimas 5 órdenes registradas</h5>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th># Orden</th>
+                                    <th>Cliente</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var orden in Model.Take(5))
+                                {
+                                    <tr>
+                                        <td>#@orden.Orden_ID</td>
+                                        <td>@orden.UsuarioNombre</td>
+                                        <td>@orden.FechaOrden.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @if (orden.Estado == "Pendiente")
+                                            {
+                                                <span class="badge bg-warning">Pendiente</span>
+                                            }
+                                            else if (orden.Estado == "Completado")
+                                            {
+                                                <span class="badge bg-success">Completada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">@orden.Estado</span>
+                                            }
+                                        </td>
+                                        <td>₡@orden.Total.ToString("N0")</td>
+                                        <td>
+                                            <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-sm btn-secondary">Ver</a>
+                                            <button class="btn btn-sm btn-danger">Anular</button>
+                                            <button class="btn btn-sm btn-primary">Enviar</button>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

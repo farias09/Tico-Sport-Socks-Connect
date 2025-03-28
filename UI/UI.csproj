@@ -370,6 +370,7 @@
     <Content Include="Content\images\companies\img-7.png" />
     <Content Include="Content\images\companies\img-8.png" />
     <Content Include="Content\images\contact.png" />
+    <Content Include="Content\images\cuenta.png" />
     <Content Include="Content\images\dashboard\dashboard-shape-1.png" />
     <Content Include="Content\images\dashboard\dashboard-shape-2.png" />
     <Content Include="Content\images\dashboard\dashboard-shape-3.png" />
@@ -381,12 +382,14 @@
     <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\fondo-whatsapp.jpg" />
     <Content Include="Content\images\fondowhatsapp.png" />
+    <Content Include="Content\images\lista-de-verificacion.png" />
     <Content Include="Content\images\logo-dark.png" />
     <Content Include="Content\images\logo-light.png" />
     <Content Include="Content\images\logo-sm.png" />
     <Content Include="Content\images\LOGOTSS.png" />
     <Content Include="Content\images\maintenance-bg.png" />
     <Content Include="Content\images\mega-menu.png" />
+    <Content Include="Content\images\paquete.png" />
     <Content Include="Content\images\PPs\PP1.jpg" />
     <Content Include="Content\images\PPs\PP2.jpg" />
     <Content Include="Content\images\PPs\PP3.jpg" />
@@ -396,6 +399,14 @@
     <Content Include="Content\images\Productos\Producto3.jpg" />
     <Content Include="Content\images\Productos\Producto4.jpg" />
     <Content Include="Content\images\Productos\Producto5.jpg" />
+    <Content Include="Content\images\banner1.jpg" />
+    <Content Include="Content\images\opc2.jpg" />
+    <Content Include="Content\images\opc3.jpg" />
+    <Content Include="Content\images\opc1.jpg" />
+    <Content Include="Content\images\banner2.jpg" />
+    <Content Include="Content\images\banner3.jpg" />
+    <Content Include="Content\images\login.jpg" />
+    <Content Include="Content\images\register.jpg" />
     <Content Include="Content\images\small\img-1.jpg" />
     <Content Include="Content\images\small\img-2.jpg" />
     <Content Include="Content\images\small\img-3.jpg" />
@@ -782,6 +793,8 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Ordenes\ConsultarFactura.cshtml" />
+    <Content Include="Views\Ordenes\GestionFacturas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

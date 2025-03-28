@@ -111,6 +111,7 @@
     <Compile Include="Modelos\MovimientosCaja\MovimientosCajaDto.cs" />
     <Compile Include="Modelos\Ordenes\DetalleOrdenesDto.cs" />
     <Compile Include="Modelos\Ordenes\OrdenesDto.cs" />
+    <Compile Include="Modelos\Ordenes\OrdenResumenDTO.cs" />
     <Compile Include="Modelos\Pagos\PagosDto.cs" />
     <Compile Include="Modelos\Productos\ProductosDto.cs" />
     <Compile Include="Modelos\Reportes\ReportesDto.cs" />
