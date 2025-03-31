@@ -26,7 +26,9 @@ namespace AcessoADatos.Ordenes
                 Usuario_ID = orden.Usuario_ID,
                 FechaOrden = DateTime.Now,
                 Total = orden.Total,
-                Estado = "Pendiente"
+                Estado = "Pendiente",
+                TipoVenta = orden.TipoVenta,          
+                Caja_ID = orden.Caja_ID
             };
 
             _contexto.OrdenesTabla.Add(nuevaOrden);
