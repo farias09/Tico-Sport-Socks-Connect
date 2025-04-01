@@ -127,7 +127,7 @@ File: Custom Css File
 }
 
 .page-content {
-  padding: calc(30px + 1rem) 1rem 50px 0.9rem;
+    padding: calc(20px + 1rem) 1rem 20px 0.9rem;
 }
 
 .header-item {
@@ -37605,4 +37605,46 @@ readers do not read off random characters that represent icons */
     right: -12px;
     bottom: 38px;
   }
+}
+
+/* Estilos para eliminar márgenes laterales y maximizar espacio */
+body {
+    overflow-x: hidden;
+}
+
+.main-content {
+    margin-left: 0 !important;
+    padding: 0 15px;
+    width: 100%;
+}
+
+.page-content {
+    max-width: 100%;
+}
+
+
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1200px) {
+    .container {
+        max-width: unset;
+        padding-left: 220px;
+        padding-right: 30px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Ajustes para gráficos */
+.apex-charts {
+    width: 100% !important;
+}
+
+/* Mejoras para el responsive de las cards */
+@media (max-width: 768px) {
+    .row > div {
+        margin-bottom: 15px;
+    }
 }

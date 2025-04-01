@@ -160,16 +160,22 @@
                         <img class="rounded-circle avatar-2xs" src="~/Content/images/users/avatar-6.png" alt="Perfil">
                     </button>
                     <div class="dropdown-menu dropdown-menu-start shadow">
-                        <!-- Cambiado a dropdown-menu-start -->
                         <div class="card border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h6 class="mb-1">Charlie Stone</h6>
-                                <small>admin@codubucks.in</small>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <h6 class="mb-1">@User.Identity.Name</h6>
+                                }
+                                else
+                                {
+                                    <h6 class="mb-1">Invitado</h6>
+                                    <small>No autenticado</small>
+                                }
                             </div>
                             <div class="card-body p-0">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <a href="apps-contact.html" class="d-flex align-items-center">
+                                        <a href="@Url.Action("Index", "Manage")" class="d-flex align-items-center">
                                             <i class="far fa-address-card me-2"></i> Perfil
                                         </a>
                                     </li>
@@ -186,7 +192,18 @@
                                 </ul>
                             </div>
                             <div class="card-footer text-center">
-                                <a href="auth-login.html" class="btn btn-danger w-100">Cerrar sesión</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-danger w-100">Cerrar sesión</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary w-100">Iniciar sesión</a>
+                                }
                             </div>
                         </div>
                     </div>
