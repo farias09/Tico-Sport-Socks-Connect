@@ -1,5 +1,6 @@
 ﻿using Abstracciones.AD.Interfaces.Ordenes;
 using Abstracciones.Modelos.Ordenes;
+using Abstracciones.Modelos.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,5 +78,29 @@ namespace LN.Ordenes.OrdenService
             return resultado;
         }
 
+        public List<VentasPorDiaDto> ObtenerVentasPorDia(DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            return _ordenRepositorio.ObtenerVentasPorDia(fechaInicio, fechaFin);
+        }
+
+        public List<VentasPorUsuarioDto> ObtenerVentasPorUsuario()
+        {
+            return _ordenRepositorio.ObtenerVentasPorUsuario();
+        }
+
+        public List<ProductoMasVendidoDto> ObtenerProductosMasVendidos()
+        {
+            return _ordenRepositorio.ObtenerProductosMasVendidos();
+        }
+
+        public List<VentasPorTipoDto> ObtenerVentasPorTipo()
+        {
+            return _ordenRepositorio.ObtenerVentasPorTipo();
+        }
+
+        public List<VentasPorMesDto> ObtenerVentasPorMes()
+        {
+            return _ordenRepositorio.ObtenerVentasPorMes();
+        }
     }
 }
