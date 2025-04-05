@@ -15,5 +15,7 @@ namespace Abstracciones.Modelos.Ordenes
         public DateTime FechaOrden { get; set; }
         public decimal Total { get; set; }
         public string Estado { get; set; }
+        public string TipoVenta { get; set; }          
+        public int? Caja_ID { get; set; }
     }
 }

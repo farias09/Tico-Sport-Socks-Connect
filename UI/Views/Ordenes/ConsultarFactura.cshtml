@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Consultar Factura";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard | Clivax - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Codebucks" name="author" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+
+    <!-- dark layout js -->
+    <script src="~/Scripts/js/pages/layout.js"></script>
+
+    <!-- Bootstrap and app CSS -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/css/app.css" />
+    <link rel="stylesheet" href="~/Content/css/icons.css" />
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Consultar Factura por Orden</h2>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="number" id="numeroOrden" class="form-control" placeholder="Ingrese número de orden" />
+                    <button id="buscarOrden" class="btn btn-success">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="facturaContainer" class="d-none">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold">Factura #<span id="facturaNumero">---</span></h5>
+                            <p class="text-muted mb-1">Fecha: <span id="facturaFecha">---</span></p>
+                        </div>
+                        <div class="text-end">
+                            <p class="fw-bold">Tico Sport Socks</p>
+                            <p class="text-muted small">Heredia, Costa Rica</p>
+                        </div>
+                    </div>
+                    <hr />
+                    <p class="fw-bold">Cliente</p>
+                    <p id="facturaCliente">Nombre: <span class="text-muted">---</span></p>
+                    <p id="facturaCorreo">Correo: <span class="text-muted">---</span></p>
+
+                    <hr />
+                    <p class="fw-bold">Productos</p>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end">Precio Unitario</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="facturaProductos">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No hay productos</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold">Total:</td>
+                                <td class="text-end fw-bold" id="facturaTotal">₡0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <button id="enviarFactura" class="btn btn-primary mt-3">
+                        <i class="bi bi-envelope"></i> Enviar factura por correo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let ordenActual = null;
+    let correoCliente = null;
+
+    $("#buscarOrden").click(function () {
+        let id = $("#numeroOrden").val();
+        if (!id) return alert("Por favor ingrese un número de orden.");
+
+        $.get("/Ordenes/ObtenerFacturaOrden", { id: id }, function (response) {
+            if (!response.success) {
+                alert(response.message);
+                return;
+            }
+
+            // Mostrar factura
+            ordenActual = response;
+            correoCliente = response.cliente.Email;
+
+            $("#facturaContainer").removeClass("d-none");
+
+            $("#facturaNumero").text(response.orden.Orden_ID);
+            $("#facturaFecha").text(new Date(response.orden.FechaOrden).toLocaleDateString());
+            $("#facturaCliente span").text(response.cliente.Nombre);
+            $("#facturaCorreo span").text(response.cliente.Email);
+            $("#facturaTotal").text("₡" + response.orden.Total.toLocaleString());
+
+            let productos = response.productos;
+            let html = "";
+
+            productos.forEach(p => {
+                html += `<tr>
+                            <td>${p.NombreProducto}</td>
+                            <td class="text-center">${p.Cantidad}</td>
+                            <td class="text-end">₡${p.PrecioUnitario.toLocaleString()}</td>
+                            <td class="text-end">₡${p.Subtotal.toLocaleString()}</td>
+                         </tr>`;
+            });
+
+            $("#facturaProductos").html(html);
+        });
+    });
+
+    $("#enviarFactura").click(function () {
+        if (!ordenActual || !correoCliente) return alert("Debe consultar una orden primero.");
+
+        let htmlFactura = $("#facturaContainer").html();
+
+        $.post("/Ordenes/EnviarFactura", {
+            correo: correoCliente,
+            facturaHtml: htmlFactura
+        }, function (response) {
+            if (response.success) {
+                alert(response.message);
+            } else {
+                alert("Error al enviar factura: " + response.message);
+            }
+        });
+    });
+</script>
+

@@ -38,5 +38,26 @@ namespace AcessoADatos.Cajas.ListarCaja
             return laListadeCajas;
         }
 
+        public CajasDto ObtenerCajaPorId(int id)
+        {
+            var laCaja = _elContexto.CajasTabla.FirstOrDefault(c => c.Caja_ID == id);
+
+            if (laCaja == null)
+                return null;
+
+            return new CajasDto
+            {
+                Caja_ID = laCaja.Caja_ID,
+                nombre_caja = laCaja.nombre_caja,
+                fecha_apertura = laCaja.fecha_apertura,
+                fecha_cierre = laCaja.fecha_cierre,
+                monto_inicial = laCaja.monto_inicial,
+                monto_final = laCaja.monto_final,
+                total_ventas = laCaja.total_ventas,
+                total_gastos = laCaja.total_gastos,
+                estado = laCaja.estado,
+                Usuario_ID = laCaja.Usuario_ID
+            };
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace UI.Models
     {
         public OrdenesDto Orden { get; set; }
         public List<ProductosDto> Productos { get; set; }
-
         public List<DetalleOrdenesDto> Detalles { get; set; } 
         public UsuarioDto Usuario { get; set; }  
     }

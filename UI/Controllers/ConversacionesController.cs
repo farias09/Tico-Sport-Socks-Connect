@@ -139,11 +139,10 @@ namespace UI.Controllers
                 return Json(new { success = false, message = "Usuario no encontrado o sin número." });
             }
 
-            // 1️⃣ Guardar el mensaje en la base de datos
             var nuevoMensaje = new MensajesTabla
             {
                 emisor_ID = 2,
-                receptor_ID = usuario.Usuario_ID,
+                receptor_ID = 1,
                 contenido = contenido,
                 fecha = DateTime.UtcNow
             };
@@ -153,7 +152,6 @@ namespace UI.Controllers
 
             try
             {
-                // 2️⃣ Enviar mensaje por WhatsApp usando Twilio
                 await EnviarMensajeWhatsApp(usuario.Numero, contenido);
             }
             catch (Exception ex)

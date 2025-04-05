@@ -151,6 +151,7 @@ namespace UI.Controllers
                 else
                 {
                     int cantidadDeDatosActualizados = await _actualizarProducto.Editar(elProducto);
+                    await VerificarYActualizarEstadoProducto(elProducto.Producto_ID); // Llamar al método para verificar y actualizar el estado
                     return RedirectToAction("Index");
                 }
             }
@@ -226,5 +227,27 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        private async Task VerificarYActualizarEstadoProducto(int productoId)
+        {
+            var producto = _obtenerPorId.Obtener(productoId);
+
+            if (producto != null)
+            {
+                if (producto.stock == 0)
+                {
+                    bool resultado = await _cambiarEstado.CambiarEstado(productoId, false);
+                    if (resultado)
+                    {
+                        TempData["Notificacion"] = $"El producto {producto.nombre} ha sido inactivado debido a la falta de stock.";
+                    }
+                }
+                else
+                {
+                    TempData.Remove("Notificacion");
+                }
+            }
+        }
+
     }
 }

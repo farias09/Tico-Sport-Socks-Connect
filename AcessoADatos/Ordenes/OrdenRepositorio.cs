@@ -1,5 +1,6 @@
 ﻿using Abstracciones.AD.Interfaces.Ordenes;
 using Abstracciones.Modelos.Ordenes;
+using Abstracciones.Modelos.Reportes;
 using Abstracciones.ModelosBaseDeDatos;
 using AccesoADatos;
 using System;
@@ -7,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.SqlServer;
+using System.Data.Entity;
+
 
 namespace AcessoADatos.Ordenes
 {
@@ -26,7 +30,9 @@ namespace AcessoADatos.Ordenes
                 Usuario_ID = orden.Usuario_ID,
                 FechaOrden = DateTime.Now,
                 Total = orden.Total,
-                Estado = "Pendiente"
+                Estado = "Pendiente",
+                TipoVenta = orden.TipoVenta,          
+                Caja_ID = orden.Caja_ID
             };
 
             _contexto.OrdenesTabla.Add(nuevaOrden);
@@ -119,6 +125,83 @@ namespace AcessoADatos.Ordenes
                     .Select(p => p.precio)
                     .FirstOrDefault()
                 }).ToList();
+        }
+        public List<VentasPorDiaDto> ObtenerVentasPorDia(DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            var query = _contexto.OrdenesTabla.AsQueryable();
+
+            if (fechaInicio.HasValue)
+                query = query.Where(o => o.FechaOrden >= fechaInicio.Value);
+
+            if (fechaFin.HasValue)
+                query = query.Where(o => o.FechaOrden <= fechaFin.Value);
+
+            return query
+                .GroupBy(o => DbFunctions.TruncateTime(o.FechaOrden))
+                .Select(g => new VentasPorDiaDto
+                {
+                    Fecha = g.Key.Value,
+                    TotalVentas = g.Sum(x => x.Total)
+                })
+                .OrderByDescending(x => x.Fecha)
+                .ToList();
+        }
+
+        public List<VentasPorUsuarioDto> ObtenerVentasPorUsuario()
+        {
+            return _contexto.OrdenesTabla
+                .GroupBy(o => o.Usuario_ID)
+                .Select(g => new VentasPorUsuarioDto
+                {
+                    UsuarioNombre = g.Select(x => x.Usuario.Nombre).FirstOrDefault(),
+                    TotalVentas = g.Sum(x => x.Total)
+                })
+                .OrderByDescending(x => x.TotalVentas)
+                .ToList();
+        }
+
+        public List<ProductoMasVendidoDto> ObtenerProductosMasVendidos()
+        {
+            return _contexto.DetalleOrdenesTabla
+                .GroupBy(d => d.Producto_ID)
+                .Select(g => new ProductoMasVendidoDto
+                {
+                    NombreProducto = g.Select(x => x.NombreProducto).FirstOrDefault(),
+                    CantidadVendida = g.Sum(x => x.Cantidad),
+                    TotalGenerado = g.Sum(x => x.Subtotal)
+                })
+                .OrderByDescending(x => x.CantidadVendida)
+                .ToList();
+        }
+
+        public List<VentasPorTipoDto> ObtenerVentasPorTipo()
+        {
+            return _contexto.OrdenesTabla
+                .GroupBy(o => o.TipoVenta)
+                .Select(g => new VentasPorTipoDto
+                {
+                    TipoVenta = g.Key,
+                    CantidadOrdenes = g.Count(),
+                    TotalVentas = g.Sum(o => o.Total)
+                })
+                .OrderByDescending(v => v.TotalVentas)
+                .ToList();
+        }
+
+        public List<VentasPorMesDto> ObtenerVentasPorMes()
+        {
+            return _contexto.OrdenesTabla
+                .GroupBy(o => new { o.FechaOrden.Year, o.FechaOrden.Month })
+                .Select(g => new VentasPorMesDto
+                {
+                    Anno = g.Key.Year,
+                    Mes = g.Key.Month,
+                    TotalVentas = g.Sum(x => x.Total),
+                    TotalOrdenes = g.Count()
+                })
+                .OrderBy(x => x.Anno)
+                .ThenBy(x => x.Mes)
+                .ToList();
         }
     }
 }

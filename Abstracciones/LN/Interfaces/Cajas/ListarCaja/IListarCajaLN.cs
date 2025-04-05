@@ -10,5 +10,7 @@ namespace Abstracciones.LN.Interfaces.Cajas.ListarCaja
     public interface IListarCajaLN
     {
         List<CajasDto> Listar();
+        CajasDto ObtenerCajaPorId(int id);
+
     }
 }

@@ -111,9 +111,15 @@
     <Compile Include="Modelos\MovimientosCaja\MovimientosCajaDto.cs" />
     <Compile Include="Modelos\Ordenes\DetalleOrdenesDto.cs" />
     <Compile Include="Modelos\Ordenes\OrdenesDto.cs" />
+    <Compile Include="Modelos\Ordenes\OrdenResumenDTO.cs" />
     <Compile Include="Modelos\Pagos\PagosDto.cs" />
     <Compile Include="Modelos\Productos\ProductosDto.cs" />
+    <Compile Include="Modelos\Reportes\ProductoMasVendidoDto.cs" />
     <Compile Include="Modelos\Reportes\ReportesDto.cs" />
+    <Compile Include="Modelos\Reportes\VentasPorDiaDto.cs" />
+    <Compile Include="Modelos\Reportes\VentasPorMesDto.cs" />
+    <Compile Include="Modelos\Reportes\VentasPorTipoDto.cs" />
+    <Compile Include="Modelos\Reportes\VentasPorUsuarioDto.cs" />
     <Compile Include="Modelos\Usuarios\UsuarioDto.cs" />
     <Compile Include="Modelos\Ventas\VentasDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

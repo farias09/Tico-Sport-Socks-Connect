@@ -61,6 +61,14 @@ using Abstracciones.LN.Interfaces.Usuarios.CrearUsuario;
 using LN.Usuarios.CrearUsuario;
 using AcessoADatos.Usuarios.CrearUsuario;
 using Abstracciones.AD.Interfaces.Usuarios.CrearUsuario;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using System.Data.Entity;
+using TicoSportSocksConnect.UI.Models;
+using TicoSportSocksConnect.UI;
+using Unity.Injection;
+using System.Web;
 
 namespace UI
 {
@@ -128,6 +136,12 @@ namespace UI
             container.RegisterType<IMensajeRepositorio, MensajeRepositorio>();
             container.RegisterType<IMensajeService, MensajeService>();
 
+            //Identity
+            container.RegisterType<DbContext, ApplicationDbContext>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager());
+            container.RegisterType<ApplicationUserManager>(new HierarchicalLifetimeManager());
+            container.RegisterType<ApplicationSignInManager>(new HierarchicalLifetimeManager());
+            container.RegisterFactory<IAuthenticationManager>(c => HttpContext.Current.GetOwinContext().Authentication);
         }
     }
 }
