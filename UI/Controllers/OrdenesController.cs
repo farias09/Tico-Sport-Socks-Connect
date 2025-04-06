@@ -349,7 +349,5 @@ namespace UI.Controllers
 
             return View(resumen);
         }
-
-
     }
 }

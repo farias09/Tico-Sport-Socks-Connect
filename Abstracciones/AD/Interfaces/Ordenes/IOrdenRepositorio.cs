@@ -1,4 +1,5 @@
 ﻿using Abstracciones.Modelos.Ordenes;
+using Abstracciones.Modelos.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,10 @@ namespace Abstracciones.AD.Interfaces.Ordenes
         List<OrdenesDto> ObtenerOrdenes();
         OrdenesDto ObtenerOrdenPorId(int id);
         List<DetalleOrdenesDto> ObtenerDetallesPorOrden(int ordenId);
+        List<VentasPorDiaDto> ObtenerVentasPorDia(DateTime? fechaInicio, DateTime? fechaFin);
+        List<VentasPorUsuarioDto> ObtenerVentasPorUsuario();
+        List<ProductoMasVendidoDto> ObtenerProductosMasVendidos();
+        List<VentasPorTipoDto> ObtenerVentasPorTipo();
+        List<VentasPorMesDto> ObtenerVentasPorMes();
     }
 }

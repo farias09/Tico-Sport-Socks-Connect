@@ -17,5 +17,8 @@ namespace Abstracciones.ModelosBaseDeDatos
         public string Estado { get; set; }
         public string TipoVenta { get; set; }        
         public int? Caja_ID { get; set; }
+
+        public virtual UsuariosTabla Usuario { get; set; }
+
     }
 }
