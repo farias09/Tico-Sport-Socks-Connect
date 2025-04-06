@@ -10,6 +10,7 @@ using Twilio.Types;
 using Twilio;
 using UI.Models;
 using Twilio.Rest.Api.V2010.Account;
+using Abstracciones.Modelos.Productos;
 
 
 namespace UI.Controllers
@@ -89,6 +90,30 @@ namespace UI.Controllers
             }
 
             return View(modelo);
+        }
+
+
+        [HttpGet]
+        public ActionResult BuscarProductos(string termino)
+        {
+            if (string.IsNullOrWhiteSpace(termino))
+            {
+                return Json(new List<ProductosDto>(), JsonRequestBehavior.AllowGet);
+            }
+
+            var productos = _contexto.ProductosTabla
+                .Where(p => p.nombre.Contains(termino) || p.Producto_ID.ToString().Contains(termino))
+                .Select(p => new ProductosDto
+                {
+                    Producto_ID = p.Producto_ID,
+                    nombre = p.nombre,
+                    imagen = p.imagen,
+                    precio = p.precio,
+                    stock = p.stock
+                })
+                .ToList();
+
+            return Json(productos, JsonRequestBehavior.AllowGet);
         }
 
 

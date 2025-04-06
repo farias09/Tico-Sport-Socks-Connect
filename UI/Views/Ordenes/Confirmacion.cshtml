@@ -1,10 +1,4 @@
-﻿@model UI.Models.OrdenViewModel
-
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -13,54 +7,127 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Codebucks" name="author" />
     <link rel="shortcut icon" href="~/images/favicon.ico">
-
+    <!-- Agrega Font Awesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="~/Scripts/js/pages/layout.js"></script>
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
+    <style>
+        /* Estilos personalizados */
+        .btn-rounded {
+            border-radius: 50px;
+            padding: 8px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+            .btn-rounded:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+        }
+
+        .card-title {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+            .table thead {
+                background-color: #f8f9fa;
+            }
+
+        .btn-group-custom {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @@media (max-width: 768px) {
+            .btn-group-custom {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-success">¡Orden Creada Exitosamente!</h2>
-        <p class="lead">Tu orden ha sido registrada correctamente. Aquí están los detalles:</p>
+        <div class="text-center mb-4">
+            <i class="fas fa-check-circle text-success mb-3" style="font-size: 4rem;"></i>
+            <h2 class="text-success">¡Orden Creada Exitosamente!</h2>
+            <p class="lead text-muted">Tu orden ha sido registrada correctamente. Aquí están los detalles:</p>
+        </div>
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Orden #@Model.Orden.Orden_ID</h4>
-                <p><strong>Usuario:</strong> @Model.Usuario.Nombre (@Model.Usuario.Usuario_ID)</p>
-                <p><strong>Fecha:</strong> @Model.Orden.FechaOrden.ToString("dd/MM/yyyy HH:mm")</p>
-                <p><strong>Estado:</strong> @Model.Orden.Estado</p>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title mb-0">Orden #@Model.Orden.Orden_ID</h4>
+                    <span class="badge bg-success">@Model.Orden.Estado</span>
+                </div>
 
-                <h5 class="mt-3">Productos en la Orden:</h5>
-                <table class="table table-bordered mt-2">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detalle in Model.Detalles)
-                        {
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong><i class="fas fa-user me-2"></i>Usuario:</strong> @Model.Usuario.Nombre (ID: @Model.Usuario.Usuario_ID)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong><i class="fas fa-calendar-alt me-2"></i>Fecha:</strong> @Model.Orden.FechaOrden.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                </div>
+
+                <h5 class="mt-4 mb-3"><i class="fas fa-boxes me-2"></i>Productos en la Orden:</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover mt-2">
+                        <thead class="table-light">
                             <tr>
-                                <td>@detalle.NombreProducto</td>
-                                <td>@detalle.PrecioUnitario</td>
-                                <td>@detalle.Cantidad</td>
-                                <td>@detalle.Subtotal</td>
+                                <th>Producto</th>
+                                <th class="text-end">Precio</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end">Subtotal</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in Model.Detalles)
+                            {
+                                <tr>
+                                    <td>@detalle.NombreProducto</td>
+                                    <td class="text-end">@detalle.PrecioUnitario.ToString("C", new System.Globalization.CultureInfo("es-CR"))</td>
+                                    <td class="text-center">@detalle.Cantidad</td>
+                                    <td class="text-end">@detalle.Subtotal.ToString("C", new System.Globalization.CultureInfo("es-CR"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
+                <div class="d-flex justify-content-end mt-4">
+                    <div class="bg-light p-3 rounded">
+                        <h4 class="mb-0"><strong>Total: </strong> @Model.Orden.Total.ToString("C", new System.Globalization.CultureInfo("es-CR"))</h4>
+                    </div>
+                </div>
 
-                <h4 class="text-right"><strong>Total: </strong> @Model.Orden.Total</h4>
-
-                <!-- Botón para regresar a Conversaciones -->
-                <a href="@Url.Action("Index", "Conversaciones")" class="btn btn-primary mt-3">
-                    <i class="fas fa-comments"></i> Volver a Conversaciones
-                </a>
+                <!-- Grupo de botones mejorado -->
+                <div class="d-flex justify-content-between mt-4 btn-group-custom">
+                    <div>
+                        <a href="javascript:history.back()" class="btn btn-outline-primary btn-rounded">
+                            <i class="fas fa-arrow-left me-2"></i> Volver Atrás
+                        </a>
+                        <a href="@Url.Action("Create", "Ordenes")" class="btn btn-outline-secondary btn-rounded" style="margin-left: 10px;">
+                            <i class="fas fa-plus-circle me-2"></i> Nueva Orden
+                        </a>
+                    </div>
+                    <a href="@Url.Action("Index", "Conversaciones")" class="btn btn-primary btn-rounded">
+                        <i class="fas fa-comments me-2"></i> Ir a Conversaciones
+                    </a>
+                </div>
             </div>
         </div>
     </div>

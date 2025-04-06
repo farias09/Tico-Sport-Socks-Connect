@@ -1,6 +1,10 @@
-﻿@{
+﻿@model List<Abstracciones.Modelos.Ordenes.OrdenesDto>
+@{
+    ViewBag.Title = "Órdenes Pendientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var usuarios = ViewBag.Usuarios as Dictionary<int, string>;
 }
+
 <!doctype html>
 <html lang="en">
 
@@ -22,7 +26,6 @@
 <style>
     body {
         background-color: #f9f9f9;
-        font-family: 'Arial', sans-serif;
     }
 
     .card-header {
@@ -63,172 +66,254 @@
             color: white;
             border-color: #007bff;
         }
-
 </style>
 
 <body>
     <div class="main-content">
         <div class="page-content">
-    <div class="container py-5">
-        <div class="mb-4 text-center">
-            <h1 class="display-5 fw-bold text-primary">Pedidos Pendientes</h1>
-            <p class="text-muted">Gestiona y actualiza los pedidos realizados a por los clientes.</p>
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'"><i class="bi bi-plus-circle"></i> Crear Nueva Orden</button>
-        </div>
+            <div id="layout-wrapper">
+                <div class="container mt-4">
+                    <div class="container-fluid">
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0">Órdenes Pendientes</h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Órdenes</a></li>
+                                            <li class="breadcrumb-item active">Pendientes</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
 
-        <!-- Filtros -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-8">
-                <div class="input-group">
-                    <span class="input-group-text bg-light"><i class="bi bi-search text-primary"></i></span>
-                    <input type="text" class="form-control" placeholder="Buscar por ID o código de caja">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <select class="form-select">
-                    <option selected>Filtrar por estado</option>
-                    <option value="1">Pendiente</option>
-                    <option value="2">En proceso</option>
-                    <option value="3">Enviado</option>
-                </select>
-            </div>
-        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <h4 class="card-title">Gestiona y actualiza los pedidos realizados por los clientes</h4>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                                                    <i class="ri-add-line align-middle me-1"></i> Crear Nueva Orden
+                                                </button>
+                                            </div>
+                                        </div>
 
-        <!-- Pedidos -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="card-title mb-0">Pedido #ORD001</h5>
-                    <small>Fecha de pedido: 15/06/2023</small>
-                </div>
-                <span class="badge badge-pendiente">Pendiente</span>
-            </div>
-            <div class="card-body">
-                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
-                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Producto</th>
-                            <th class="text-end">Cantidad</th>
-                            <th class="text-end">Precio</th>
-                            <th class="text-end">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medias Antideslizantes Blancas (M)</td>
-                            <td class="text-end">2</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡2,000</td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Negras (M)</td>
-                            <td class="text-end">1</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡1,000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end fw-bold">Total:</td>
-                            <td class="text-end fw-bold">₡3,000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha de envío no establecida</p>
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
-                    <i class="bi bi-calendar"></i> Establecer Envío
-                </button>
-            </div>
-        </div>
+                                        <!-- Filtros -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por ID o cliente...">
+                                                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                                                        <i class="ri-search-line"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="form-select" id="statusFilter">
+                                                    <option value="">Todos los estados</option>
+                                                    <option value="Pendiente">Pendiente</option>
+                                                    <option value="En proceso">En proceso</option>
+                                                    <option value="Completada">Completada</option>
+                                                    <option value="Cancelada">Cancelada</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="date" class="form-control" id="dateFilter">
+                                            </div>
+                                        </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="card-title mb-0">Pedido #ORD002</h5>
-                    <small>Fecha de pedido: 15/06/2023</small>
-                </div>
-                <span class="badge badge-en-proceso">En Proceso</span>
-            </div>
-            <div class="card-body">
-                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
-                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Producto</th>
-                            <th class="text-end">Cantidad</th>
-                            <th class="text-end">Precio</th>
-                            <th class="text-end">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medias Antideslizantes Blancas (L)</td>
-                            <td class="text-end">2</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡2,000</td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Negras (XL)</td>
-                            <td class="text-end">1</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡1,000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end fw-bold">Total:</td>
-                            <td class="text-end fw-bold">₡3,000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha estimada de envío: 29/12/2024</p>
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
-                    <i class="bi bi-calendar"></i> Modificar Fecha
-                </button>
-            </div>
-        </div>
+                                        <!-- Lista de órdenes -->
+                                        <div class="table-responsive">
+                                            @if (Model != null && Model.Any())
+                                            {
+                                                foreach (var orden in Model)
+                                                {
+                                                    <div class="card mb-3 border">
+                                                        <div class="card-header bg-light">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <h5 class="mb-0">Pedido #ORD@(orden.Orden_ID.ToString("D4"))</h5>
+                                                                    <p class="mb-0 text-muted">Cliente: <strong>@usuarios[orden.Usuario_ID]</strong></p>
+                                                                </div>
+                                                                <span class="badge bg-@(orden.Estado == "Pendiente" ? "warning" : orden.Estado == "Completada" ? "success" : "primary")">
+                                                                    @orden.Estado
+                                                                </span>
+                                                            </div>
+                                                            <p class="mb-0 text-muted">Fecha de pedido: @orden.FechaOrden.ToString("dd/MM/yyyy")</p>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            @{
+                                                                var detalles = ViewBag.Detalles as List<Abstracciones.Modelos.Ordenes.DetalleOrdenesDto>;
+                                                                var detallesOrden = detalles?.Where(d => d.Orden_ID == orden.Orden_ID).ToList();
+                                                            }
 
+                                                            @if (detallesOrden != null && detallesOrden.Any())
+                                                            {
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-bordered mb-4">
+                                                                        <thead class="table-light">
+                                                                            <tr>
+                                                                                <th>Producto</th>
+                                                                                <th>Cantidad</th>
+                                                                                <th>Precio Unitario</th>
+                                                                                <th>Subtotal</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach (var detalle in detallesOrden)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>@detalle.NombreProducto</td>
+                                                                                    <td>@detalle.Cantidad</td>
+                                                                                    <td>₡@detalle.PrecioUnitario.ToString("N2")</td>
+                                                                                    <td>₡@detalle.Subtotal.ToString("N2")</td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                        <tfoot>
+                                                                            <tr>
+                                                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                                                                <td><strong>₡@orden.Total.ToString("N2")</strong></td>
+                                                                            </tr>
+                                                                        </tfoot>
+                                                                    </table>
+                                                                </div>
+                                                            }
 
-        <!-- Modal -->
-        <div class="modal fade" id="envioModal" tabindex="-1" aria-labelledby="envioModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="envioModalLabel">Detalles de Envío - Pedido #ORD001</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <p>Establezca la fecha estimada de envío y confirme el envío del pedido.</p>
-                            <label for="shipping-date" class="form-label">Fecha de envío</label>
-                            <input type="date" class="form-control" id="shipping-date">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    @if (orden.Estado == "Pendiente")
+                                                                    {
+                                                                        <span class="text-muted"><i class="ri-time-line align-middle me-1"></i> Fecha de envío no establecida</span>
+                                                                    }
+                                                                    else if (orden.Estado == "En proceso")
+                                                                    {
+                                                                        <div class="d-flex align-items-center">
+                                                                            <span class="text-muted me-2"><i class="ri-truck-line align-middle me-1"></i> Fecha estimada de envío:</span>
+                                                                            <input type="date" class="form-control form-control-sm" style="width: auto; display: inline-block;" value="@DateTime.Now.AddDays(3).ToString("yyyy-MM-dd")">
+                                                                            <button class="btn btn-sm btn-outline-primary ms-2">Modificar</button>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                                <div>
+                                                                    @if (orden.Estado == "Pendiente")
+                                                                    {
+                                                                        <button class="btn btn-sm btn-primary me-2" onclick="cambiarEstado(@orden.Orden_ID, 'En proceso')">
+                                                                            <i class="ri-play-circle-line align-middle me-1"></i> Iniciar Proceso
+                                                                        </button>
+                                                                    }
+                                                                    else if (orden.Estado == "En proceso")
+                                                                    {
+                                                                        <button class="btn btn-sm btn-success me-2" onclick="cambiarEstado(@orden.Orden_ID, 'Completada')">
+                                                                            <i class="ri-check-line align-middle me-1"></i> Marcar como Completada
+                                                                        </button>
+                                                                    }
+                                                                    <button class="btn btn-sm btn-outline-secondary" onclick="verDetalles(@orden.Orden_ID)">
+                                                                        <i class="ri-eye-line align-middle me-1"></i> Ver Detalles
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="alert alert-info">
+                                                    No hay órdenes pendientes en este momento.
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="bi bi-check-circle"></i> Confirmar Envío</button>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-        </div>
-    </div>
 
-    <!-- JAVASCRIPT -->
-    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
-    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
-    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
-    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+            @section Scripts {
+                <script>
+        function cambiarEstado(ordenId, nuevoEstado) {
+            if (confirm(`¿Estás seguro de cambiar el estado de la orden a "${nuevoEstado}"?`)) {
+                $.ajax({
+                    url: '@Url.Action("CambiarEstadoOrden", "Ordenes")',
+                    type: 'POST',
+                    data: { id: ordenId, estado: nuevoEstado },
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Error al actualizar el estado: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error al comunicarse con el servidor');
+                    }
+                });
+            }
+        }
 
-    <script src="~/Scripts/js/app.js"></script>
+        function verDetalles(ordenId) {
+            window.location.href = '@Url.Action("Confirmacion", "Ordenes")' + '?id=' + ordenId;
+        }
 
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+        // Filtros
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                aplicarFiltros();
+            });
 
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
+            $('#statusFilter, #dateFilter').change(function () {
+                aplicarFiltros();
+            });
+
+            function aplicarFiltros() {
+                const searchText = $('#searchInput').val().toLowerCase();
+                const statusFilter = $('#statusFilter').val();
+                const dateFilter = $('#dateFilter').val();
+
+                $('.card.mb-3.border').each(function () {
+                    const orderId = $(this).find('h5').text().toLowerCase();
+                    const orderStatus = $(this).find('.badge').text();
+                    const orderDate = $(this).find('.text-muted').text().split(': ')[1];
+
+                    let matchesSearch = orderId.includes(searchText) || orderId.includes('ord' + searchText);
+                    let matchesStatus = statusFilter === '' || orderStatus === statusFilter;
+                    let matchesDate = dateFilter === '' || orderDate.includes(dateFilter.split('-').reverse().join('/'));
+
+                    if (matchesSearch && matchesStatus && matchesDate) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+                </script>
+            }
+
+            <!-- JAVASCRIPT -->
+            <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
+            <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
+            <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
+            <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+
+            <script src="~/Scripts/js/app.js"></script>
+
+            <!-- apexcharts -->
+            <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+
+            <script src="~/Scripts/js/pages/dashboard.init.js"></script>
 </body>
 </html>

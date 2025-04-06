@@ -29,74 +29,74 @@
             @Html.AntiForgeryToken()
             @Html.HiddenFor(model => model.Producto_ID)
 
-            <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
-                <h4 class="mb-3 text-primary text-center">Detalles del Producto</h4>
-                <hr />
-                @if (ViewBag.MensajeDeError != null)
-                {
-                    <div class="alert alert-danger">
-                        @ViewBag.MensajeDeError
-                    </div>
-                }
-
-                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
-
-                <!-- Nombre del Producto -->
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.nombre, "Nombre", new { @class = "form-label fw-bold" })
-                    @Html.TextBoxFor(model => model.nombre, new { @class = "form-control", placeholder = "Ingrese el nombre del producto", required = "required" })
-                    @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
-                </div>
-
-                <!-- Descripción -->
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.descripcion, "Descripción", new { @class = "form-label fw-bold" })
-                    @Html.TextAreaFor(model => model.descripcion, new { @class = "form-control", rows = "3", placeholder = "Ingrese una breve descripción" })
-                    @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
-                </div>
-
-                <!-- Precio y Stock -->
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(model => model.precio, "Precio", new { @class = "form-label fw-bold" })
-                        @Html.TextBoxFor(model => model.precio, new { @class = "form-control", type = "number", step = "0.01", placeholder = "0.00" })
-                        @Html.ValidationMessageFor(model => model.precio, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(model => model.stock, "Stock", new { @class = "form-label fw-bold" })
-                        @Html.TextBoxFor(model => model.stock, new { @class = "form-control", type = "number", min = "0", placeholder = "0" })
-                        @Html.ValidationMessageFor(model => model.stock, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <!-- Imagen del Producto -->
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.imagen, "Imagen (URL)", new { @class = "form-label fw-bold" })
-                    @Html.TextBoxFor(model => model.imagen, new { @class = "form-control", type = "url", placeholder = "https://example.com/imagen.jpg" })
-                    @Html.ValidationMessageFor(model => model.imagen, "", new { @class = "text-danger" })
-                </div>
-
-                <!-- Categoría -->
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.Categoria_ID, "Categoría", new { @class = "form-label fw-bold" })
-                    @Html.EditorFor(model => model.Categoria_ID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Categoria_ID, "", new { @class = "text-danger" })
-                </div>
-
-                <!-- Estado del Producto -->
-                <div class="mb-3">
-                    <div class="form-check">
-                        @Html.CheckBoxFor(model => model.Estado, new { @class = "form-check-input", id = "estadoProducto" })
-                        <label class="form-check-label fw-bold" for="estadoProducto">Producto Activo</label>
-                    </div>
-                </div>
-
-                <!-- Botones -->
-                <div class="d-flex justify-content-between">
-                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Volver</a>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
+    <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
+        <h4 class="mb-3 text-primary text-center">Detalles del Producto</h4>
+        <hr />
+        @if (ViewBag.MensajeDeError != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.MensajeDeError
             </div>
+        }
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        <!-- Nombre del Producto -->
+        <div class="mb-3">
+            @Html.LabelFor(model => model.nombre, "Nombre", new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(model => model.nombre, new { @class = "form-control", placeholder = "Ingrese el nombre del producto", required = "required" })
+            @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            @Html.LabelFor(model => model.descripcion, "Descripción", new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(model => model.descripcion, new { @class = "form-control", rows = "3", placeholder = "Ingrese una breve descripción" })
+            @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Precio y Stock -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.precio, "Precio", new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(model => model.precio, new { @class = "form-control", type = "number", step = "0.01", placeholder = "0.00" })
+                @Html.ValidationMessageFor(model => model.precio, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.stock, "Stock", new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(model => model.stock, new { @class = "form-control", type = "number", min = "0", placeholder = "0" })
+                @Html.ValidationMessageFor(model => model.stock, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Imagen del Producto -->
+        <div class="mb-3">
+            @Html.LabelFor(model => model.imagen, "Imagen (URL)", new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(model => model.imagen, new { @class = "form-control", type = "url", placeholder = "https://example.com/imagen.jpg" })
+            @Html.ValidationMessageFor(model => model.imagen, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Categoria_ID, "Categoría", new { @class = "form-label fw-bold" })
+            @Html.EditorFor(model => model.Categoria_ID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Categoria_ID, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Estado del Producto -->
+        <div class="mb-3">
+            <div class="form-check">
+                @Html.CheckBoxFor(model => model.Estado, new { @class = "form-check-input", id = "estadoProducto" })
+                <label class="form-check-label fw-bold" for="estadoProducto">Producto Activo</label>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-between">
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Volver</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+    </div>
         }
     </div>
 

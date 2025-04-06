@@ -55,6 +55,57 @@ namespace UI.Controllers
             return View();
         }
 
+        public ActionResult OrdenesPendientes()
+        {
+            var ordenes = _ordenService.ObtenerOrdenes();
+            var detalles = new List<DetalleOrdenesDto>();
+            var usuarios = new Dictionary<int, string>(); // Diccionario para almacenar Usuario_ID -> Nombre
+
+            foreach (var orden in ordenes)
+            {
+                detalles.AddRange(_ordenService.ObtenerDetallesPorOrden(orden.Orden_ID));
+
+                // Obtener el nombre del usuario si no está en el diccionario
+                if (!usuarios.ContainsKey(orden.Usuario_ID))
+                {
+                    var usuario = _listarUsuarioLN.ObtenerUsuarioPorId(orden.Usuario_ID);
+                    usuarios.Add(orden.Usuario_ID, usuario?.Nombre ?? "Cliente no encontrado");
+                }
+            }
+
+            ViewBag.Detalles = detalles;
+            ViewBag.Usuarios = usuarios; // Pasar el diccionario a la vista
+            return View(ordenes);
+        }
+
+        [HttpPost]
+        public ActionResult CambiarEstadoOrden(int id, string estado)
+        {
+            try
+            {
+                var orden = _ordenService.ObtenerOrdenPorId(id);
+                if (orden == null)
+                {
+                    return Json(new { success = false, message = "Orden no encontrada" });
+                }
+
+                // Actualizar el estado en la base de datos
+                var contexto = new Contexto();
+                var ordenDb = contexto.OrdenesTabla.FirstOrDefault(o => o.Orden_ID == id);
+                if (ordenDb != null)
+                {
+                    ordenDb.Estado = estado;
+                    contexto.SaveChanges();
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         public ActionResult VentaFisica()
         {
             var productosActivos = _listarProductoLN.Listar().Where(p => p.Estado).ToList();

@@ -146,13 +146,13 @@
                 <!-- Exportar inventario -->
                 <div class="row mt-4">
                     <div class="col-md-4">
-                        <button class="btn btn-success w-100" style=" background-color: steelblue;">Exportar a PDF</button>
+                        <a href="@Url.Action("ExportarPDF", "Productos", new { nombre = ViewBag.Nombre, categoriaId = ViewBag.CategoriaId, estado = ViewBag.Estado, ordenStock = ViewBag.OrdenStock })" class="btn btn-success w-100" style="background-color: steelblue;">Exportar a PDF</a>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-primary w-100" style=" background-color: mediumseagreen;">Exportar a Excel</button>
+                        <a href="@Url.Action("ExportarExcel", "Productos", new { nombre = ViewBag.Nombre, categoriaId = ViewBag.CategoriaId, estado = ViewBag.Estado, ordenStock = ViewBag.OrdenStock })" class="btn btn-primary w-100" style="background-color: mediumseagreen;">Exportar a Excel</a>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-secondary w-100">Exportar a CSV</button>
+                        <a href="@Url.Action("ExportarCSV", "Productos", new { nombre = ViewBag.Nombre, categoriaId = ViewBag.CategoriaId, estado = ViewBag.Estado, ordenStock = ViewBag.OrdenStock })" class="btn btn-secondary w-100">Exportar a CSV</a>
                     </div>
                 </div>
             </div>

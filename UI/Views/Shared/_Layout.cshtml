@@ -18,6 +18,58 @@
 
 <style>
 
+    .footer {
+        flex-shrink: 0;
+        background-color: #f8f9fa;
+        padding: 1rem 0;
+        margin-top: auto;
+        bottom: 0;
+        position: relative;
+        left: 0;
+        color: #74788d;
+        right: 255px;
+        height: 50px;
+        -webkit-box-shadow: var(--bs-box-shadow);
+        box-shadow: var(--bs-box-shadow);
+        background-color: var(--bs-white);
+        width: 100%;
+    }
+
+    .page-content {
+        min-height: calc(100vh - 120px);
+        padding-bottom: 60px;
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-left: 250px;
+    }
+
+
+    .sidebar-left.minimized + .main-content {
+        padding-left: 60px;
+    }
+
+    @@media (min-width: 992px) {
+        .sidebar-left.minimized ~ footer.footer {
+            left: 60px;
+            right: 0;
+        }
+    }
+
+    @@media (max-width: 991.98px) {
+        .main-content {
+            padding-left: 0;
+        }
+
+        .footer {
+            position: relative;
+            right: 0;
+        }
+    }
+
     /* Estilos base para el sidebar */
     .sidebar-left {
         position: fixed;
