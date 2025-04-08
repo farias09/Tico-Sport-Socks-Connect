@@ -69,6 +69,10 @@ using TicoSportSocksConnect.UI.Models;
 using TicoSportSocksConnect.UI;
 using Unity.Injection;
 using System.Web;
+using Abstracciones.AD.Interfaces.Cajas.CerrarCaja;
+using Abstracciones.LN.Interfaces.Cajas.CerrarCaja;
+using AcessoADatos.Cajas.CerrarCaja;
+using LN.Cajas.CerrarCaja;
 
 namespace UI
 {
@@ -124,6 +128,9 @@ namespace UI
 
             container.RegisterType<ICrearCajaLN, CrearCajaLN>();
             container.RegisterType<ICrearCajaAD, CrearCajaAD>();
+
+            container.RegisterType<ICerrarCajaLN, CerrarCajaLN>();
+            container.RegisterType<ICerrarCajaAD, CerrarCajaAD>();
 
             container.RegisterType<ICrearMovimientoLN, CrearMovimientoLN>();
             container.RegisterType<ICrearMovimientoAD, CrearMovimientoAD>();

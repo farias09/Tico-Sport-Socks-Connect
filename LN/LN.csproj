@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cajas\CerrarCaja\CerrarCajaLN.cs" />
     <Compile Include="Carrito\CarritoLN.cs" />
     <Compile Include="Categorias\ListarCategorias\ListarCategoriasLN.cs" />
     <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasDto\ConvertirACategoriasDto.cs" />

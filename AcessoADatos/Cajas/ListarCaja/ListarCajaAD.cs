@@ -1,11 +1,8 @@
 ﻿using Abstracciones.AD.Interfaces.Cajas.ListarCaja;
 using Abstracciones.Modelos.Caja;
 using AccesoADatos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AcessoADatos.Cajas.ListarCaja
 {
@@ -32,7 +29,7 @@ namespace AcessoADatos.Cajas.ListarCaja
                                                  total_ventas = laCaja.total_ventas,
                                                  total_gastos = laCaja.total_gastos,
                                                  estado = laCaja.estado,
-                                                 Usuario_ID = laCaja.Usuario_ID
+                                                 Usuario_GUID = laCaja.Usuario_GUID
                                              }).ToList();
 
             return laListadeCajas;
@@ -56,7 +53,7 @@ namespace AcessoADatos.Cajas.ListarCaja
                 total_ventas = laCaja.total_ventas,
                 total_gastos = laCaja.total_gastos,
                 estado = laCaja.estado,
-                Usuario_ID = laCaja.Usuario_ID
+                Usuario_GUID = laCaja.Usuario_GUID
             };
         }
     }

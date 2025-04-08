@@ -1,16 +1,15 @@
-﻿using Abstracciones.LN.Interfaces.Cajas.CrearCaja;
+﻿using Abstracciones.LN.Interfaces.Cajas.CerrarCaja;
+using Abstracciones.LN.Interfaces.Cajas.CrearCaja;
 using Abstracciones.LN.Interfaces.Cajas.ListarCaja;
 using Abstracciones.LN.Interfaces.MovimientosCaja;
 using Abstracciones.Modelos.Caja;
 using Abstracciones.Modelos.MovimientosCaja;
-using LN.Cajas.CrearCaja;
-using LN.Cajas.ListarCaja;
+using AccesoADatos;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace UI.Controllers
@@ -20,17 +19,26 @@ namespace UI.Controllers
         private readonly ICrearCajaLN _crearCajaLN;
         private readonly ICrearMovimientoLN _crearMovimientoLN;
         private readonly IListarCajaLN _listarCajaLN;
+        private readonly ICerrarCajaLN _cerrarCajaLN;
 
-        public CajaController(ICrearMovimientoLN crearMovimientoLN, ICrearCajaLN crearCajaLN, IListarCajaLN listarCajaLN)
+        public CajaController(ICrearMovimientoLN crearMovimientoLN, ICrearCajaLN crearCajaLN, IListarCajaLN listarCajaLN, ICerrarCajaLN cerrarCajaLN)
         {
             _crearCajaLN = crearCajaLN;
             _crearMovimientoLN = crearMovimientoLN;
             _listarCajaLN = listarCajaLN;
+            _cerrarCajaLN = cerrarCajaLN;
         }
 
         // GET: Caja
         public ActionResult Index()
         {
+            var identidad = (System.Security.Claims.ClaimsIdentity)User.Identity;
+
+            foreach (var claim in identidad.Claims)
+            {
+                System.Diagnostics.Debug.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+
             List<CajasDto> laListaDeCajas = _listarCajaLN.Listar();
             return View(laListaDeCajas);
         }
@@ -51,50 +59,51 @@ namespace UI.Controllers
         [HttpPost]
         public ActionResult Create(CajasDto modelo)
         {
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Los datos ingresados no son válidos.";
-                return View(modelo);
-            }
-
             try
             {
-                // -------------------------------------------------------------------
-                // Validar que la caja no esté duplicada (Opcional, si se necesita)
-                var cajaExistente = _crearCajaLN.VerificarCajaAbierta();
-                if (cajaExistente)
+                modelo.Usuario_GUID = ObtenerUsuarioGuidDesdeIdentity();
+                ModelState.Remove("Usuario_GUID");
+                modelo.estado = true;
+                modelo.fecha_apertura = DateTime.Now;
+
+                
+                if (!ModelState.IsValid)
+                {
+                    TempData["Error"] = "Los datos ingresados no son válidos.";
+                    return RedirectToAction("Index");
+                }
+
+                // ⚠️ Validamos si ya hay una caja abierta
+                if (_crearCajaLN.VerificarCajaAbierta())
                 {
                     TempData["Error"] = "Ya existe una caja abierta.";
                     return RedirectToAction("Index");
                 }
-                // -------------------------------------------------------------------
 
-                // Establecer estado inicial
-                modelo.estado = true;
-                modelo.fecha_apertura = DateTime.Now;
-
-                // -------------------------------------------------------------------
-                // Guardar la caja en la base de datos
+                // 🧩 Guardamos la caja
                 int idCaja = _crearCajaLN.Crear(modelo);
-                // -------------------------------------------------------------------
 
                 if (idCaja > 0)
                 {
                     TempData["Success"] = "Caja registrada correctamente.";
-                    return RedirectToAction("Details", new { id = idCaja });
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     TempData["Error"] = "No se pudo registrar la caja.";
-                    return View(modelo);
+                    TempData["ShowAbrirCajaModal"] = true;
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("🔥 Error completo: " + ex.ToString());
                 TempData["Error"] = "Ocurrió un error al procesar la solicitud: " + ex.Message;
-                return View(modelo);
+                return RedirectToAction("Index");
             }
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult> CreateMovimiento(MovimientosCajaDto modelo)
@@ -143,48 +152,41 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Caja/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Caja/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult CerrarCaja(int cajaId, decimal montoFinal)
         {
             try
             {
-                // TODO: Add update logic here
+                if (montoFinal <= 0)
+                {
+                    TempData["Error"] = "El monto final debe ser mayor a 0.";
+                    return RedirectToAction("Index");
+                }
+
+                bool exito = _cerrarCajaLN.CerrarCaja(cajaId, montoFinal);
+
+                if (exito)
+                {
+                    TempData["Success"] = "Caja cerrada correctamente.";
+                }
+                else
+                {
+                    TempData["Error"] = "No se pudo cerrar la caja. Verifica que esté abierta.";
+                }
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
-            }
-        }
-
-        // GET: Caja/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Caja/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
+                TempData["Error"] = "Error al cerrar la caja: " + ex.Message;
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
         }
+
+        private string ObtenerUsuarioGuidDesdeIdentity()
+        {
+            return User.Identity.GetUserId();
+        }
+
     }
 }

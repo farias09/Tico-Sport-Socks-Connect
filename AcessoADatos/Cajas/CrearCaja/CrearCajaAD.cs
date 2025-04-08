@@ -1,39 +1,36 @@
 ﻿using Abstracciones.AD.Interfaces.Cajas.CrearCaja;
 using Abstracciones.ModelosBaseDeDatos;
-using System;
-using System.Data.Entity;
 using System.Linq;
+using System;
 
 namespace AccesoADatos.Cajas.CrearCaja
 {
     public class CrearCajaAD : ICrearCajaAD
     {
-        private readonly Contexto _elContexto;
+        private readonly Contexto _contexto;
 
-        public CrearCajaAD (Contexto contexto)
+        public CrearCajaAD(Contexto contexto)
         {
-            _elContexto = contexto;
+            _contexto = contexto;
         }
 
         public int Crear(CajasTabla laCajaAGuardar)
         {
             try
             {
-                _elContexto.CajasTabla.Add(laCajaAGuardar);
-                EntityState estado = _elContexto.Entry(laCajaAGuardar).State = System.Data.Entity.EntityState.Added;
-                int cantidadDeDatosGuardados = _elContexto.SaveChanges();
-                return cantidadDeDatosGuardados;
+                _contexto.CajasTabla.Add(laCajaAGuardar);
+                return _contexto.SaveChanges();
             }
             catch (Exception ex)
             {
-
-                throw new Exception("Error al crear la caja en la base de datos.", ex);
+                throw new Exception($"Error al crear la caja en la base de datos. Usuario_GUID: {laCajaAGuardar.Usuario_GUID}", ex);
             }
         }
 
         public bool HayCajaAbierta()
         {
-            return _elContexto.CajasTabla.Any(c => c.estado == true);
+            return _contexto.CajasTabla.Any(c => c.estado == true);
         }
+
     }
 }
