@@ -124,6 +124,7 @@
     <Compile Include="Modelos\Ventas\VentasDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilidades\AesEncryption.cs" />
+    <Compile Include="Utilidades\Email.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

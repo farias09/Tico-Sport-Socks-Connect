@@ -35,6 +35,9 @@
     <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net48\BCrypt.Net-Next.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -74,6 +77,7 @@
     <Compile Include="General\Conversiones\Usuarios\ConvertirAUsuariosTabla\ConvertirAUsuarioTabla.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasDto\ConvertirAVentaDto.cs" />
     <Compile Include="General\Conversiones\Ventas\ConvertirAVentasTabla\ConvertirAVentasTabla.cs" />
+    <Compile Include="General\Email\EmailSender.cs" />
     <Compile Include="MovimientosCaja\CrearMovimientoLN.cs" />
     <Compile Include="Mensajes\MensajeService.cs" />
     <Compile Include="Ordenes\OrdenService\OrdenService.cs" />
