@@ -135,7 +135,7 @@
                                             {
                                                 foreach (var orden in Model)
                                                 {
-                                                    <div class="card mb-3 border">
+                                                    <div class="card mb-3 border order-card" data-id="@orden.Orden_ID" data-status="@orden.Estado" data-date="@orden.FechaOrden.ToString("yyyy-MM-dd")">
                                                         <div class="card-header bg-light">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <div>
@@ -208,6 +208,9 @@
                                                                         <button class="btn btn-sm btn-primary me-2" onclick="cambiarEstado(@orden.Orden_ID, 'En proceso')">
                                                                             <i class="ri-play-circle-line align-middle me-1"></i> Iniciar Proceso
                                                                         </button>
+                                                                        <button class="btn btn-sm btn-danger me-2" onclick="mostrarModalCancelar(@orden.Orden_ID)">
+                                                                            <i class="ri-close-circle-line align-middle me-1"></i> Cancelar Orden
+                                                                        </button>
                                                                     }
                                                                     else if (orden.Estado == "En proceso")
                                                                     {
@@ -241,8 +244,27 @@
         </div>
     </div>
 
-            @section Scripts {
-                <script>
+    <!-- Modal de confirmación de cancelación -->
+    <div class="modal fade" id="modalCancelarOrden" tabindex="-1" aria-labelledby="modalCancelarOrdenLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelarOrdenLabel">Confirmar Cancelación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas cancelar esta orden?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="confirmarCancelarOrden">Cancelar Orden</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
         function cambiarEstado(ordenId, nuevoEstado) {
             if (confirm(`¿Estás seguro de cambiar el estado de la orden a "${nuevoEstado}"?`)) {
                 $.ajax({
@@ -267,6 +289,14 @@
             window.location.href = '@Url.Action("Confirmacion", "Ordenes")' + '?id=' + ordenId;
         }
 
+        function mostrarModalCancelar(ordenId) {
+            $('#modalCancelarOrden').modal('show');
+            $('#confirmarCancelarOrden').off('click').on('click', function () {
+                cambiarEstado(ordenId, 'Cancelada');
+                $('#modalCancelarOrden').modal('hide');
+            });
+        }
+
         // Filtros
         $(document).ready(function () {
             $('#searchButton').click(function () {
@@ -282,14 +312,14 @@
                 const statusFilter = $('#statusFilter').val();
                 const dateFilter = $('#dateFilter').val();
 
-                $('.card.mb-3.border').each(function () {
-                    const orderId = $(this).find('h5').text().toLowerCase();
-                    const orderStatus = $(this).find('.badge').text();
-                    const orderDate = $(this).find('.text-muted').text().split(': ')[1];
+                $('.order-card').each(function () {
+                    const orderId = $(this).data('id').toString().toLowerCase();
+                    const orderStatus = $(this).data('status');
+                    const orderDate = $(this).data('date');
 
                     let matchesSearch = orderId.includes(searchText) || orderId.includes('ord' + searchText);
                     let matchesStatus = statusFilter === '' || orderStatus === statusFilter;
-                    let matchesDate = dateFilter === '' || orderDate.includes(dateFilter.split('-').reverse().join('/'));
+                    let matchesDate = dateFilter === '' || orderDate === dateFilter;
 
                     if (matchesSearch && matchesStatus && matchesDate) {
                         $(this).show();
@@ -299,21 +329,21 @@
                 });
             }
         });
-                </script>
-            }
+        </script>
+    }
 
-            <!-- JAVASCRIPT -->
-            <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
-            <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
-            <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
-            <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    <!-- JAVASCRIPT -->
+    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
 
-            <script src="~/Scripts/js/app.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
 
-            <!-- apexcharts -->
-            <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+    <!-- apexcharts -->
+    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
 
-            <script src="~/Scripts/js/pages/dashboard.init.js"></script>
+    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
 </body>
 </html>

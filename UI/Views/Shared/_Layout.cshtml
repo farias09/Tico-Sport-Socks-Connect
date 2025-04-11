@@ -17,59 +17,6 @@
 </head>
 
 <style>
-
-    .footer {
-        flex-shrink: 0;
-        background-color: #f8f9fa;
-        padding: 1rem 0;
-        margin-top: auto;
-        bottom: 0;
-        position: relative;
-        left: 0;
-        color: #74788d;
-        right: 255px;
-        height: 50px;
-        -webkit-box-shadow: var(--bs-box-shadow);
-        box-shadow: var(--bs-box-shadow);
-        background-color: var(--bs-white);
-        width: 100%;
-    }
-
-    .page-content {
-        min-height: calc(100vh - 120px);
-        padding-bottom: 60px;
-    }
-
-    .main-content {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        padding-left: 250px;
-    }
-
-
-    .sidebar-left.minimized + .main-content {
-        padding-left: 60px;
-    }
-
-    @@media (min-width: 992px) {
-        .sidebar-left.minimized ~ footer.footer {
-            left: 60px;
-            right: 0;
-        }
-    }
-
-    @@media (max-width: 991.98px) {
-        .main-content {
-            padding-left: 0;
-        }
-
-        .footer {
-            position: relative;
-            right: 0;
-        }
-    }
-
     /* Estilos base para el sidebar */
     .sidebar-left {
         position: fixed;
@@ -78,9 +25,10 @@
         bottom: 0;
         width: 250px;
         z-index: 999;
-        transition: all 0.0s ease;
+        transition: all 0.3s ease;
         overflow-y: auto;
         background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
         /* Estilos para los elementos del menú */
@@ -111,7 +59,7 @@
         }
 
             .sidebar-left.minimized + .main-content {
-                margin-left: 60px;
+                padding-left: 60px;
             }
 
             .sidebar-left.minimized .menu-title {
@@ -139,13 +87,51 @@
 
         /* Estilos de hover cuando el sidebar está desplegado */
         .sidebar-left:not(.minimized) .nav-link:hover {
-            background-color: #e9ecef; /* Cambia el color de fondo al hacer hover */
-            color: #000; /* Cambia el color del texto al hacer hover */
+            background-color: #e9ecef;
+            color: #000;
         }
 
             .sidebar-left:not(.minimized) .nav-link:hover i {
-                color: #000; /* Cambia el color del ícono al hacer hover */
+                color: #000;
             }
+
+    /* Estilos para la main-content */
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-left: 250px;
+    }
+
+    .sidebar-left.minimized ~ .main-content {
+        padding-left: 60px;
+    }
+
+    .page-content {
+        min-height: calc(100vh - 120px);
+        padding-bottom: 60px;
+    }
+
+    /* Estilos para el footer */
+    .footer {
+        flex-shrink: 0;
+        background-color: #f8f9fa;
+        padding: 1rem 0;
+        margin-top: auto;
+        bottom: 0;
+        position: relative;
+        left: 0;
+        color: #74788d;
+        right: 255px;
+        height: 50px;
+        -webkit-box-shadow: var(--bs-box-shadow);
+        box-shadow: var(--bs-box-shadow);
+        background-color: var(--bs-white);
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    
 </style>
 
 <body>
@@ -231,16 +217,6 @@
                                             <i class="far fa-address-card me-2"></i> Perfil
                                         </a>
                                     </li>
-                                    <li class="list-group-item">
-                                        <a href="#!" class="d-flex align-items-center">
-                                            <i class="far fa-calendar-check me-2"></i> Tareas
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="#!" class="d-flex align-items-center">
-                                            <i class="far fa-bell me-2"></i> Notificaciones
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                             <div class="card-footer text-center">
@@ -304,7 +280,7 @@
                         else
                         {
                             <a class="nav-link text-dark fw-semibold" href="@Url.Action("Login", "Account")">
-                                <i class="bi bi-people"></i>
+                                <i class="bi bi-list-task"></i>
                                 <span>Órdenes</span>
                             </a>
                         }
@@ -321,7 +297,7 @@
                         else
                         {
                             <a class="nav-link text-dark fw-semibold" href="@Url.Action("Login", "Account")">
-                                <i class="bi bi-people"></i>
+                                <i class="bi bi-person"></i>
                                 <span>Usuarios</span>
                             </a>
                         }
@@ -359,13 +335,69 @@
             const sidebarBtn = document.getElementById('sidebar-btn');
             const sidebar = document.querySelector('.sidebar-left');
             const mainContent = document.querySelector('.main-content');
+            const body = document.body;
 
-            sidebarBtn.addEventListener('click', function () {
+            // Crear overlay para móviles
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            body.appendChild(overlay);
+
+            // Función para manejar el toggle del sidebar
+            function toggleSidebar() {
                 sidebar.classList.toggle('minimized');
                 mainContent.classList.toggle('minimized');
-            });
-        });
+                // Si el ancho es mayor a 1200px, no permitir minimizar completamente
+                if (window.innerWidth >= 1200) {
+                    sidebar.classList.remove('minimized');
+                }
 
+                // En móviles, mostrar/ocultar en lugar de minimizar
+                if (window.innerWidth <= 991.98) {
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                }
+            }
+
+            // Función para manejar el cambio de tamaño de la ventana
+            function handleResize() {
+                if (window.innerWidth < 1200) {
+                    sidebar.classList.add('minimized');
+                } else {
+                    sidebar.classList.remove('minimized');
+                }
+
+                if (window.innerWidth > 991.98) {
+                    overlay.classList.remove('show');
+                    sidebar.classList.remove('show');
+                    sidebar.style.transform = 'translateX(0)';
+                } else {
+                    // En móvil, ocultar el sidebar si está minimizado
+                    if (sidebar.classList.contains('minimized') && !sidebar.classList.contains('show')) {
+                        sidebar.style.transform = 'translateX(-100%)';
+                    }
+                }
+            }
+
+            // Event listener para el botón de toggle
+            sidebarBtn.addEventListener('click', toggleSidebar);
+
+            // Event listener para el overlay (cerrar sidebar al hacer clic fuera)
+            overlay.addEventListener('click', function () {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+
+                // Si estamos en móvil, mantenerlo minimizado
+                if (window.innerWidth <= 991.98) {
+                    sidebar.classList.add('minimized');
+                }
+            });
+
+            // Manejar el cambio de tamaño de la ventana
+            window.addEventListener('resize', handleResize);
+
+            // Inicializar estado del sidebar según el tamaño de la pantalla
+            handleResize();
+        });
     </script>
 
     @RenderSection("Scripts", required: false)

@@ -332,6 +332,7 @@ body[data-layout=horizontal] .footer {
   transition: transform 0.2s, -webkit-transform 0.2s;
   font-size: 1rem;
 }
+
 #sidebar-menu ul li a {
   display: block;
   padding: 0.625rem 1.5rem;
