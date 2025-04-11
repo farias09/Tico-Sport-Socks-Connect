@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -16,10 +18,30 @@ namespace TicoSportSocksConnect.UI
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            try
+            {
+                var mail = new MailMessage();
+                mail.From = new MailAddress("nigelpruebasmtp@gmail.com");
+                mail.To.Add(message.Destination);
+                mail.Subject = message.Subject;
+                mail.Body = message.Body;
+                mail.IsBodyHtml = true; // Recomendado si mandás HTML (como links)
+
+                using (var smtpClient = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential("nigelpruebasmtp@gmail.com", "tu-contraseña-o-token-de-app");
+
+                    await smtpClient.SendMailAsync(mail);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Podés loguear o relanzar el error si lo querés capturar en otro lado
+                throw new Exception("Error al enviar correo: " + ex.Message);
+            }
         }
     }
 

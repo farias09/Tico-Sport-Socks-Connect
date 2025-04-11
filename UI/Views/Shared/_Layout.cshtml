@@ -137,9 +137,6 @@
                         }
 
                     </ul>
-                    <div class="d-flex justify-content-end">
-                        @Html.Partial("_LoginPartial")
-                    </div>
                 </nav>
                 <!-- End Navigation Links -->
                 <!-- App Search -->
@@ -159,37 +156,42 @@
                     <button type="button" class="btn btn-light shadow-sm rounded-circle p-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img class="rounded-circle avatar-2xs" src="~/Content/images/users/avatar-6.png" alt="Perfil">
                     </button>
-                    <div class="dropdown-menu dropdown-menu-start shadow">
+                    <div class="dropdown-menu dropdown-menu-start shadow w-100" style="min-width: 200px;">
                         <!-- Cambiado a dropdown-menu-start -->
                         <div class="card border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h6 class="mb-1">Charlie Stone</h6>
-                                <small>admin@codubucks.in</small>
+                                <h6 class="mb-0 d-inline">Tico Sports Socks</h6>
                             </div>
                             <div class="card-body p-0">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <a href="apps-contact.html" class="d-flex align-items-center">
-                                            <i class="far fa-address-card me-2"></i> Perfil
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="#!" class="d-flex align-items-center">
-                                            <i class="far fa-calendar-check me-2"></i> Tareas
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="#!" class="d-flex align-items-center">
-                                            <i class="far fa-bell me-2"></i> Notificaciones
-                                        </a>
-                                    </li>
+                                    @if (Request.IsAuthenticated)
+                                    {
+                                        <li class="list-group-item">
+                                            <a href="@Url.Action("Perfil", "Account")" class="d-flex align-items-center">
+                                                <i class="far fa-address-card me-2"></i>
+                                                Perfil
+                                            </a>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                             <div class="card-footer text-center">
-                                <a href="auth-login.html" class="btn btn-danger w-100">Cerrar sesión</a>
+                                @if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "w-100" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger w-100">Cerrar sesión</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary w-100">Iniciar sesión</a>
+                                }
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <!-- End Profile -->
                 <!-- Sidebar Toggle Button -->
