@@ -21,7 +21,7 @@ namespace LN.General.Conversiones.Usuarios.ConvertirAUsuariosTabla
                 estado = elUsuario.estado,
                 FechaRegistro = elUsuario.FechaRegistro,
                 Contraseña = elUsuario.Contraseña,
-                Numero = elUsuario.Numero ?? "N/A" // Asignar un valor por defecto si es nulo
+                Numero = elUsuario.Numero ?? "N/A"
             };
         }
     }

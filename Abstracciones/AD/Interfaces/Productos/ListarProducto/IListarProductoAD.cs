@@ -10,5 +10,7 @@ namespace Abstracciones.AD.Interfaces.Productos.ListarProducto
     public interface IListarProductoAD
     {
         List<ProductosDto> Listar();
+
+        List<ProductosDto> BuscarProductos(string query);
     }
 }

@@ -240,16 +240,19 @@ File: Custom Css File
 }
 
 .footer {
-  bottom: 0;
-  padding: 15px calc(1rem * 1);
-  position: absolute;
-  left: 0;
-  color: #74788d;
-  right: 255px;
-  height: 50px;
-  -webkit-box-shadow: var(--bs-box-shadow);
-          box-shadow: var(--bs-box-shadow);
-  background-color: var(--bs-white);
+    flex-shrink: 0;
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+    margin-top: auto;
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    color: #74788d;
+    right: 255px;
+    height: 50px;
+    -webkit-box-shadow: var(--bs-box-shadow);
+    box-shadow: var(--bs-box-shadow);
+    background-color: var(--bs-white);
 }
 
 @media (max-width: 992px) {

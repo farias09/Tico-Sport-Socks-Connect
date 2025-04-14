@@ -1,15 +1,15 @@
 ﻿@model UI.Models.ChatViewModel
-
 <h4>Chat con @Model.Nombre (@Model.Numero)</h4>
-
 <div class="chat-box">
-    @foreach (var mensaje in Model.Mensajes)
-    {
-        <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
-            <p>@mensaje.Contenido</p>
-            <span class="fecha">@mensaje.Fecha.ToString("g")</span>
-        </div>
-    }
+    <div id="mensajes-container">
+        @foreach (var mensaje in Model.Mensajes)
+        {
+            <div class="mensaje @(mensaje.EsMio ? "mio" : "otro")">
+                <p>@mensaje.Contenido</p>
+                <span class="fecha">@mensaje.Fecha.ToString("g")</span>
+            </div>
+        }
+    </div>
 </div>
 
 <style>
@@ -27,6 +27,7 @@
         background-size: cover;
         background-repeat: repeat;
         background-position: center;
+        margin-bottom: 10px;
     }
 
     .mensaje {
@@ -61,43 +62,60 @@
         overflow-y: auto;
     }
 
-    .mensaje {
-        max-width: 60%;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 14px;
-        line-height: 1.4;
-        position: relative;
-        word-wrap: break-word;
+    .mensaje .fecha {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.5);
+        margin-top: 5px;
+        text-align: right;
     }
 
-        /* Mensajes enviados por el usuario */
-        .mensaje.mio {
-            align-self: flex-end;
-            background-color: #d9fdd3;
-            color: black;
-            text-align: right;
+    .mensaje.otro .fecha {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Estilos nuevos */
+    .chat-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-group {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+        .input-group textarea {
+            flex-grow: 1;
+            border-radius: 4px 0 0 4px;
+            resize: none;
+            height: 38px;
+            overflow: hidden;
         }
 
-        /* Mensajes recibidos */
-        .mensaje.otro {
-            align-self: flex-start;
-            background-color: #fcfafa;
-            color: black;
-            text-align: left;
+        .input-group button {
+            border-radius: 0 4px 4px 0;
         }
 
-        /* Formato para la fecha debajo del mensaje */
-        .mensaje .fecha {
-            display: block;
-            font-size: 12px;
-            color: rgba(0, 0, 0, 0.5);
-            margin-top: 5px;
-            text-align: right;
-        }
+    .gestionar-pedidos-container {
+        display: flex;
+        justify-content: center;
+    }
 
-        .mensaje.otro .fecha {
-            color: rgba(0, 0, 0, 0.5);
+    .btn-gestionar-pedidos {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        border-color: #28a745;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+        .btn-gestionar-pedidos:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 </style>
-

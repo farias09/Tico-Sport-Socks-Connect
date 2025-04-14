@@ -38,5 +38,48 @@ namespace AcessoADatos.Usuarios.ListarUsuario
                                                   }).ToList();
             return laListaDeUsuarios;
         }
+
+        public UsuarioDto ObtenerUsuarioPorId(int usuarioId)
+        {
+            return _elContexto.UsuariosTabla
+                .Where(u => u.Usuario_ID == usuarioId)
+                .Select(u => new UsuarioDto
+                {
+                    Usuario_ID = u.Usuario_ID,
+                    Nombre = u.Nombre,
+                    Email = u.Email,
+                    Direccion = u.Direccion,
+                    Provincia = u.Provincia,
+                    Numero = u.Numero,
+                    Rol_ID = u.Rol_ID,
+                    estado = u.estado,
+                    FechaRegistro = u.FechaRegistro
+                })
+                .FirstOrDefault();
+        }
+
+        public List<UsuarioDto> BuscarClientes(string query)
+        {
+            return _elContexto.UsuariosTabla
+                .Where(u => u.Rol_ID == 2 &&
+                           (u.Nombre.Contains(query) ||
+                            u.Email.Contains(query) ||
+                            u.Telefono.Contains(query)))
+                .Select(u => new UsuarioDto
+                {
+                    Usuario_ID = u.Usuario_ID,
+                    Nombre = u.Nombre,
+                    Email = u.Email,
+                    Telefono = u.Telefono,
+                    Direccion = u.Direccion,
+                    Provincia = u.Provincia,
+                    Numero = u.Numero,
+                    Rol_ID = u.Rol_ID,
+                    estado = u.estado,
+                    FechaRegistro = u.FechaRegistro,
+                    Contraseña = u.Contraseña
+                })
+                .ToList();
+        }
     }
 }

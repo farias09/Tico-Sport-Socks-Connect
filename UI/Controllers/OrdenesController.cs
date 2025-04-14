@@ -55,6 +55,57 @@ namespace UI.Controllers
             return View();
         }
 
+        public ActionResult OrdenesPendientes()
+        {
+            var ordenes = _ordenService.ObtenerOrdenes();
+            var detalles = new List<DetalleOrdenesDto>();
+            var usuarios = new Dictionary<int, string>();
+
+            foreach (var orden in ordenes)
+            {
+                detalles.AddRange(_ordenService.ObtenerDetallesPorOrden(orden.Orden_ID));
+
+                // Obtener el nombre del usuario si no está en el diccionario
+                if (!usuarios.ContainsKey(orden.Usuario_ID))
+                {
+                    var usuario = _listarUsuarioLN.ObtenerUsuarioPorId(orden.Usuario_ID);
+                    usuarios.Add(orden.Usuario_ID, usuario?.Nombre ?? "Cliente no encontrado");
+                }
+            }
+
+            ViewBag.Detalles = detalles;
+            ViewBag.Usuarios = usuarios; // Pasar el diccionario a la vista
+            return View(ordenes);
+        }
+
+        [HttpPost]
+        public ActionResult CambiarEstadoOrden(int id, string estado)
+        {
+            try
+            {
+                var orden = _ordenService.ObtenerOrdenPorId(id);
+                if (orden == null)
+                {
+                    return Json(new { success = false, message = "Orden no encontrada" });
+                }
+
+                // Actualizar el estado en la base de datos
+                var contexto = new Contexto();
+                var ordenDb = contexto.OrdenesTabla.FirstOrDefault(o => o.Orden_ID == id);
+                if (ordenDb != null)
+                {
+                    ordenDb.Estado = estado;
+                    contexto.SaveChanges();
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         public ActionResult VentaFisica()
         {
             var productosActivos = _listarProductoLN.Listar().Where(p => p.Estado).ToList();
@@ -101,9 +152,38 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
-                var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(Request.Form["ProductosSeleccionadosJson"]);
+                // Deserializar los productos seleccionados del JSON
+                var detalles = JsonConvert.DeserializeObject<List<dynamic>>(Request.Form["ProductosSeleccionadosJson"]);
 
-                var ordenCreada = _ordenService.CrearOrden(model.Orden, detalles);
+                // Calcular el total de la orden
+                decimal totalOrden = 0;
+
+                // Crear una lista de DetalleOrdenesDto con la información completa
+                var detallesOrdenes = new List<DetalleOrdenesDto>();
+
+                foreach (var detalle in detalles)
+                {
+                    // Convertir los detalles dinámicos a DetalleOrdenesDto con todos los campos necesarios
+                    var detalleOrden = new DetalleOrdenesDto
+                    {
+                        Producto_ID = Convert.ToInt32(detalle.Producto_ID),
+                        Cantidad = Convert.ToInt32(detalle.Cantidad),
+                        Subtotal = Convert.ToDecimal(detalle.Subtotal),
+                        NombreProducto = detalle.Nombre.ToString(), // Guardar el nombre del producto
+                        PrecioUnitario = Convert.ToInt32(detalle.Precio) // Guardar el precio unitario
+                    };
+
+                    detallesOrdenes.Add(detalleOrden);
+                    totalOrden += detalleOrden.Subtotal;
+                }
+
+                // Asignar el total calculado a la orden
+                model.Orden.Total = totalOrden;
+                model.Orden.FechaOrden = DateTime.Now;
+                model.Orden.Estado = "Pendiente"; // Estado inicial por defecto
+
+                // Crear la orden con los detalles completos
+                var ordenCreada = _ordenService.CrearOrden(model.Orden, detallesOrdenes);
 
                 if (ordenCreada == null || ordenCreada.Orden_ID == 0)
                 {

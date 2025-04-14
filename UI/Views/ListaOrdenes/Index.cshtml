@@ -1,188 +1,149 @@
-﻿@{
+﻿@model List<Abstracciones.Modelos.Ordenes.OrdenResumenDto>
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!doctype html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8" />
-    <title>Pricing | Clivax - Admin & Dashboard Template</title>
+    <title>Tico Sports Socks Connect</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Tico Sports Socks" name="description" />
     <meta content="Codebucks" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
-
 
     <!-- dark layout js -->
     <script src="~/Scripts/js/pages/layout.js"></script>
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
-
 </head>
 
 <body>
     <div class="main-content">
         <div class="page-content">
-    <div class="container mt-4">
-        <h1>Lista de Órdenes</h1>
-        <p class="text-muted">Administra, edita o anula órdenes existentes.</p>
+            <div class="container mt-4">
+                <h1>Lista de Órdenes</h1>
+                <p class="text-muted">Administra, edita o anula órdenes existentes.</p>
 
-        <!-- Filtros -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Buscar por cliente">
-            </div>
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option value="">Estado</option>
-                    <option value="Confirmado">Confirmado</option>
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Anulado">Anulado</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option value="">Origen</option>
-                    <option value="Redes Sociales">Redes Sociales</option>
-                    <option value="Punto de Venta">Punto de Venta</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <input type="date" class="form-control">
-            </div>
-        </div>
+                <!-- Filtros -->
+                <div class="row mb-4 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Cliente</label>
+                        <input type="text" id="filtroCliente" class="form-control" placeholder="Buscar cliente" oninput="filtrarOrdenes()">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Estado</label>
+                        <select id="filtroEstado" class="form-select" onchange="filtrarOrdenes()">
+                            <option value="">Todos</option>
+                            <option value="Completada">Completada</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Tipo</label>
+                        <select id="filtroTipo" class="form-select" onchange="filtrarOrdenes()">
+                            <option value="">Todos</option>
+                            <option value="Virtual">Virtual</option>
+                            <option value="Fisica">Física</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" id="filtroFecha" class="form-control" onchange="filtrarOrdenes()">
+                    </div>
+                    <div class="col-md-2 ms-auto">
+                        <label class="form-label">&nbsp;</label>
+                        <button id="btnRestablecer" class="btn btn-secondary w-100" onclick="restablecerFiltros()">
+                            <i class="fas fa-sync-alt me-1"></i> Restablecer
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Tabla de órdenes -->
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th># Orden</th>
-                            <th>Cliente</th>
-                            <th>Estado</th>
-                            <th>Fecha</th>
-                            <th>Origen</th>
-                            <th>Total</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>001</td>
-                            <td>María López</td>
-                            <td><span class="badge bg-success">Confirmado</span></td>
-                            <td>01/12/2024</td>
-                            <td>Redes Sociales</td>
-                            <td>₡45,000</td>
-                            <td>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verOrdenModal">Ver</button>
-                                <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editarOrdenModal">Editar</button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#anularOrdenModal">Anular</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>002</td>
-                            <td>Venta Directa</td>
-                            <td><span class="badge bg-warning">Pendiente</span></td>
-                            <td>02/12/2024</td>
-                            <td>Punto de Venta</td>
-                            <td>₡15,000</td>
-                            <td>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verOrdenModal">Ver</button>
-                                <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editarOrdenModal">Editar</button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#anularOrdenModal">Anular</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para ver detalles de la orden -->
-    <div class="modal fade" id="verOrdenModal" tabindex="-1" aria-labelledby="verOrdenModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verOrdenModalLabel">Detalles de la Orden</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>ID de la Orden:</strong> 001</p>
-                    <p><strong>Cliente:</strong> María López</p>
-                    <p><strong>Estado:</strong> <span class="badge bg-success">Confirmado</span></p>
-                    <p><strong>Fecha:</strong> 01/12/2024</p>
-                    <p><strong>Canal de Venta:</strong> Redes Sociales</p>
-                    <p><strong>Total:</strong> ₡45,000</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para editar detalles de la orden -->
-    <div class="modal fade" id="editarOrdenModal" tabindex="-1" aria-labelledby="editarOrdenModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarOrdenModalLabel">Editar Orden</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="cliente" class="form-label">Cliente</label>
-                            <input type="text" class="form-control" id="cliente" value="María López">
+                <!-- Tabla de órdenes -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="tablaOrdenes">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th># Orden</th>
+                                        <th>Cliente</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Total</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var orden in Model)
+                                    {
+                                        <tr>
+                                            <td>@orden.Orden_ID.ToString("D3")</td>
+                                            <td>@orden.UsuarioNombre</td>
+                                            <td>
+                                                @if (orden.Estado == "Completada")
+                                                {
+                                                    <span class="badge bg-success">@orden.Estado</span>
+                                                }
+                                                else if (orden.Estado == "Pendiente")
+                                                {
+                                                    <span class="badge bg-warning">@orden.Estado</span>
+                                                }
+                                                else if (orden.Estado == "Cancelada")
+                                                {
+                                                    <span class="badge bg-danger">@orden.Estado</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">@orden.Estado</span>
+                                                }
+                                            </td>
+                                            <td>@orden.FechaOrden.ToString("yyyy-MM-dd")</td>
+                                            <td>@orden.TipoVenta</td>
+                                            <td>₡@orden.Total.ToString("N0")</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarDetallesOrden(@orden.Orden_ID)">
+                                                    <i class="fas fa-eye"></i> Ver
+                                                </button>
+                                                <button class="btn btn-sm btn-danger btn-anular" data-bs-toggle="modal" data-bs-target="#anularOrdenModal" data-orden-id="@orden.Orden_ID">
+                                                    <i class="fas fa-times"></i> Cancelar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="mb-3">
-                            <label for="canalVenta" class="form-label">Canal de Venta</label>
-                            <select class="form-select" id="canalVenta">
-                                <option value="Redes Sociales" selected>Redes Sociales</option>
-                                <option value="Punto de Venta">Punto de Venta</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="total" class="form-label">Total</label>
-                            <input type="number" class="form-control" id="total" value="45000">
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar Cambios</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal para confirmar anulación -->
-    <div class="modal fade" id="anularOrdenModal" tabindex="-1" aria-labelledby="anularOrdenModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="anularOrdenModalLabel">Confirmar Anulación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Estás seguro de que deseas anular la orden <strong>#001</strong>?</p>
-                    <p><strong>Esta acción no se puede deshacer.</strong></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Confirmar Anulación</button>
+                <!-- Modal para confirmar anulación -->
+                <div class="modal fade" id="anularOrdenModal" tabindex="-1" aria-labelledby="anularOrdenModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="anularOrdenModalLabel">Confirmar Cancelación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Estás seguro de que deseas cancelar la orden <strong id="ordenAnularNumero">#000</strong>?</p>
+                                <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" onclick="confirmarAnulacion()">Cancelar Pedido</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-        </div>
-    </div>
-    
 
         <!-- JAVASCRIPT -->
         <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
@@ -190,13 +151,124 @@
         <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
         <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
         <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+        <!-- Font Awesome para iconos -->
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-        <script src="~/Scripts/js/app.js"></script>
+        <script>
+            function filtrarOrdenes() {
+                const cliente = document.getElementById('filtroCliente').value.toLowerCase();
+                const estado = document.getElementById('filtroEstado').value;
+                const tipo = document.getElementById('filtroTipo').value;
+                const fecha = document.getElementById('filtroFecha').value;
 
-        <!-- apexcharts -->
-        <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
+                const filas = document.querySelectorAll('#tablaOrdenes tbody tr');
 
-        <script src="~/Scripts/js/pages/dashboard.init.js"></script>
+                filas.forEach(fila => {
+                    const clienteTexto = fila.children[1].textContent.toLowerCase();
+                    const estadoTexto = fila.children[2].textContent.trim();
+                    const tipoTexto = fila.children[4].textContent.trim();
+                    const fechaTexto = fila.children[3].textContent.trim();
+
+                    // Verificar coincidencias
+                    const coincideCliente = cliente === '' || clienteTexto.includes(cliente);
+                    const coincideEstado = estado === '' || estadoTexto === estado;
+                    const coincideTipo = tipo === '' || tipoTexto === tipo;
+                    const coincideFecha = fecha === '' || fechaTexto === fecha;
+
+                    // Mostrar/ocultar fila según los filtros
+                    fila.style.display = (coincideCliente && coincideEstado && coincideTipo && coincideFecha) ? '' : 'none';
+                });
+            }
+
+            function restablecerFiltros() {
+                // Limpiar los valores de los filtros
+                document.getElementById('filtroCliente').value = '';
+                document.getElementById('filtroEstado').selectedIndex = 0;
+                document.getElementById('filtroTipo').selectedIndex = 0;
+                document.getElementById('filtroFecha').value = '';
+
+                // Volver a aplicar el filtro (que ahora mostrará todo)
+                filtrarOrdenes();
+            }
+
+            function cargarDetallesOrden(ordenId) {
+                $.get('@Url.Action("ObtenerDetallesOrden", "ListaOrdenes")', { id: ordenId }, function(data) {
+                    if (data.success) {
+                        // Construir el HTML con los detalles
+                        let html = `
+                            <p><strong>ID de la Orden:</strong> ${data.orden.Orden_ID}</p>
+                            <p><strong>Cliente:</strong> ${data.cliente.Nombre}</p>
+                            <p><strong>Estado:</strong> <span class="badge ${data.orden.Estado === 'Completada' ? 'bg-success' : data.orden.Estado === 'Pendiente' ? 'bg-warning' : 'bg-danger'}">${data.orden.Estado}</span></p>
+                            <p><strong>Fecha:</strong> ${new Date(data.orden.FechaOrden).toLocaleDateString()}</p>
+                            <p><strong>Tipo de Venta:</strong> ${data.orden.TipoVenta}</p>
+                            <p><strong>Total:</strong> ₡${data.orden.Total.toLocaleString()}</p>
+                            <hr>
+                            <h5>Productos:</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.productos.map(p => `
+                                        <tr>
+                                            <td>${p.NombreProducto}</td>
+                                            <td>${p.Cantidad}</td>
+                                            <td>₡${p.PrecioUnitario.toLocaleString()}</td>
+                                            <td>₡${p.Subtotal.toLocaleString()}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+
+                        $('#detallesOrdenModalBody').html(html);
+                    } else {
+                        $('#detallesOrdenModalBody').html('<p class="text-danger">Error al cargar los detalles de la orden.</p>');
+                    }
+                });
+            }
+
+            let ordenIdAnular = 0;
+
+            function prepararAnulacion(id) {
+                ordenIdAnular = id;
+                document.getElementById('ordenAnularNumero').textContent = '#' + id.toString().padStart(3, '0');
+            }
+
+            function confirmarAnulacion() {
+                if (ordenIdAnular === 0) return;
+
+                $.ajax({
+                    url: '@Url.Action("AnularOrden", "ListaOrdenes")',
+                    type: 'POST',
+                    data: { id: ordenIdAnular },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#anularOrdenModal').modal('hide');
+                            alert('La orden ha sido cancelada correctamente');
+                            location.reload();
+                        } else {
+                            alert('Error al cancelar la orden: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error al comunicarse con el servidor');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.btn-anular').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ordenId = parseInt(this.getAttribute('data-orden-id'));
+                    prepararAnulacion(ordenId);
+                });
+            });
+        </script>
+    </div>
 </body>
-
 </html>

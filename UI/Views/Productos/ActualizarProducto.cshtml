@@ -24,7 +24,7 @@
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Actualizar Producto</h2>
 
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(model => model.Producto_ID)
@@ -71,10 +71,49 @@
 
                 <!-- Imagen del Producto -->
                 <div class="mb-3">
-                    @Html.LabelFor(model => model.imagen, "Imagen (URL)", new { @class = "form-label fw-bold" })
-                    @Html.TextBoxFor(model => model.imagen, new { @class = "form-control", type = "url", placeholder = "https://example.com/imagen.jpg" })
-                    @Html.ValidationMessageFor(model => model.imagen, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.imagen, "Imagen del Producto", new { @class = "form-label fw-bold" })
+
+                    <!-- Mostrar la imagen actual si existe -->
+                    <div class="mb-2" id="imagenPreviewContainer">
+                        @if (!string.IsNullOrEmpty(Model.imagen))
+                        {
+                            <img id="imagenPreview" src="@Url.Content(Model.imagen)" alt="Imagen actual" style="max-width: 100px; max-height: 100px;" class="img-thumbnail" />
+                            <p class="text-muted small mt-1">Imagen actual</p>
+                        }
+                        else
+                        {
+                            <img id="imagenPreview" src="#" alt="Preview de la imagen" style="display: none; max-width: 100px; max-height: 100px;" class="img-thumbnail" />
+                        }
+                    </div>
+
+                    <!-- Input para subir nueva imagen -->
+                    <input type="file" name="imagenArchivo" class="form-control" accept="image/*" id="imagenArchivoInput" />
+                    <small class="text-muted">Deje en blanco para mantener la imagen actual</small>
+                    @Html.ValidationMessage("imagenArchivo", "", new { @class = "text-danger" })
+
+                    <!-- Campo oculto para mantener la ruta de la imagen actual -->
+                    @Html.HiddenFor(model => model.imagen)
                 </div>
+
+                <script>
+                    document.getElementById('imagenArchivoInput').addEventListener('change', function (event) {
+                        const file = event.target.files[0];
+                        const preview = document.getElementById('imagenPreview');
+                        const previewContainer = document.getElementById('imagenPreviewContainer');
+
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                preview.src = e.target.result;
+                                preview.style.display = 'block';
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            preview.src = '#';
+                            preview.style.display = 'none';
+                        }
+                    });
+                </script>
 
                 <!-- Categoría -->
                 <div class="mb-3">

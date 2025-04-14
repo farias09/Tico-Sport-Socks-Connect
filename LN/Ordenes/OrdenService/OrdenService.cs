@@ -102,5 +102,10 @@ namespace LN.Ordenes.OrdenService
         {
             return _ordenRepositorio.ObtenerVentasPorMes();
         }
+
+        public List<OrdenesDto> BuscarOrdenes(string query)
+        {
+            return _ordenRepositorio.BuscarOrdenes(query);
+        }
     }
 }
