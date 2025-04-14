@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abstracciones.Modelos.Usuarios;
 using System;
+using TicoSportSocksConnect.UI.Models;
 
 namespace UI.Controllers
 {
@@ -17,6 +18,8 @@ namespace UI.Controllers
         private readonly ICrearUsuarioLN _crearUsuarioLN;
         private readonly IActualizarUsuarioLN _actualizarUsuarioLN;
         private readonly IEliminarUsuarioLN _eliminarUsuarioLN;
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
 
         public UsuariosController(
             IListarUsuarioLN listarUsuarioLN,
@@ -28,6 +31,7 @@ namespace UI.Controllers
             _crearUsuarioLN = crearUsuarioLN;
             _actualizarUsuarioLN = actualizarUsuarioLN;
             _eliminarUsuarioLN = eliminarUsuarioLN;
+            _context = new ApplicationDbContext();
         }
 
         // GET: Usuarios
@@ -181,5 +185,24 @@ namespace UI.Controllers
 
             return View("Index", adminsViewModel); 
         }
+
+        #region Usuarios del Sistema (AspNetUsers)
+
+        public ActionResult ListaAspNetUsers(string busqueda)
+        {
+            var usuarios = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                usuarios = usuarios.Where(u => u.Nombre.Contains(busqueda));
+            }
+
+            ViewBag.Busqueda = busqueda;
+            return View(usuarios.ToList());
+        }
+
+
+        #endregion
+
     }
 }
