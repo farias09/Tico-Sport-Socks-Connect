@@ -1,12 +1,12 @@
-﻿@model UI.Models.ConversacionesChatViewModel
+﻿﻿@model UI.Models.ConversacionesChatViewModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<!doctype html>
-<html lang="en">
 
+<!DOCTYPE html>
+<html>
 <head>
-
     <meta charset="utf-8" />
     <title>Conversaciones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,254 +14,288 @@
     <meta content="Tico Sport Socks" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
-
     <!-- dark layout js -->
     <script src="~/Scripts/js/pages/layout.js"></script>
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
 
-</head>
-
-<style>
-    /* Contenedor principal con tres columnas */
-    .contenedor-chat {
-        display: flex;
-        height: 80vh;
-        margin-top: 20px;
-        padding: 15px;
-    }
-
-    /* Panel Izquierdo: Lista de conversaciones */
-    .lista-conversaciones {
-        width: 35%;
-        overflow-y: auto;
-        border-right: 1px solid #ddd;
-        background: #fff;
-        border-radius: 8px;
-    }
-
-    /* Panel Central: Chat */
-    .chat-panel {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-        background: #f9f9f9;
-        margin: 0 15px;
-        border-radius: 8px;
-    }
-
-    /* Panel Derecho: Inventario y botón de crear orden */
-    .inventory-panel {
-        width: 35%;
-        overflow-y: auto;
-        background: #fff;
-        border-left: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    /* Estilos existentes para el chat */
-    .chat-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        text-align: center;
-        color: #777;
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-        .chat-placeholder i {
-            font-size: 50px;
-            color: #bbb;
-            margin-bottom: 10px;
+    <style>
+        /* Contenedor principal con tres columnas */
+        .contenedor-chat {
+            display: flex;
+            height: 80vh;
+            margin-top: 20px;
+            padding: 15px;
         }
 
-    .chat-box {
-        flex-grow: 1;
-        overflow-y: auto;
-        border: 1px solid #ddd;
-        background: #fff;
-        padding: 15px;
-        border-radius: 8px;
-    }
-</style>
+        /* Panel Izquierdo: Lista de conversaciones */
+        .lista-conversaciones {
+            width: 35%;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            background: #fff;
+            border-radius: 8px;
+        }
 
-<body>
-    <div class="main-content">
-        <div class="page-content">
-            <!-- Begin page -->
-            <div id="layout-wrapper">
-                <div class="container mt-4">
-                    <div class="text-center">
-                        <h1>Gestión de órdenes</h1>
-                        <p class="text-muted">Gestiona las órdenes que recibe Tico Sport Socks</p>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'">
-                            <i class="bi bi-cart me-2"></i>
-                            Registrar Venta Física
-                        </button>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
-                            <i class="bi bi-plus-circle me-2"></i> Crear Orden
-                        </button>
-                    </div>
-                    <div class="contenedor-chat">
-                        <!-- Panel Izquierdo: Lista de conversaciones -->
-                        <div class="lista-conversaciones" id="conversaciones-panel">
-                            <div class="card">
-                                <div class="card-header bg-white d-flex justify-content-between">
-                                    <h5 class="mb-0">Conversaciones</h5>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                        @foreach (var conversacion in Model.Conversaciones)
-                                        {
-                                            <li class="list-group-item">
-                                                <a href="@Url.Action("Index", "Conversaciones", new { id = conversacion.UsuarioId })"
-                                                   class="abrir-chat"
-                                                   data-id="@conversacion.UsuarioId">
-                                                    <strong>@conversacion.Nombre</strong><br>
-                                                    <small>@conversacion.Numero</small>
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
+        /* Panel Central: Chat */
+        .chat-panel {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f9f9f9;
+            margin: 0 15px;
+            border-radius: 8px;
+        }
+
+        /* Panel Derecho: Inventario y botón de crear orden */
+        .inventory-panel {
+            width: 35%;
+            overflow-y: auto;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Estilos existentes para el chat */
+        .chat-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+            .chat-placeholder i {
+                font-size: 50px;
+                color: #bbb;
+                margin-bottom: 10px;
+            }
+
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .chat-form {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 10px;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        #chat-container {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    </style>
+</head>
+
+<div class="main-content">
+    <div class="page-content">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <div class="container mt-4">
+                <div class="text-center mb-4">
+                    <h1>Gestión de órdenes</h1>
+                    <p class="text-muted">Gestiona las órdenes que recibe Tico Sport Socks</p>
+
+                </div>
+                <div class="contenedor-chat">
+                    <!-- Panel Izquierdo: Lista de conversaciones -->
+                    <div class="lista-conversaciones" id="conversaciones-panel">
+                        <div class="card">
+                            <div class="card-header bg-white d-flex justify-content-between">
+                                <h5 class="mb-0">Conversaciones</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    @foreach (var conversacion in Model.Conversaciones)
+                                    {
+                                        <li class="list-group-item">
+                                            <a href="@Url.Action("Index", "Conversaciones", new { id = conversacion.UsuarioId })"
+                                               class="abrir-chat"
+                                               data-id="@conversacion.UsuarioId">
+                                                <strong>@conversacion.Nombre</strong><br>
+                                                <small>@conversacion.Numero</small>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Panel Central: Chat -->
-                        <div class="chat-panel" id="chat-container" data-usuario-id="@Model.Chat?.UsuarioId">
-                            @if (Model.Chat != null)
-                            {
-                                @Html.Partial("_Chat", Model.Chat)
-                            }
-                            else
-                            {
-                                <div class="chat-placeholder">
-                                    <i class="fas fa-comments"></i>
-                                    <p>Seleccione una conversación para ver los mensajes.</p>
-                                </div>
-                            }
-                        </div>
+                    <!-- Panel Central: Chat -->
+                    <div class="chat-panel" id="chat-container" data-usuario-id="@Model.Chat?.UsuarioId">
+                        @if (Model.Chat != null)
+                        {
+                            @Html.Partial("_Chat", Model.Chat)
+                        }
+                        else
+                        {
+                            <div class="chat-placeholder">
+                                <i class="fas fa-comments"></i>
+                                <p>Seleccione una conversación para ver los mensajes.</p>
+                            </div>
+                        }
+                    </div>
 
-                        <!-- Panel Derecho: Inventario y botón de crear orden -->
-                        <div class="inventory-panel">
-                            <div class="card">
-                                <div class="card-header bg-white d-flex justify-content-between">
-                                    <h5 class="mb-0">Inventario</h5>
-                                </div>
-                                <div class="card-body">
-                                    <select class="form-select mb-3">
-                                        <option>Selecciona la bodega</option>
-                                        <option>Tibás</option>
-                                        <option>Pérez Zeledón</option>
-                                    </select>
-                                    <div class="mb-3">
-                                        <input type="text"
-                                               class="form-control"
-                                               placeholder="Nombre del producto, COD..."
-                                               id="buscador-productos"
-                                               aria-label="Buscar productos">
-                                    </div>
+                    <!-- Panel Derecho: Inventario y botón de crear orden -->
+                    <div class="inventory-panel">
+                        <div class="card">
+                            <div class="card-header bg-white d-flex justify-content-between">
+                                <h5 class="mb-0">Inventario</h5>
+                            </div>
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary mb-3" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                                    Crear Orden
+                                </button>
+                                <select class="form-select mb-3">
+                                    <option>Selecciona la bodega</option>
+                                    <option>Tibás</option>
+                                    <option>Pérez Zeledón</option>
+                                </select>
+                                <input type="text" class="form-control mb-3" placeholder="Nombre del producto, SKU..." />
+                                <h6>Productos más buscados</h6>
+                                <div class="list-group">
 
-                                    <!-- Contenedor para resultados de búsqueda -->
-                                    <div id="productos-buscados" class="mb-4"></div>
 
-                                    <h6 id="titulo-productos-populares">Productos más buscados</h6>
-                                    <div class="list-group" id="productos-populares">
-                                        @foreach (var producto in Model.Productos)
-                                        {
-                                            <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-3">
-                                                    <div>
-                                                        <p class="mb-1"><strong>@producto.nombre</strong></p>
-                                                        <p class="mb-0">COD: @producto.CodigoDelProducto | Stock: @producto.stock</p>
-                                                    </div>
+                                    @foreach (var producto in Model.Productos)
+                                    {
+                                        <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-3">
+                                                <div>
+                                                    <p class="mb-1"><strong>@producto.nombre</strong></p>
+                                                    <p class="mb-0">COD: @producto.Producto_ID | Stock: @producto.stock</p>
                                                 </div>
-                                                <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-info">Detalles</a>
                                             </div>
-                                        }
-                                    </div>
+                                            <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-success">Detalles</a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                @if (Model.Chat != null)
+                {
+                    <div class="chat-form">
+                        @Html.Partial("_ChatForm", Model.Chat)
+                    </div>
+                }
             </div>
         </div>
     </div>
+</div>
 
-    @section Scripts {
-        <script>
-            function actualizarMensajes() {
-                const chatPanel = document.getElementById("chat-container");
-                const usuarioId = chatPanel?.dataset.usuarioId;
+@section Scripts {
+    <script>
+        function actualizarMensajes() {
+            const chatPanel = document.getElementById("chat-container");
+            const usuarioId = chatPanel?.dataset.usuarioId;
 
-                if (!usuarioId) return;
+            if (!usuarioId) return;
 
-                fetch(`/Conversaciones/ObtenerMensajes/${usuarioId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Error al obtener mensajes");
+            fetch(`/Conversaciones/ObtenerMensajes/${usuarioId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error al obtener mensajes");
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    const mensajesContainer = document.getElementById("mensajes-container");
+                    if (mensajesContainer) {
+                        mensajesContainer.innerHTML = html;
+                    }
+                })
+                .catch(err => console.error("Error al actualizar mensajes:", err));
+        }
+
+        function actualizarConversaciones() {
+            fetch(window.location.href)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const nuevoPanel = doc.getElementById("chat-container")?.innerHTML;
+                    const actualPanel = document.getElementById("chat-container");
+
+                    if (nuevoPanel && actualPanel) {
+                        actualPanel.innerHTML = nuevoPanel;
+                    }
+                })
+                .catch(err => console.error("Error al actualizar conversaciones:", err));
+        }
+
+        function actualizarInbox() {
+            fetch(window.location.href)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const nuevoInbox = doc.getElementById("conversaciones-panel")?.innerHTML;
+                    const inboxActual = document.getElementById("conversaciones-panel");
+
+                    if (nuevoInbox && inboxActual) {
+                        inboxActual.innerHTML = nuevoInbox;
+                    }
+                })
+                .catch(err => console.error("Error al actualizar la lista de conversaciones:", err));
+        }
+
+
+        setInterval(() => {
+            actualizarMensajes();
+            actualizarConversaciones();
+            actualizarInbox();
+        }, 2000);
+
+        const chatForm = document.getElementById("chatForm");
+
+        if (chatForm) {
+            chatForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const usuarioId = document.getElementById("usuarioId").value;
+                const mensaje = document.getElementById("mensaje").value;
+
+                if (mensaje.trim() === "") return;
+
+                const formData = new FormData();
+                formData.append("id", usuarioId);
+                formData.append("contenido", mensaje);
+
+                fetch(`/Conversaciones/EnviarMensaje/${usuarioId}`, {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById("mensaje").value = "";
+                            actualizarMensajes();
+                        } else {
+                            alert("Error: " + data.message);
                         }
-                        return response.text();
                     })
-                    .then(html => {
-                        const mensajesContainer = document.getElementById("mensajes-container");
-                        if (mensajesContainer) {
-                            mensajesContainer.innerHTML = html;
-                        }
-                    })
-                    .catch(err => console.error("Error al actualizar mensajes:", err));
-            }
-
-
-            function actualizarConversaciones() {
-                fetch(window.location.href)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const nuevoPanel = doc.getElementById("chat-container")?.innerHTML;
-                        const actualPanel = document.getElementById("chat-container");
-
-                        if (nuevoPanel && actualPanel) {
-                            actualPanel.innerHTML = nuevoPanel;
-                        }
-                    })
-                    .catch(err => console.error("Error al actualizar conversaciones:", err));
-            }
-
-            function actualizarInbox() {
-                fetch(window.location.href)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const nuevoInbox = doc.getElementById("conversaciones-panel")?.innerHTML;
-                        const inboxActual = document.getElementById("conversaciones-panel");
-
-                        if (nuevoInbox && inboxActual) {
-                            inboxActual.innerHTML = nuevoInbox;
-                        }
-                    })
-                    .catch(err => console.error("Error al actualizar la lista de conversaciones:", err));
-            }
-
-
-            setInterval(() => {
-                actualizarMensajes();
-                actualizarConversaciones();
-                actualizarInbox();
-            }, 6000);
-
-
-
+                    .catch(error => {
+                        console.error("Error al enviar mensaje:", error);
+                    });
+            });
 
             // Variable para controlar el debounce
             let timeoutBusqueda;
@@ -295,7 +329,7 @@
             });
 
             function buscarProductos(terminoBusqueda) {
-                fetch(`/Conversaciones/BuscarProductos?termino=${encodeURIComponent(terminoBusqueda)}`)
+                fetch(/Conversaciones/BuscarProductos ? termino = ${ encodeURIComponent(terminoBusqueda) })
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error en la búsqueda');
@@ -311,17 +345,17 @@
                         } else {
                             productos.forEach(producto => {
                                 const productoHTML = `
-                                <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
-                                    <div class="d-flex align-items-center">
-                                        <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
-                                        <div>
-                                            <p class="mb-1"><strong>${producto.nombre}</strong></p>
-                                            <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
-                                        </div>
-                                    </div>
-                                    <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>
-                                </div>
-                            `;
+                    <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
+                        <div class="d-flex align-items-center">
+                            <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
+                            <div>
+                                <p class="mb-1"><strong>${producto.nombre}</strong></p>
+                                <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
+                            </div>
+                        </div>
+                        <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>
+                    </div>
+                `;
                                 contenedorProductos.innerHTML += productoHTML;
                             });
                         }
@@ -330,7 +364,6 @@
                         console.error('Error al buscar productos:', error);
                         document.getElementById('productos-buscados').innerHTML = '<p class="text-danger">Error al buscar productos</p>';
                     });
-            }
-        </script>
-    }
-
+        }
+    </script>
+}
