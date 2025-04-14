@@ -24,7 +24,7 @@
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Crear Producto</h2>
 
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
@@ -70,9 +70,9 @@
 
                 <!-- Imagen del Producto -->
                 <div class="mb-3">
-                    @Html.LabelFor(model => model.imagen, "Imagen (URL)", new { @class = "form-label fw-bold" })
-                    @Html.TextBoxFor(model => model.imagen, new { @class = "form-control", type = "url", placeholder = "https://example.com/imagen.jpg" })
-                    @Html.ValidationMessageFor(model => model.imagen, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.imagen, "Imagen del Producto", new { @class = "form-label fw-bold" })
+                    <input type="file" name="imagenArchivo" class="form-control" accept="image/*" required />
+                    @Html.ValidationMessage("imagenArchivo", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Categoría -->

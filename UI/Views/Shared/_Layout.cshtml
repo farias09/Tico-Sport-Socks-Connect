@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +19,7 @@
 </head>
 
 <style>
+    
     /* Estilos base para el sidebar */
     .sidebar-left {
         position: fixed;
@@ -130,8 +133,6 @@
         width: 100%;
         transition: all 0.3s ease;
     }
-
-    
 </style>
 
 <body>
@@ -198,7 +199,18 @@
                         <!-- Cambiado a dropdown-menu-start -->
                         <div class="card border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h6 class="mb-0 d-inline">Tico Sports Socks</h6>
+                                <h6 class="mb-0 d-inline">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        var claimsIdentity = User.Identity as ClaimsIdentity;
+                                        var nombreUsuarioClaim = claimsIdentity?.FindFirst("NombreDeUsuario");
+                                        <text>@(nombreUsuarioClaim?.Value ?? User.Identity.Name)</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Bienvenido</text>
+                                    }
+                                </h6>
                             </div>
                             <div class="card-body p-0">
                                 <ul class="list-group list-group-flush">
@@ -321,79 +333,7 @@
     <script src="~/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/libs/simplebar/simplebar.min.js"></script>
     <script src="~/libs/node-waves/waves.min.js"></script>
-
-
     <script src="~/js/pages/apexcharts-area.init.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebarBtn = document.getElementById('sidebar-btn');
-            const sidebar = document.querySelector('.sidebar-left');
-            const mainContent = document.querySelector('.main-content');
-            const body = document.body;
-
-            // Crear overlay para móviles
-            const overlay = document.createElement('div');
-            overlay.className = 'sidebar-overlay';
-            body.appendChild(overlay);
-
-            // Función para manejar el toggle del sidebar
-            function toggleSidebar() {
-                sidebar.classList.toggle('minimized');
-                mainContent.classList.toggle('minimized');
-                // Si el ancho es mayor a 1200px, no permitir minimizar completamente
-                if (window.innerWidth >= 1200) {
-                    sidebar.classList.remove('minimized');
-                }
-
-                // En móviles, mostrar/ocultar en lugar de minimizar
-                if (window.innerWidth <= 991.98) {
-                    sidebar.classList.toggle('show');
-                    overlay.classList.toggle('show');
-                }
-            }
-
-            // Función para manejar el cambio de tamaño de la ventana
-            function handleResize() {
-                if (window.innerWidth < 1200) {
-                    sidebar.classList.add('minimized');
-                } else {
-                    sidebar.classList.remove('minimized');
-                }
-
-                if (window.innerWidth > 991.98) {
-                    overlay.classList.remove('show');
-                    sidebar.classList.remove('show');
-                    sidebar.style.transform = 'translateX(0)';
-                } else {
-                    // En móvil, ocultar el sidebar si está minimizado
-                    if (sidebar.classList.contains('minimized') && !sidebar.classList.contains('show')) {
-                        sidebar.style.transform = 'translateX(-100%)';
-                    }
-                }
-            }
-
-            // Event listener para el botón de toggle
-            sidebarBtn.addEventListener('click', toggleSidebar);
-
-            // Event listener para el overlay (cerrar sidebar al hacer clic fuera)
-            overlay.addEventListener('click', function () {
-                sidebar.classList.remove('show');
-                overlay.classList.remove('show');
-
-                // Si estamos en móvil, mantenerlo minimizado
-                if (window.innerWidth <= 991.98) {
-                    sidebar.classList.add('minimized');
-                }
-            });
-
-            // Manejar el cambio de tamaño de la ventana
-            window.addEventListener('resize', handleResize);
-
-            // Inicializar estado del sidebar según el tamaño de la pantalla
-            handleResize();
-        });
-    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

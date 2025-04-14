@@ -59,7 +59,7 @@ namespace UI.Controllers
         {
             var ordenes = _ordenService.ObtenerOrdenes();
             var detalles = new List<DetalleOrdenesDto>();
-            var usuarios = new Dictionary<int, string>(); // Diccionario para almacenar Usuario_ID -> Nombre
+            var usuarios = new Dictionary<int, string>();
 
             foreach (var orden in ordenes)
             {
@@ -152,9 +152,38 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
-                var detalles = JsonConvert.DeserializeObject<List<DetalleOrdenesDto>>(Request.Form["ProductosSeleccionadosJson"]);
+                // Deserializar los productos seleccionados del JSON
+                var detalles = JsonConvert.DeserializeObject<List<dynamic>>(Request.Form["ProductosSeleccionadosJson"]);
 
-                var ordenCreada = _ordenService.CrearOrden(model.Orden, detalles);
+                // Calcular el total de la orden
+                decimal totalOrden = 0;
+
+                // Crear una lista de DetalleOrdenesDto con la información completa
+                var detallesOrdenes = new List<DetalleOrdenesDto>();
+
+                foreach (var detalle in detalles)
+                {
+                    // Convertir los detalles dinámicos a DetalleOrdenesDto con todos los campos necesarios
+                    var detalleOrden = new DetalleOrdenesDto
+                    {
+                        Producto_ID = Convert.ToInt32(detalle.Producto_ID),
+                        Cantidad = Convert.ToInt32(detalle.Cantidad),
+                        Subtotal = Convert.ToDecimal(detalle.Subtotal),
+                        NombreProducto = detalle.Nombre.ToString(), // Guardar el nombre del producto
+                        PrecioUnitario = Convert.ToInt32(detalle.Precio) // Guardar el precio unitario
+                    };
+
+                    detallesOrdenes.Add(detalleOrden);
+                    totalOrden += detalleOrden.Subtotal;
+                }
+
+                // Asignar el total calculado a la orden
+                model.Orden.Total = totalOrden;
+                model.Orden.FechaOrden = DateTime.Now;
+                model.Orden.Estado = "Pendiente"; // Estado inicial por defecto
+
+                // Crear la orden con los detalles completos
+                var ordenCreada = _ordenService.CrearOrden(model.Orden, detallesOrdenes);
 
                 if (ordenCreada == null || ordenCreada.Orden_ID == 0)
                 {

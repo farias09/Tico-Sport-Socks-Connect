@@ -6,103 +6,280 @@
 }
 
 <head>
-
     <meta charset="utf-8" />
-    <title>Control de Cajas | Clivax - Admin & Dashboard Template</title>
+    <title>Panel de Control - Editar Perfil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Codebucks" name="author" />
-    <!-- App favicon -->
+    <meta content="Panel de Control para vendedores de TicoSportSocks" name="description" />
+
+    <!-- Favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
 
-    <!-- dark layout js -->
-    <script src="~/Scripts/js/pages/layout.js"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
 
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #dbeafe;
+            --success-color: #10b981;
+            --success-light: #d1fae5;
+            --warning-color: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger-color: #ef4444;
+            --danger-light: #fee2e2;
+            --dark-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --body-bg: #f1f5f9;
+            --sidebar-bg: #0f172a;
+        }
+
+        body {
+            background-color: var(--body-bg);
+            color: var(--dark-color);
+        }
+
+        .dashboard-container {
+            padding: 1.5rem;
+        }
+
+        /* Data Card */
+        .data-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-card-title {
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark-color);
+        }
+
+            .data-card-title i {
+                font-size: 1.1rem;
+                color: var(--primary-color);
+            }
+
+        .data-card-body {
+            padding-bottom: 1.5rem;
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        /* Form Fields */
+        .profile-fields {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .profile-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .profile-field-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-control-edit {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            width: 100%;
+            transition: border-color 0.2s ease;
+        }
+
+            .form-control-edit:focus {
+                border-color: var(--primary-color);
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            }
+
+        /* Buttons */
+        .btn-custom {
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+            .btn-primary-custom:hover {
+                background-color: #1d4ed8;
+                border-color: #1d4ed8;
+                color: white;
+            }
+
+        .btn-outline-custom {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+            .btn-outline-custom:hover {
+                background-color: #f8fafc;
+                color: var(--dark-color);
+            }
+
+        /* Validation */
+        .text-danger {
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            color: var(--danger-color);
+        }
+
+        /* Footer */
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
 </head>
+
 <body>
     <div class="main-content">
         <div class="page-content">
             <div id="layout-wrapper">
-                <div class="container mt-5">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-10 col-xl-9">
-                            <div class="card shadow-lg rounded-4">
-                                <div class="card-header bg-primary text-white py-4">
-                                    <h2 class="mb-0 fs-3">Editar Perfil</h2>
+                <div class="container mt-4">
+                    <div class="dashboard-container">
+                        <!-- Data Card for Edit Form -->
+                        <div class="data-card">
+                            <div class="data-card-header">
+                                <h5 class="data-card-title">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Editar Información Personal
+                                </h5>
+                            </div>
+                            <div class="data-card-body">
+                                @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "needs-validation", role = "form", novalidate = "novalidate" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary("", new { @class = "text-danger mb-4" })
+
+                                <div class="profile-fields">
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-person"></i> Nombre
+                                        </div>
+                                        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control-edit", placeholder = "Nombre" })
+                                        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-person"></i> Apellido
+                                        </div>
+                                        @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control-edit", placeholder = "Apellido" })
+                                        @Html.ValidationMessageFor(m => m.Apellido, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-card-text"></i> Número de Cédula
+                                        </div>
+                                        @Html.TextBoxFor(m => m.Identificacion, new { @class = "form-control-edit", placeholder = "Número de cédula", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(m => m.Identificacion, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-at"></i> Nombre de Usuario
+                                        </div>
+                                        @Html.TextBoxFor(m => m.NombreDeUsuario, new { @class = "form-control-edit", placeholder = "Nombre de usuario" })
+                                        @Html.ValidationMessageFor(m => m.NombreDeUsuario, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-envelope"></i> Correo Electrónico
+                                        </div>
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control-edit", placeholder = "Correo electrónico" })
+                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-telephone"></i> Número de Teléfono
+                                        </div>
+                                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control-edit", placeholder = "Número de Teléfono" })
+                                        @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-lock-fill"></i> Nueva Contraseña
+                                        </div>
+                                        @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control-edit", placeholder = "Dejar vacío para mantener la actual" })
+                                        @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-lock"></i> Contraseña Actual
+                                        </div>
+                                        @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control-edit", placeholder = "Contraseña actual" })
+                                        @Html.ValidationMessageFor(m => m.OldPassword, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="profile-field">
+                                        <div class="profile-field-label">
+                                            <i class="bi bi-lock-fill"></i> Confirmar Nueva Contraseña
+                                        </div>
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control-edit", placeholder = "Confirmar nueva contraseña" })
+                                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                    </div>
+
                                 </div>
-                                <div class="card-body p-5">
-                                    @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "needs-validation", role = "form", novalidate = "novalidate" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @Html.ValidationSummary("", new { @class = "text-danger mb-4" })
 
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control form-control-lg", placeholder = "Nombre" })
-                                            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.Apellido, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control form-control-lg", placeholder = "Apellido" })
-                                            @Html.ValidationMessageFor(m => m.Apellido, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.Identificacion, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.Identificacion, new { @class = "form-control form-control-lg", placeholder = "Número de cédula", @readonly = "readonly" })
-                                            @Html.ValidationMessageFor(m => m.Identificacion, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.NombreDeUsuario, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.NombreDeUsuario, new { @class = "form-control form-control-lg", placeholder = "Nombre de usuario" })
-                                            @Html.ValidationMessageFor(m => m.NombreDeUsuario, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-lg", placeholder = "Correo electrónico" })
-                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.PhoneNumber, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-control-lg", placeholder = "Número de Teléfono" })
-                                            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.OldPassword, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control form-control-lg", placeholder = "Contraseña actual" })
-                                            @Html.ValidationMessageFor(m => m.OldPassword, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.NewPassword, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control form-control-lg", placeholder = "Nueva contraseña" })
-                                            @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="mb-4">
-                                            @Html.LabelFor(m => m.ConfirmPassword, htmlAttributes: new { @class = "form-label fs-5" })
-                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control form-control-lg", placeholder = "Confirmar nueva contraseña" })
-                                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="d-flex justify-content-between mt-4">
-                                            <a href="@Url.Action("Perfil", "Account")" class="btn btn-lg btn-secondary">
-                                                Cancelar
-                                            </a>
-                                            <button type="submit" class="btn btn-lg btn-outline-primary">
-                                                Guardar cambios
-                                            </button>
-                                        </div>
-                                    }
-                                </div>
+                                    <div class="form-footer">
+                                        <a href="@Url.Action("Perfil", "Account")" class="btn btn-outline-custom">
+                                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                                        </a>
+                                        <button type="submit" class="btn btn-primary-custom">
+                                            <i class="bi bi-check-circle me-1"></i> Guardar cambios
+                                        </button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

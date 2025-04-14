@@ -111,25 +111,56 @@ namespace UI.Controllers
 
         // POST: Productos/Create
         [HttpPost]
-        public async Task<ActionResult> CrearProducto(ProductosDto modeloDelProducto)
+        public async Task<ActionResult> CrearProducto(ProductosDto modeloDelProducto, HttpPostedFileBase imagenArchivo)
         {
             try
             {
+                // Validar código duplicado
                 var productoExiste = _listarProducto.Listar()
                     .FirstOrDefault(elCodigo => elCodigo.CodigoDelProducto == modeloDelProducto.CodigoDelProducto);
 
                 if (productoExiste != null)
                 {
-                    ViewBag.MensajeDeError = "El codigo del producto ingresado ya está registrado.";
+                    ViewBag.MensajeDeError = "El código del producto ingresado ya está registrado.";
                     return View(modeloDelProducto);
                 }
 
+                // Procesar la imagen
+                if (imagenArchivo != null && imagenArchivo.ContentLength > 0)
+                {
+                    // Crear directorio si no existe
+                    string uploadDir = Server.MapPath("~/Content/Uploads/Productos");
+                    if (!Directory.Exists(uploadDir))
+                    {
+                        Directory.CreateDirectory(uploadDir);
+                    }
+
+                    // Generar nombre único para el archivo
+                    string fileName = Path.GetFileNameWithoutExtension(imagenArchivo.FileName);
+                    string extension = Path.GetExtension(imagenArchivo.FileName);
+                    fileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
+                    string filePath = Path.Combine(uploadDir, fileName);
+
+                    // Guardar el archivo
+                    imagenArchivo.SaveAs(filePath);
+
+                    // Guardar la ruta relativa en el modelo
+                    modeloDelProducto.imagen = "/Content/Uploads/Productos/" + fileName;
+                }
+                else
+                {
+                    ModelState.AddModelError("imagenArchivo", "Debe seleccionar una imagen para el producto");
+                    return View(modeloDelProducto);
+                }
+
+                // Guardar el producto
                 int cantidadDeDatosGuardados = await _crearProducto.Guardar(modeloDelProducto);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ModelState.AddModelError("", "Ocurrió un error al crear el producto: " + ex.Message);
+                return View(modeloDelProducto);
             }
         }
 
@@ -142,39 +173,59 @@ namespace UI.Controllers
 
         // POST: Productos/Edit/5
         [HttpPost]
-        public async Task<ActionResult> ActualizarProducto(ProductosDto elProducto)
+        public async Task<ActionResult> ActualizarProducto(ProductosDto elProducto, HttpPostedFileBase imagenArchivo)
         {
             try
             {
+                // Validar código duplicado
                 var existeProducto = _listarProducto.Listar();
                 bool codigoDuplicado = existeProducto
-                    .Any(elProductoValido => elProductoValido.CodigoDelProducto == elProducto.CodigoDelProducto && elProductoValido.Producto_ID != elProducto.Producto_ID);
+                    .Any(elProductoValido => elProductoValido.CodigoDelProducto == elProducto.CodigoDelProducto &&
+                                           elProductoValido.Producto_ID != elProducto.Producto_ID);
 
                 if (codigoDuplicado)
                 {
-                    ModelState.AddModelError("CodigoDelProducto", "Ya existe ese codigo de producto.");
+                    ModelState.AddModelError("CodigoDelProducto", "Ya existe ese código de producto.");
                     return View(elProducto);
                 }
-                else
-                {
-                    bool cambioEstado = await _cambiarEstado.CambiarEstado(elProducto.Producto_ID, elProducto.Estado);
 
-                    if (!cambioEstado)
+                // Procesar imagen solo si se subió un nuevo archivo
+                if (imagenArchivo != null && imagenArchivo.ContentLength > 0)
+                {
+                    // Eliminar imagen anterior si existe
+                    if (!string.IsNullOrEmpty(elProducto.imagen))
                     {
-                        ModelState.AddModelError("", "No se pudo actualizar el estado del producto.");
-                        return View(elProducto);
+                        string oldFilePath = Server.MapPath(elProducto.imagen);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
                     }
 
-                    int cantidadDeDatosActualizados = await _actualizarProducto.Editar(elProducto);
+                    // Guardar nueva imagen
+                    string uploadDir = Server.MapPath("~/Content/Uploads/Productos");
+                    if (!Directory.Exists(uploadDir))
+                    {
+                        Directory.CreateDirectory(uploadDir);
+                    }
 
-                    await VerificarYActualizarEstadoProducto(elProducto.Producto_ID);
+                    string fileName = Path.GetFileNameWithoutExtension(imagenArchivo.FileName);
+                    string extension = Path.GetExtension(imagenArchivo.FileName);
+                    fileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
+                    string filePath = Path.Combine(uploadDir, fileName);
 
-                    return RedirectToAction("Index");
+                    imagenArchivo.SaveAs(filePath);
+                    elProducto.imagen = "/Content/Uploads/Productos/" + fileName;
                 }
+
+                // Resto de la lógica de actualización...
+                int cantidadDeDatosActualizados = await _actualizarProducto.Editar(elProducto);
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ocurrió un error al actualizar el producto: " + ex.Message);
+                ModelState.AddModelError("", "Error al actualizar: " + ex.Message);
                 return View(elProducto);
             }
         }
@@ -270,63 +321,86 @@ namespace UI.Controllers
         public ActionResult ExportarPDF(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
             var productos = ObtenerProductosFiltrados(nombre, categoriaId, estado, ordenStock);
+            string fechaRecuperacion = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             using (MemoryStream stream = new MemoryStream())
             {
-                Document document = new Document(PageSize.A4.Rotate(), 25, 25, 30, 30); // Usamos horizontal para más espacio
+                Document document = new Document(PageSize.A4.Rotate(), 25, 25, 30, 30);
                 PdfWriter writer = PdfWriter.GetInstance(document, stream);
+
+                // Agregar evento para numeración de páginas
+                writer.PageEvent = new PdfPageEventHelper();
+
                 document.Open();
 
+                // Logo de la empresa
+                string logoPath = Server.MapPath("~/Content/images/LOGOTSS.png");
+                if (System.IO.File.Exists(logoPath))
+                {
+                    Image logo = Image.GetInstance(logoPath);
+                    logo.ScaleAbsolute(100, 50);
+                    logo.Alignment = Image.ALIGN_RIGHT;
+                    document.Add(logo);
+                }
+
                 // Título
-                Paragraph titulo = new Paragraph("Reporte de Inventario");
+                Paragraph titulo = new Paragraph("Reporte de Inventario - Tico Sport Socks Connect",
+                    new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
                 titulo.Alignment = Element.ALIGN_CENTER;
-                titulo.Font.Size = 18;
                 document.Add(titulo);
 
+                // Fecha de recuperación
+                Paragraph fecha = new Paragraph($"Fecha de generación: {fechaRecuperacion}",
+                    new Font(Font.FontFamily.HELVETICA, 10));
+                fecha.Alignment = Element.ALIGN_LEFT;
+                document.Add(fecha);
+
                 // Filtros aplicados
-                Paragraph filtros = new Paragraph($"Filtros: Nombre: {nombre ?? "Todos"}, Categoría: {categoriaId}, Estado: {(estado ? "Activo" : "Inactivo")}, Orden: {ordenStock}");
+                Paragraph filtros = new Paragraph($"Filtros: Nombre: {nombre ?? "Todos"}, Categoría: {categoriaId}, Estado: {(estado ? "Activo" : "Inactivo")}, Orden: {ordenStock}",
+                    new Font(Font.FontFamily.HELVETICA, 10));
                 filtros.Alignment = Element.ALIGN_LEFT;
-                filtros.Font.Size = 10;
                 document.Add(filtros);
 
+                // Espacio
                 document.Add(new Paragraph(" "));
 
                 // Tabla de productos (ahora con 8 columnas incluyendo imagen)
                 PdfPTable table = new PdfPTable(8);
                 table.WidthPercentage = 100;
-                table.SetWidths(new float[] { 2f, 2f, 1f, 1f, 1f, 1f, 1f, 1.5f }); // Ajuste de anchos
+                table.SetWidths(new float[] { 2f, 2f, 1f, 1f, 1f, 1f, 1f, 1.5f });
 
                 // Encabezados
-                table.AddCell("Nombre");
-                table.AddCell("Descripción");
-                table.AddCell("Precio");
-                table.AddCell("Stock");
-                table.AddCell("Imagen");
-                table.AddCell("Categoría");
-                table.AddCell("Estado");
-                table.AddCell("Código");
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+                table.AddCell(new PdfPCell(new Phrase("Nombre", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Descripción", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Precio", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Stock", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Imagen", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Categoría", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Estado", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
+                table.AddCell(new PdfPCell(new Phrase("Código", headerFont)) { BackgroundColor = BaseColor.LIGHT_GRAY });
 
                 // Configuración para imágenes
                 float maxImageHeight = 50f; // Altura máxima de la imagen en puntos (1 punto = 1/72 pulgadas)
 
                 // Datos
+                Font cellFont = new Font(Font.FontFamily.HELVETICA, 9);
                 foreach (var producto in productos)
                 {
                     // Nombre
-                    table.AddCell(producto.nombre);
+                    table.AddCell(new PdfPCell(new Phrase(producto.nombre, cellFont)));
 
                     // Descripción
-                    table.AddCell(producto.descripcion);
+                    table.AddCell(new PdfPCell(new Phrase(producto.descripcion, cellFont)));
 
                     // Precio
-                    table.AddCell(producto.precio.ToString("₡#,##0.00"));
+                    table.AddCell(new PdfPCell(new Phrase(producto.precio.ToString("₡#,##0.00"), cellFont)));
 
                     // Stock
-                    table.AddCell(producto.stock.ToString());
+                    table.AddCell(new PdfPCell(new Phrase(producto.stock.ToString(), cellFont)));
 
                     // Imagen (celda especial)
                     PdfPCell imageCell = new PdfPCell();
-
                     if (!string.IsNullOrEmpty(producto.imagen))
                     {
                         try
@@ -370,24 +444,24 @@ namespace UI.Controllers
                         catch
                         {
                             // Si hay algún error al cargar la imagen, mostramos un texto alternativo
-                            imageCell.AddElement(new Phrase("Imagen no disponible"));
+                            imageCell.AddElement(new Phrase("Imagen no disponible", cellFont));
                         }
                     }
                     else
                     {
-                        imageCell.AddElement(new Phrase("Sin imagen"));
+                        imageCell.AddElement(new Phrase("Sin imagen", cellFont));
                     }
 
                     table.AddCell(imageCell);
 
                     // Categoría
-                    table.AddCell(producto.Categoria_ID.ToString());
+                    table.AddCell(new PdfPCell(new Phrase(producto.Categoria_ID.ToString(), cellFont)));
 
                     // Estado
-                    table.AddCell(producto.Estado ? "Activo" : "Inactivo");
+                    table.AddCell(new PdfPCell(new Phrase(producto.Estado ? "Activo" : "Inactivo", cellFont)));
 
                     // Código
-                    table.AddCell(producto.CodigoDelProducto.ToString());
+                    table.AddCell(new PdfPCell(new Phrase(producto.CodigoDelProducto.ToString(), cellFont)));
                 }
 
                 document.Add(table);
@@ -400,30 +474,35 @@ namespace UI.Controllers
         public ActionResult ExportarExcel(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
             var productos = ObtenerProductosFiltrados(nombre, categoriaId, estado, ordenStock);
+            string fechaGeneracion = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Inventario");
 
                 // Título
-                worksheet.Cell(1, 1).Value = "Reporte de Inventario";
+                worksheet.Cell(1, 1).Value = "Reporte de Inventario - Tico Sport Socks Connect";
                 worksheet.Range(1, 1, 1, 7).Merge().Style.Font.Bold = true;
 
-                // Filtros
-                worksheet.Cell(2, 1).Value = $"Filtros: Nombre: {nombre ?? "Todos"}, Categoría: {categoriaId}, Estado: {(estado ? "Activo" : "Inactivo")}, Orden: {ordenStock}";
+                // Fecha de generación
+                worksheet.Cell(2, 1).Value = $"Fecha de generación: {fechaGeneracion}";
                 worksheet.Range(2, 1, 2, 7).Merge();
 
+                // Filtros
+                worksheet.Cell(3, 1).Value = $"Filtros: Nombre: {nombre ?? "Todos"}, Categoría: {categoriaId}, Estado: {(estado ? "Activo" : "Inactivo")}, Orden: {ordenStock}";
+                worksheet.Range(3, 1, 3, 7).Merge();
+
                 // Encabezados
-                worksheet.Cell(4, 1).Value = "Nombre";
-                worksheet.Cell(4, 2).Value = "Descripción";
-                worksheet.Cell(4, 3).Value = "Precio";
-                worksheet.Cell(4, 4).Value = "Stock";
-                worksheet.Cell(4, 5).Value = "Categoría";
-                worksheet.Cell(4, 6).Value = "Estado";
-                worksheet.Cell(4, 7).Value = "Código";
+                worksheet.Cell(5, 1).Value = "Nombre";
+                worksheet.Cell(5, 2).Value = "Descripción";
+                worksheet.Cell(5, 3).Value = "Precio";
+                worksheet.Cell(5, 4).Value = "Stock";
+                worksheet.Cell(5, 5).Value = "Categoría";
+                worksheet.Cell(5, 6).Value = "Estado";
+                worksheet.Cell(5, 7).Value = "Código";
 
                 // Datos
-                int row = 5;
+                int row = 6;
                 foreach (var producto in productos)
                 {
                     worksheet.Cell(row, 1).Value = producto.nombre;
@@ -450,8 +529,12 @@ namespace UI.Controllers
         public ActionResult ExportarCSV(string nombre, int categoriaId = 0, bool estado = true, string ordenStock = "")
         {
             var productos = ObtenerProductosFiltrados(nombre, categoriaId, estado, ordenStock);
+            string fechaGeneracion = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             var sb = new StringBuilder();
+
+            // Fecha de generación
+            sb.AppendLine($"Fecha de generación: {fechaGeneracion}");
 
             // Encabezados
             sb.AppendLine("Nombre,Descripción,Precio,Stock,Categoría,Estado,Código");

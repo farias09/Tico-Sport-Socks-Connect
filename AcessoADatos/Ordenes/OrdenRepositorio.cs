@@ -83,9 +83,11 @@ namespace AcessoADatos.Ordenes
                     Usuario_ID = o.Usuario_ID,
                     FechaOrden = o.FechaOrden,
                     Total = o.Total,
-                    Estado = o.Estado
+                    Estado = o.Estado,
+                    TipoVenta = o.TipoVenta
                 }).ToList();
         }
+
         public OrdenesDto ObtenerOrdenPorId(int id)
         {
             return _contexto.OrdenesTabla
@@ -201,6 +203,26 @@ namespace AcessoADatos.Ordenes
                 })
                 .OrderBy(x => x.Anno)
                 .ThenBy(x => x.Mes)
+                .ToList();
+        }
+
+        public List<OrdenesDto> BuscarOrdenes(string query)
+        {
+            return _contexto.OrdenesTabla
+                .Where(o => o.Orden_ID.ToString().Contains(query) ||
+                           o.Usuario.Nombre.Contains(query) ||
+                           o.Estado.Contains(query) ||
+                           o.TipoVenta.Contains(query))
+                .Select(o => new OrdenesDto
+                {
+                    Orden_ID = o.Orden_ID,
+                    Usuario_ID = o.Usuario_ID,
+                    FechaOrden = o.FechaOrden,
+                    Total = o.Total,
+                    Estado = o.Estado,
+                    TipoVenta = o.TipoVenta,
+                    Caja_ID = o.Caja_ID
+                })
                 .ToList();
         }
     }

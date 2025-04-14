@@ -566,22 +566,26 @@ namespace TicoSportSocksConnect.UI.Controllers
                 return View("Error");
             }
 
-            // Validar que la contraseña actual no esté vacía
-            if (string.IsNullOrWhiteSpace(model.OldPassword))
+            // Validar la contraseña actual solo si se está intentando cambiar la contraseña
+            if (!string.IsNullOrEmpty(model.NewPassword))
             {
-                ModelState.AddModelError("OldPassword", "La contraseña actual no puede estar vacía.");
-                return View(model);
+                if (string.IsNullOrWhiteSpace(model.OldPassword))
+                {
+                    ModelState.AddModelError("OldPassword", "Debe ingresar su contraseña actual para cambiarla.");
+                    return View(model);
+                }
+
+                var passwordVerificationResult = UserManager.PasswordHasher.VerifyHashedPassword(
+                    user.PasswordHash, model.OldPassword);
+
+                if (passwordVerificationResult != PasswordVerificationResult.Success)
+                {
+                    ModelState.AddModelError("OldPassword", "La contraseña actual es incorrecta.");
+                    return View(model);
+                }
             }
 
-            // Validar que la contraseña actual coincida con el hash almacenado
-            var passwordVerificationResult = UserManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.OldPassword);
-            if (passwordVerificationResult != PasswordVerificationResult.Success)
-            {
-                ModelState.AddModelError("OldPassword", "La contraseña actual es incorrecta.");
-                return View(model);
-            }
-
-            // Actualizar el correo y el nombre de usuario
+            // Actualizar los datos básicos del usuario
             user.Email = model.Email;
             user.UserName = model.Email;
             user.NombreDeUsuario = model.NombreDeUsuario;
@@ -596,10 +600,14 @@ namespace TicoSportSocksConnect.UI.Controllers
                 return View(model);
             }
 
-            // Cambiar la contraseña si se proporciona una nueva
+            // Cambiar la contraseña solo si se proporcionó una nueva
             if (!string.IsNullOrEmpty(model.NewPassword))
             {
-                var changePasswordResult = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+                var changePasswordResult = await UserManager.ChangePasswordAsync(
+                    User.Identity.GetUserId(),
+                    model.OldPassword,
+                    model.NewPassword);
+
                 if (!changePasswordResult.Succeeded)
                 {
                     AddErrors(changePasswordResult);

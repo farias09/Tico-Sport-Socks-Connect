@@ -35,5 +35,26 @@ namespace AcessoADatos.Productos.ListarProductos
                                                      }).ToList();
             return laListaDeProductos;
         }
+
+        public List<ProductosDto> BuscarProductos(string query)
+        {
+            return _elContexto.ProductosTabla
+                .Where(p => p.nombre.Contains(query) ||
+                           p.descripcion.Contains(query) ||
+                           p.CodigoDelProducto.ToString().Contains(query))
+                .Select(p => new ProductosDto
+                {
+                    Producto_ID = p.Producto_ID,
+                    nombre = p.nombre,
+                    descripcion = p.descripcion,
+                    precio = p.precio,
+                    stock = p.stock,
+                    imagen = p.imagen,
+                    Categoria_ID = p.Categoria_ID,
+                    Estado = p.Estado,
+                    CodigoDelProducto = p.CodigoDelProducto
+                })
+                .ToList();
+        }
     }
 }

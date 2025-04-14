@@ -117,11 +117,16 @@
                 <!-- Grupo de botones mejorado -->
                 <div class="d-flex justify-content-between mt-4 btn-group-custom">
                     <div>
-                        <a href="javascript:history.back()" class="btn btn-outline-primary btn-rounded">
-                            <i class="fas fa-arrow-left me-2"></i> Volver Atrás
+                        <a href="@(Request.UrlReferrer != null && !Request.UrlReferrer.AbsoluteUri.Contains("/Ordenes/Create") ? Request.UrlReferrer.AbsoluteUri : Url.Action("Index", "Home"))" class="btn btn-outline-secondary btn-rounded">
+                            <i class="fas fa-arrow-left me-2"></i> Volver
                         </a>
-                        <a href="@Url.Action("Create", "Ordenes")" class="btn btn-outline-secondary btn-rounded" style="margin-left: 10px;">
+
+                        <a href="@Url.Action("Create", "Ordenes")" class="btn btn-outline-primary btn-rounded" style="margin-left: 10px;">
                             <i class="fas fa-plus-circle me-2"></i> Nueva Orden
+                        </a>
+
+                        <a href="@Url.Action("Index", "ListaOrdenes")" class="btn btn-outline-info btn-rounded" style="margin-left: 10px;">
+                            <i class="fas fa-list me-2"></i> Ver Lista de Órdenes
                         </a>
                     </div>
                     <a href="@Url.Action("Index", "Conversaciones")" class="btn btn-primary btn-rounded">

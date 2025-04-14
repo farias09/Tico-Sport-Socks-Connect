@@ -1,11 +1,4 @@
-﻿@model UI.Models.OrdenViewModel
-
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<!DOCTYPE html>
-
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,250 +13,509 @@
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
         .contenedor-orden {
-            margin-left: 260px;
-            padding-top: 80px;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding: 20px 30px 30px;
+            background-color: #fff;
+            border-radius: var(--border-radius);
         }
 
-        /* Estilos de la tabla de productos */
-        .tabla-productos {
-            width: 100%;
-            border-collapse: collapse;
+        h2 {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
         }
 
-            .tabla-productos th, .tabla-productos td {
-                padding: 10px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-
-            .tabla-productos th {
-                background-color: #f8f9fa;
-            }
-
-        /* Botón de Crear Orden */
-        .boton-crear {
-            margin-top: 20px;
-            width: 100%;
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        .select-producto {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
             border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            height: auto;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            }
+
+        /* Estilos para la tabla */
+        .table {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+            .table thead th {
+                background-color: var(--secondary-color);
+                color: white;
+                border: none;
+                padding: 12px 15px;
+                font-weight: 500;
+            }
+
+            .table tbody tr:hover {
+                background-color: rgba(52, 152, 219, 0.05);
+            }
+
+            .table td {
+                padding: 12px 15px;
+                vertical-align: middle;
+                border-color: #eee;
+            }
+
+        /* Botones */
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .btn-primary:hover {
+                background-color: #2980b9;
+                border-color: #2980b9;
+            }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+            .btn-success:hover {
+                background-color: #27ae60;
+                border-color: #27ae60;
+            }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+            .btn-danger:hover {
+                background-color: #c0392b;
+                border-color: #c0392b;
+            }
+
+        /* Contenedores de acciones */
+        .action-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .product-selection-container {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 25px;
+        }
+
+        /* Estilos para Select2 */
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            height: 45px;
+            padding: 8px 10px;
+        }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 43px;
+            }
+
+        .select2-container--default .select2-results__option--highlighted {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .select2-container--default .select2-results__option--selected {
+            background-color: var(--medium-gray);
+            color: var(--secondary-color);
+        }
+
+        .select2-results__option {
+            padding: 10px 15px;
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-dropdown {
+            border-color: #ddd;
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Badge para el tipo de venta */
+        .venta-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .venta-badge-virtual {
+            background-color: var(--primary-color);
+        }
+
+        .venta-badge-fisica {
+            background-color: var(--warning-color);
+        }
+
+        /* Sección de productos */
+        .productos-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-flex {
+            display: flex;
+            gap: 15px;
+        }
+
+            .form-flex .form-group {
+                flex: 1;
+            }
+
+        #cantidad-producto {
+            width: 150px;
+        }
+
+        /* Precio total */
+        .total-container {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.2rem;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .total-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .total-amount {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-left: 10px;
+        }
+
+        /* Animaciones */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-row {
+            animation: fadeIn 0.3s ease-in-out;
         }
     </style>
 </head>
 <body>
-    <div class="contenedor-orden">
-        @using (Html.BeginForm("Create", "Ordenes", FormMethod.Post))
-        {
-            <h2>Crear Orden</h2>
+    <div class="main-content">
+        <div class="page-content">
+            <div id="layout-wrapper">
+                <div class="container mt-4">
+                    <div class="contenedor-orden">
+                        @using (Html.BeginForm("Create", "Ordenes", FormMethod.Post))
+                        {
+                            <h2>Crear Orden</h2>
 
-            <div class="form-group d-flex align-items-center">
-                <label for="Usuario_ID" class="me-2">Seleccionar Usuario</label>
-                <div class="d-flex w-100">
-                    @Html.DropDownListFor(m => m.Orden.Usuario_ID, ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control me-2" })
+                            <div class="form-flex">
+                                <div class="form-group">
+                                    <label for="Usuario_ID">Usuario</label>
+                                    @Html.DropDownList("Orden.Usuario_ID", ViewBag.Usuarios as SelectList, "Seleccione un usuario", new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="TipoVenta">Tipo de Venta</label>
+                                    <select class="form-control" name="Orden.TipoVenta" id="TipoVenta">
+                                        <option value="Virtual">Virtual</option>
+                                        <option value="Fisica">Física</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" id="CajaContainer" style="display:none;">
+                                    <label for="Caja_ID">Caja</label>
+                                    @Html.DropDownList("Orden.Caja_ID", ViewBag.Cajas as SelectList, "Seleccione una caja", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="productos-section">
+                                <h3>Agregar Productos</h3>
+                                <div class="product-selection-container">
+                                    <div class="form-group" style="flex: 3;">
+                                        <label>Producto</label>
+                                        <select id="select-producto" class="form-control select2-productos">
+                                            <option value="">Seleccione un producto</option>
+                                            @foreach (var producto in Model.Productos)
+                                            {
+                                                <option value="@producto.Producto_ID"
+                                                        data-nombre="@producto.nombre"
+                                                        data-precio="@producto.precio"
+                                                        data-codigo="@producto.CodigoDelProducto">
+                                                    @producto.nombre - @producto.CodigoDelProducto - ₡@producto.precio
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" style="flex: 1;">
+                                        <label>Cantidad</label>
+                                        <input type="number" id="cantidad-producto" class="form-control" placeholder="Cantidad" min="1" value="1">
+                                    </div>
+
+                                    <div class="form-group" style="align-self: flex-end;">
+                                        <button type="button" id="agregar-producto" class="btn btn-success">
+                                            <i class="fas fa-plus"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h3>Productos Seleccionados</h3>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 40%">Producto</th>
+                                                    <th style="width: 15%">Precio</th>
+                                                    <th style="width: 15%">Cantidad</th>
+                                                    <th style="width: 15%">Subtotal</th>
+                                                    <th style="width: 15%">Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="productos-seleccionados">
+                                                <!-- Aquí se insertarán dinámicamente los productos -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="total-container">
+                                        <span class="total-label">Total:</span>
+                                        <span class="total-amount" id="total-amount">₡0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Campo oculto para almacenar los productos seleccionados -->
+                            <input type="hidden" name="ProductosSeleccionadosJson" id="ProductosSeleccionadosJson">
+
+                            <div class="action-container mt-4">
+                                <button type="button" class="btn btn-outline-secondary" onclick="window.history.back();">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-check"></i> Crear Orden
+                                </button>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="form-group mt-3">
-                <label for="TipoVenta">Tipo de Venta</label>
-                <select class="form-control" name="Orden.TipoVenta" id="TipoVenta">
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- jQuery y Select2 JS -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-                    <script>
-                        $(document).ready(function () {
-                            // Mostramos/ocultamos según valor actual al cargar
-                            if ($("#TipoVenta").val() === "Fisica") {
-                                $("#CajaContainer").show();
-                            } else {
-                                $("#CajaContainer").hide();
-                                $("#Caja_ID").val("");
-                            }
+        <script>
+            $(document).ready(function () {
+                // Inicializar Select2 con búsqueda
+                $('.select2-productos').select2({
+                    placeholder: "Buscar producto por nombre o código",
+                    allowClear: true,
+                    width: '100%',
+                    matcher: function (params, data) {
+                        // Si no hay término de búsqueda, mostrar todos
+                        if ($.trim(params.term) === '') {
+                            return data;
+                        }
 
-                            // Cambio dinámico cuando el usuario cambia
-                            $("#TipoVenta").change(function () {
-                                if ($(this).val() === "Fisica") {
-                                    $("#CajaContainer").show();
-                                } else {
-                                    $("#CajaContainer").hide();
-                                    $("#Caja_ID").val("");
-                                }
-                            });
-                        });
-                    </script>
+                        // Normalizar términos
+                        var term = params.term.toLowerCase();
+                        var nombre = (data.element.getAttribute('data-nombre') || '').toLowerCase();
+                        var codigo = (data.element.getAttribute('data-codigo') || '').toLowerCase();
 
-                    <option value="Virtual">Virtual</option>
-                    <option value="Fisica">Física</option>
-                </select>
-            </div>
+                        // Buscar coincidencias en nombre o código
+                        if (nombre.indexOf(term) > -1 || codigo.indexOf(term) > -1) {
+                            return data;
+                        }
 
-            <div class="form-group mt-3" id="CajaContainer" style="display:none;">
-                <label for="Caja_ID">Caja</label>
-                @Html.DropDownListFor(m => m.Orden.Caja_ID, ViewBag.Cajas as SelectList, "Seleccione una caja", new { @class = "form-control" })
-            </div>
+                        // No hay coincidencia
+                        return null;
+                    },
+                    templateResult: function (data) {
+                        // Personalizar cómo se muestran los resultados
+                        if (!data.id) { return data.text; }
 
-            <!-- Dropdown para seleccionar productos -->
-            <div class="form-group">
-                <label>Seleccionar Productos</label>
-                <select id="select-producto" class="form-control">
-                    <option value="">Seleccione un producto</option>
-                    @foreach (var producto in Model.Productos)
-                    {
-                        <option value="@producto.Producto_ID" data-nombre="@producto.nombre" data-precio="@producto.precio">
-                            @producto.nombre - @producto.precio
-                        </option>
+                        var $result = $(
+                            '<div class="select-product-item">' +
+                            '<div><span class="fw-bold">' + data.element.getAttribute('data-nombre') + '</span></div>' +
+                            '<div class="d-flex justify-content-between">' +
+                            '<span class="text-muted">Código: ' + data.element.getAttribute('data-codigo') + '</span>' +
+                            '<span class="text-success">₡' + data.element.getAttribute('data-precio') + '</span>' +
+                            '</div>' +
+                            '</div>'
+                        );
+
+                        return $result;
                     }
-                </select>
-            </div>
+                });
 
-            <!-- Entrada para la cantidad -->
-            <div class="form-group">
-                <label>Cantidad</label>
-                <input type="number" id="cantidad-producto" class="form-control" placeholder="Ingrese la cantidad" min="1">
-            </div>
+                // Mostrar/ocultar caja según tipo de venta
+                $("#TipoVenta").change(function () {
+                    if ($(this).val() === "Fisica") {
+                        $("#CajaContainer").fadeIn(300);
+                    } else {
+                        $("#CajaContainer").fadeOut(300);
+                        setTimeout(() => $("#Caja_ID").val(""), 300);
+                    }
+                });
 
-            <!-- Botón para agregar productos -->
-            <button type="button" id="agregar-producto" class="btn btn-success">Agregar Producto</button>
+                var productosSeleccionados = [];
 
-            <!-- Tabla de productos seleccionados -->
-            <h3 class="mt-3">Productos Seleccionados</h3>
-            <table class="table table-bordered mt-2">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="productos-seleccionados">
-                    <!-- Aquí se insertarán dinámicamente los productos -->
-                </tbody>
-            </table>
+                $("#agregar-producto").click(function () {
+                    var productoID = $("#select-producto").val();
+                    var nombre = $("#select-producto option:selected").data("nombre");
+                    var precio = $("#select-producto option:selected").data("precio");
+                    var cantidad = parseInt($("#cantidad-producto").val()) || 0;
 
-            <!-- Campo oculto para almacenar los productos seleccionados -->
-            <input type="hidden" name="ProductosSeleccionadosJson" id="ProductosSeleccionadosJson">
+                    if (!productoID || cantidad <= 0) {
+                        showAlertMessage("Seleccione un producto y una cantidad válida.");
+                        return;
+                    }
 
-            <button type="submit" class="btn btn-primary mt-2">Crear Orden</button>
-        }
+                    // Verificar si el producto ya está en la lista
+                    var existe = productosSeleccionados.find(p => p.Producto_ID == productoID);
+                    if (existe) {
+                        showAlertMessage("Este producto ya ha sido agregado.");
+                        return;
+                    }
 
-    </div>
+                    // Agregar producto a la lista
+                    var subtotal = precio * cantidad;
+                    productosSeleccionados.push({
+                        Producto_ID: productoID,
+                        Nombre: nombre,
+                        Precio: precio,
+                        Cantidad: cantidad,
+                        Subtotal: subtotal
+                    });
+
+                    // Actualizar la tabla
+                    actualizarTabla();
+
+                    // Limpiar selección y cantidad
+                    $("#select-producto").val('').trigger('change');
+                    $("#cantidad-producto").val('1');
+                });
+
+                function actualizarTabla() {
+                    var tabla = $("#productos-seleccionados");
+                    tabla.empty();
+
+                    let total = 0;
+
+                    productosSeleccionados.forEach((producto, index) => {
+                        total += producto.Subtotal;
+
+                        tabla.append(`
+                                                        <tr class="animated-row">
+                                                            <td>
+                                                                <div class="fw-bold">${producto.Nombre}</div>
+                                                                <div class="small text-muted">ID: ${producto.Producto_ID}</div>
+                                                            </td>
+                                                            <td>₡${producto.Precio.toFixed(2)}</td>
+                                                            <td>${producto.Cantidad}</td>
+                                                            <td class="fw-bold">₡${producto.Subtotal.toFixed(2)}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">
+                                                                    <i class="fas fa-trash"></i> Eliminar
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    `);
+                    });
+
+                    // Actualizar el total
+                    $("#total-amount").text(`₡${total.toFixed(2)}`);
+
+                    // Convertir lista a JSON y guardarla en un campo oculto
+                    $("#ProductosSeleccionadosJson").val(JSON.stringify(productosSeleccionados));
+                }
+
+                function showAlertMessage(message) {
+                    // Simple alert for now, could be replaced with a nicer toast/notification
+                    alert(message);
+                }
+
+                window.eliminarProducto = function (index) {
+                    productosSeleccionados.splice(index, 1);
+                    actualizarTabla();
+                };
+            });
+        </script>
 </body>
 </html>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var productosSeleccionados = [];
-
-        $("#agregar-producto").click(function () {
-            var productoID = $("#select-producto").val();
-            var nombre = $("#select-producto option:selected").data("nombre");
-            var precio = $("#select-producto option:selected").data("precio");
-            var cantidad = $("#cantidad-producto").val();
-
-            if (!productoID || cantidad <= 0) {
-                alert("Seleccione un producto y una cantidad válida.");
-                return;
-            }
-
-            // Verificar si el producto ya está en la lista
-            var existe = productosSeleccionados.find(p => p.Producto_ID == productoID);
-            if (existe) {
-                alert("Este producto ya ha sido agregado.");
-                return;
-            }
-
-            // Agregar producto a la lista
-            var subtotal = precio * cantidad;
-            productosSeleccionados.push({
-                Producto_ID: productoID,
-                Nombre: nombre,
-                Precio: precio,
-                Cantidad: cantidad,
-                Subtotal: subtotal
-            });
-
-            // Actualizar la tabla
-            actualizarTabla();
-        });
-
-        function actualizarTabla() {
-            var tabla = $("#productos-seleccionados");
-            tabla.empty();
-            productosSeleccionados.forEach((producto, index) => {
-                tabla.append(`
-                    <tr>
-                        <td>${producto.Nombre}</td>
-                        <td>${producto.Precio}</td>
-                        <td>${producto.Cantidad}</td>
-                        <td>${producto.Subtotal}</td>
-                        <td><button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button></td>
-                    </tr>
-                `);
-            });
-
-            // Convertir lista a JSON y guardarla en un campo oculto
-            $("#ProductosSeleccionadosJson").val(JSON.stringify(productosSeleccionados));
-        }
-
-        window.eliminarProducto = function (index) {
-            productosSeleccionados.splice(index, 1);
-            actualizarTabla();
-        };
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $("#guardarUsuario").click(function (e) {
-            e.preventDefault();
-
-            var nuevoUsuario = {
-                Nombre: $("#nombre").val(),
-                Email: $("#email").val(),
-                Rol: $("#rol").val(),
-                Contraseña: $("#contraseña").val()
-            };
-
-            $.ajax({
-                url: '@Url.Action("Crear", "Usuarios")',
-                type: 'POST',
-                data: nuevoUsuario,
-                dataType: "json", // Asegura que espera JSON
-                success: function (response) {
-                    if (response.success) {
-                        // Agregar el nuevo usuario al dropdown
-                        $("#Orden_Usuario_ID").append(new Option(response.nombre, response.id));
-
-                        // Seleccionar automáticamente el nuevo usuario
-                        $("#Orden_Usuario_ID").val(response.id);
-
-                        // Cerrar el modal con Bootstrap 5
-                        var modal = new bootstrap.Modal(document.getElementById('agregarUsuarioModal'));
-                        modal.hide();
-
-                        // Limpiar el formulario
-                        $("#formCrearUsuario")[0].reset();
-                    } else {
-                        alert("Error al agregar usuario: " + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error: " + error);
-                    alert("Hubo un error al conectar con el servidor.");
-                }
-            });
-        });
-    });
-</script>
-
-

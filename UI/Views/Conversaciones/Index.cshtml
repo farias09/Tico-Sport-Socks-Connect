@@ -1,12 +1,12 @@
 ﻿@model UI.Models.ConversacionesChatViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!doctype html>
+<html lang="en">
 
-<!DOCTYPE html>
-<html>
 <head>
+
     <meta charset="utf-8" />
     <title>Conversaciones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,80 +14,82 @@
     <meta content="Tico Sport Socks" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
+
     <!-- dark layout js -->
     <script src="~/Scripts/js/pages/layout.js"></script>
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
 
-    <style>
-        /* Contenedor principal con tres columnas */
-        .contenedor-chat {
-            display: flex;
-            height: 80vh;
-            margin-top: 20px;
-            padding: 15px;
-        }
-
-        /* Panel Izquierdo: Lista de conversaciones */
-        .lista-conversaciones {
-            width: 35%;
-            overflow-y: auto;
-            border-right: 1px solid #ddd;
-            background: #fff;
-            border-radius: 8px;
-        }
-
-        /* Panel Central: Chat */
-        .chat-panel {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            background: #f9f9f9;
-            margin: 0 15px;
-            border-radius: 8px;
-        }
-
-        /* Panel Derecho: Inventario y botón de crear orden */
-        .inventory-panel {
-            width: 35%;
-            overflow-y: auto;
-            background: #fff;
-            border-left: 1px solid #ddd;
-            border-radius: 8px;
-        }
-
-        /* Estilos existentes para el chat */
-        .chat-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-            color: #777;
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-            .chat-placeholder i {
-                font-size: 50px;
-                color: #bbb;
-                margin-bottom: 10px;
-            }
-
-        .chat-box {
-            flex-grow: 1;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-        }
-    </style>
 </head>
+
+<style>
+    /* Contenedor principal con tres columnas */
+    .contenedor-chat {
+        display: flex;
+        height: 80vh;
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    /* Panel Izquierdo: Lista de conversaciones */
+    .lista-conversaciones {
+        width: 35%;
+        overflow-y: auto;
+        border-right: 1px solid #ddd;
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    /* Panel Central: Chat */
+    .chat-panel {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        background: #f9f9f9;
+        margin: 0 15px;
+        border-radius: 8px;
+    }
+
+    /* Panel Derecho: Inventario y botón de crear orden */
+    .inventory-panel {
+        width: 35%;
+        overflow-y: auto;
+        background: #fff;
+        border-left: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    /* Estilos existentes para el chat */
+    .chat-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        color: #777;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+        .chat-placeholder i {
+            font-size: 50px;
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+
+    .chat-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+    }
+</style>
 
 <body>
     <div class="main-content">
@@ -182,10 +184,9 @@
                                                     <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-3">
                                                     <div>
                                                         <p class="mb-1"><strong>@producto.nombre</strong></p>
-                                                        <p class="mb-0">COD: @producto.Producto_ID | Stock: @producto.stock</p>
-                                                    </div>
+                                                        <p class="mb-0">COD: @producto.CodigoDelProducto | Stock: @producto.stock</p>                                                    </div>
                                                 </div>
-                                                <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-success">Detalles</a>
+                                                <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-info">Detalles</a>
                                             </div>
                                         }
                                     </div>
@@ -296,7 +297,6 @@
                 }, 300);
             });
 
-            // Función que realiza la búsqueda (se mantiene igual)
             function buscarProductos(terminoBusqueda) {
                 fetch(`/Conversaciones/BuscarProductos?termino=${encodeURIComponent(terminoBusqueda)}`)
                     .then(response => {
@@ -319,7 +319,7 @@
                                 <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
                                 <div>
                                     <p class="mb-1"><strong>${producto.nombre}</strong></p>
-                                    <p class="mb-0">COD: ${producto.Producto_ID} | Stock: ${producto.stock}</p>
+                                    <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
                                 </div>
                             </div>
                             <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>

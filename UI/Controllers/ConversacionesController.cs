@@ -54,7 +54,8 @@ namespace UI.Controllers
                     nombre = p.nombre,
                     imagen = p.imagen,
                     precio = p.precio,
-                    stock = p.stock
+                    stock = p.stock,
+                    CodigoDelProducto = p.CodigoDelProducto
                 })
                 .ToList();
 
@@ -102,14 +103,17 @@ namespace UI.Controllers
             }
 
             var productos = _contexto.ProductosTabla
-                .Where(p => p.nombre.Contains(termino) || p.Producto_ID.ToString().Contains(termino))
+                .Where(p => p.nombre.Contains(termino) ||
+                           p.CodigoDelProducto.ToString().Contains(termino) ||
+                           p.Producto_ID.ToString().Contains(termino))
                 .Select(p => new ProductosDto
                 {
                     Producto_ID = p.Producto_ID,
                     nombre = p.nombre,
                     imagen = p.imagen,
                     precio = p.precio,
-                    stock = p.stock
+                    stock = p.stock,
+                    CodigoDelProducto = p.CodigoDelProducto
                 })
                 .ToList();
 

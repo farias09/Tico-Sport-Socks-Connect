@@ -11,5 +11,6 @@ namespace Abstracciones.AD.Interfaces.Usuarios.ListarUsuario
     public interface IListarUsuarioAD
     {
         List<UsuarioDto> Listar();
+        List<UsuarioDto> BuscarClientes(string query);
     }
 }
