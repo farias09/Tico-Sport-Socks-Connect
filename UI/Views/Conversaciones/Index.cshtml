@@ -85,6 +85,7 @@
             background: #fff;
             padding: 15px;
             border-radius: 8px;
+
         }
 
         .chat-form {
@@ -151,7 +152,7 @@
                             </div>
                         }
                     </div>
-
+                    
                     <!-- Panel Derecho: Inventario y botón de crear orden -->
                     <div class="inventory-panel">
                         <div class="card">
@@ -296,74 +297,6 @@
                         console.error("Error al enviar mensaje:", error);
                     });
             });
-
-            // Variable para controlar el debounce
-            let timeoutBusqueda;
-
-            // Función para manejar la búsqueda en tiempo real
-            document.getElementById('buscador-productos').addEventListener('input', function (e) {
-                clearTimeout(timeoutBusqueda);
-
-                const terminoBusqueda = e.target.value.trim();
-                const tituloProductosPopulares = document.getElementById('titulo-productos-populares');
-
-                // Si el campo está vacío, mostrar productos populares y salir
-                if (!terminoBusqueda) {
-                    document.getElementById('productos-populares').style.display = 'block';
-                    tituloProductosPopulares.style.display = 'block'; // Mostrar título
-                    document.getElementById('productos-buscados').innerHTML = '';
-                    return;
-                }
-
-                // Ocultar productos populares y su título durante la búsqueda
-                document.getElementById('productos-populares').style.display = 'none';
-                tituloProductosPopulares.style.display = 'none'; // Ocultar título
-
-                // Mostrar mensaje de "Buscando..." mientras esperamos
-                document.getElementById('productos-buscados').innerHTML = '<p class="text-muted">Buscando productos...</p>';
-
-                // Esperar 300ms después de la última tecla para hacer la petición
-                timeoutBusqueda = setTimeout(() => {
-                    buscarProductos(terminoBusqueda);
-                }, 300);
-            });
-
-            function buscarProductos(terminoBusqueda) {
-                fetch(/Conversaciones/BuscarProductos ? termino = ${ encodeURIComponent(terminoBusqueda) })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la búsqueda');
-                        }
-                        return response.json();
-                    })
-                    .then(productos => {
-                        const contenedorProductos = document.getElementById('productos-buscados');
-                        contenedorProductos.innerHTML = '';
-
-                        if (productos.length === 0) {
-                            contenedorProductos.innerHTML = '<p class="text-muted">No se encontraron productos</p>';
-                        } else {
-                            productos.forEach(producto => {
-                                const productoHTML = `
-                    <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
-                        <div class="d-flex align-items-center">
-                            <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
-                            <div>
-                                <p class="mb-1"><strong>${producto.nombre}</strong></p>
-                                <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
-                            </div>
-                        </div>
-                        <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>
-                    </div>
-                `;
-                                contenedorProductos.innerHTML += productoHTML;
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al buscar productos:', error);
-                        document.getElementById('productos-buscados').innerHTML = '<p class="text-danger">Error al buscar productos</p>';
-                    });
         }
     </script>
 }
