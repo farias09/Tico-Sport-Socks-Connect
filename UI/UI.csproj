@@ -862,6 +862,7 @@
     <Content Include="Views\Ordenes\GestionFacturas.cshtml" />
     <Content Include="Views\Account\Perfil.cshtml" />
     <Content Include="Views\Account\EditProfile.cshtml" />
+    <Content Include="Views\Usuarios\ListaAspNetUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

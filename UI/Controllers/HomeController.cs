@@ -56,8 +56,31 @@ namespace UI.Controllers
 
             var resumen = _ordenService.ObtenerUltimasOrdenesConDetalles(obtenerNombreUsuario, obtenerNombreCaja);
 
+            var ventasPorMes = _ordenService.ObtenerVentasPorMes();
+            ViewBag.VentasMensuales = ventasPorMes;
+
+            var productosMasVendidos = _ordenService.ObtenerProductosMasVendidos();
+            ViewBag.ProductosMasVendidos = productosMasVendidos;
+
+            var ventasPorTipo = _ordenService.ObtenerVentasPorTipo();
+            ViewBag.VentasPorTipo = ventasPorTipo;
+
+            var totalProductos = _listarProductoLN.Listar().Count();
+            ViewBag.TotalProductos = totalProductos;
+
+            var totalUsuarios = _listarUsuarioLN.Listar().Count();
+            ViewBag.TotalUsuarios = totalUsuarios;
+
+            var hoy = DateTime.Today;
+            var mañana = hoy.AddDays(1);
+            var ventas = _ordenService.ObtenerVentasPorDia(hoy, mañana.AddSeconds(-1));
+
+            var ventasHoy = ventas.FirstOrDefault(v => v.Fecha.Date == hoy)?.TotalVentas ?? 0;
+            ViewBag.VentasHoy = ventasHoy;
+
             return View(resumen);
         }
+
 
         public ActionResult About()
         {

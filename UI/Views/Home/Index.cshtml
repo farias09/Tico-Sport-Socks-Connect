@@ -1,9 +1,13 @@
 ﻿@model List<Abstracciones.Modelos.Ordenes.OrdenResumenDto>
+@using Abstracciones.Modelos.Reportes
+
 @using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.Owin
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var prueba = new ProductoMasVendidoDto();
+
 }
 <!doctype html>
 <html lang="en">
@@ -77,185 +81,204 @@
         </section>
 
         <!-- Bloque de resumen de reportes con gráficos -->
-        <section class="container py-5">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-6 mb-4">
-                    <div class="bg-white shadow rounded p-4 h-100">
-                        <h4 class="fw-bold mb-3 text-center">📊 Ingresos mensuales</h4>
-                        <p class="text-muted text-center fs-5">Este mes: <strong style="color: #28a745;">¢280,000</strong></p>
-                        <canvas id="ingresosChart" style="max-height: 150px; width: 100%;"></canvas>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="bg-white shadow rounded p-4 h-100">
-                        <h4 class="fw-bold mb-3 text-center">📈 Ventas por categoría</h4>
-                        <p class="text-muted text-center fs-6">Distribución de productos más vendidos</p>
-                        <canvas id="categoriasChart" style="max-height: 150px; width: 100%;"></canvas>
+<section class="container py-5">
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="bg-white shadow rounded p-4 h-100">
+                <h4 class="fw-bold mb-3 text-center">📊 Ventas históricas</h4>
+                <canvas id="ventasPorTipoChart" style="max-height: 150px; width: 100%;"></canvas>
 
-                    </div>
-                </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                            const ctxTipo = document.getElementById('ventasPorTipoChart').getContext('2d');
+
+                            const labelsTipo = @Html.Raw(Json.Encode(
+                                (ViewBag.VentasPorTipo as List<Abstracciones.Modelos.Reportes.VentasPorTipoDto>)
+                                    .Select(v => v.TipoVenta)
+                            ));
+
+                            const dataTipo = @Html.Raw(Json.Encode(
+                                (ViewBag.VentasPorTipo as List<Abstracciones.Modelos.Reportes.VentasPorTipoDto>)
+                                    .Select(v => v.TotalVentas)
+                            ));
+
+                            new Chart(ctxTipo, {
+                                type: 'bar',
+                                data: {
+                                    labels: labelsTipo,
+                                    datasets: [{
+                                        label: 'Total Vendido (₡)',
+                                        data: dataTipo,
+                                        backgroundColor: '#329542', // Azul como estilo de ventas virtuales
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    indexAxis: 'y',
+                                    responsive: true,
+                                    scales: {
+                                        x: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: function(value) {
+                                                    return '₡' + value.toLocaleString();
+                                                }
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: { display: false }
+                                    }
+                                }
+                            });
+                </script>
             </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="bg-white shadow rounded p-4 h-100">
+                <h4 class="fw-bold mb-3 text-center">📈 Ventas por mes</h4>
+                <p class="text-muted text-center fs-6">Distribución de productos más vendidos</p>
+                <canvas id="ventasPorMesChart" style="max-height: 150px; width: 100%;"></canvas>
+                <script>
+                            const ctxMes = document.getElementById('ventasPorMesChart').getContext('2d');
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                const ingresosCtx = document.getElementById('ingresosChart').getContext('2d');
-                new Chart(ingresosCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
-                        datasets: [{
-                            label: 'Ingresos (¢)',
-                            data: [220000, 245000, 275000, 280000],
-                            backgroundColor: '#28a745'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
+                            const labelsMes = @Html.Raw(Json.Encode(
+                                                  (ViewBag.VentasMensuales as List<Abstracciones.Modelos.Reportes.VentasPorMesDto>)
+                                                      .Select(m => System.Globalization.CultureInfo.GetCultureInfo("es-ES").TextInfo.ToTitleCase(System.Globalization.CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.GetMonthName(m.Mes)))
+                                              ));
 
-                const categoriasCtx = document.getElementById('categoriasChart').getContext('2d');
-                new Chart(categoriasCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Calcetas', 'Medias', 'Espinilleras'],
-                        datasets: [{
-                            data: [35, 45, 20],
-                            backgroundColor: ['#28a745', '#6c757d', '#adb5bd'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }
-                });
-            </script>
+                            const dataMes = @Html.Raw(Json.Encode(
+                                (ViewBag.VentasMensuales as List<Abstracciones.Modelos.Reportes.VentasPorMesDto>)
+                                    .Select(m => m.TotalVentas)
+                            ));
 
-            <!-- Secciones con fondo gris -->
-            <div class="row text-center mb-5">
-                <div class="col-md-3">
-                    <div class="p-4 rounded" style="background-color: #eff2f7; color: #343a40;">
-                        <i class="bi bi-box-seam fs-1"></i>
-                        <h6 class="mt-3">Productos</h6>
-                        <p class="mb-0 fw-bold">120</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded" style="background-color: #eff2f7; color: #343a40;">
-                        <i class="bi bi-people fs-1"></i>
-                        <h6 class="mt-3">Usuarios</h6>
-                        <p class="mb-0 fw-bold">15</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded" style="background-color: #eff2f7; color: #343a40;">
-                        <i class="bi bi-person-lines-fill fs-1"></i>
-                        <h6 class="mt-3">Clientes</h6>
-                        <p class="mb-0 fw-bold">48</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded" style="background-color: #eff2f7; color: #343a40;">
-                        <i class="bi bi-bar-chart-line fs-1"></i>
-                        <h6 class="mt-3">Ventas Hoy</h6>
-                        <p class="mb-0 fw-bold">¢54,200</p>
-                    </div>
-                </div>
+                            new Chart(ctxMes, {
+                                type: 'bar',
+                                data: {
+                                    labels: labelsMes,
+                                    datasets: [{
+                                        label: 'Total Vendido (₡)',
+                                        data: dataMes,
+                                        backgroundColor: '#329542', // naranja
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: function(value) {
+                                                    return '₡' + value.toLocaleString();
+                                                }
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: { display: false }
+                                    }
+                                }
+                            });
+                </script>
             </div>
+        </div>
+    </div>
 
-            <!-- Últimas órdenes -->
-            <h2 class="mt-3 mb-4">📦 Últimas Órdenes Realizadas</h2>
+    <!-- Secciones con fondo gris y enlaces -->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Productos")" class="text-decoration-none">
+                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                    <i class="bi bi-box-seam fs-1"></i>
+                    <h6 class="mt-3">Productos</h6>
+                    <p class="mb-0 fw-bold">@ViewBag.TotalProductos</p>
 
-            @if (Model != null && Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table align-middle shadow-sm rounded table-hover" style="overflow: hidden;">
-                        <thead class="table-success text-dark">
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Total</th>
-                                <th>Estado</th>
-                                <th>Fecha</th>
-                                <th class="text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var orden in Model)
-                            {
-                                <tr>
-                                    <td>@orden.UsuarioNombre</td>
-                                    <td>₡@orden.Total.ToString("N2")</td>
-                                    <td>
-                                        @if (orden.Estado == "Pendiente")
-                                        {
-                                            <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
-                                        }
-                                        else if (orden.Estado == "Completada")
-                                        {
-                                            <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
-                                        }
-                                        else if (orden.Estado == "Cancelada")
-                                        {
-                                            <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
-                                        }
-                                    </td>
-
-                                    <td>@orden.FechaOrden.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">
-                                        <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-outline-info btn-sm shadow-sm">
-                                            <i class="bi bi-eye"></i> Ver
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-
-                    </table>
                 </div>
-            }
-            else
-            {
-                <div class="alert alert-info">No hay órdenes recientes registradas.</div>
-            }
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Usuarios")" class="text-decoration-none">
+                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                    <i class="bi bi-people fs-1"></i>
+                    <h6 class="mt-3">Clientes</h6>
+                    <p class="mb-0 fw-bold">@ViewBag.TotalUsuarios</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Ordenes")" class="text-decoration-none">
+                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                    <i class="bi bi-bar-chart-line fs-1"></i>
+                    <h6 class="mt-3">Ventas Hoy</h6>
+                    <p class="mb-0 fw-bold">₡@ViewBag.VentasHoy.ToString("N2")</p>
+
+                </div>
+            </a>
+        </div>
+    </div>
 
 
-        </section>
+    <!-- Últimas órdenes -->
+    <h2 class="mt-3 mb-4">📦 Últimas Órdenes Realizadas</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table align-middle shadow-sm rounded table-hover" style="overflow: hidden;">
+                <thead class="table-success text-dark">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var orden in Model)
+                    {
+                        <tr>
+                            <td>@orden.UsuarioNombre</td>
+                            <td>₡@orden.Total.ToString("N2")</td>
+                            <td>
+                                @if (orden.Estado == "Pendiente")
+                                {
+                                    <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
+                                }
+                                else if (orden.Estado == "Completada")
+                                {
+                                    <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
+                                }
+                                else if (orden.Estado == "Cancelada")
+                                {
+                                    <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
+                                }
+                                else
+                                {
+                                    <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
+                                }
+                            </td>
+
+                            <td>@orden.FechaOrden.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-outline-info btn-sm shadow-sm">
+                                    <i class="bi bi-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
     }
-
-    <!-- JAVASCRIPT -->
-    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
-    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
-    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
-    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
-
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
-
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
-
-    <!-- App js -->
-    <script src="~/Scripts/js/app.js"></script>
-
+    else
+    {
+        <div class="alert alert-info">No hay órdenes recientes registradas.</div>
+    }
+</section>
+    }
 </body>
-
 </html>
