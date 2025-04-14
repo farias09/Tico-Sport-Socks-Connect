@@ -25,35 +25,43 @@ namespace UI.Controllers
 
          [System.Web.Http.HttpPost]
          [System.Web.Http.Route("webhook")]
-         public async Task<IHttpActionResult> ReceiveWhatsAppMessage()
-         {
+        public async Task<IHttpActionResult> ReceiveWhatsAppMessage()
+        {
             var form = await Request.Content.ReadAsFormDataAsync();
 
-             string numeroRemitente = form["From"];
-             string contenido = form["Body"];
+            string numeroRemitente = form["From"]?.Trim();
+            string contenido = form["Body"]?.Trim();
 
-             Console.WriteLine($"📩 Mensaje recibido de {numeroRemitente}: {contenido}");
+            string numeroTwilio = "whatsapp:+14155238886"; // número de Twilio
 
-             if (string.IsNullOrEmpty(numeroRemitente) || string.IsNullOrEmpty(contenido))
-                 return BadRequest("Datos incompletos.");
+            Console.WriteLine($"📩 Mensaje recibido de {numeroRemitente}: {contenido}");
 
-             try
-             {
+            // Ignorar mensajes enviados por el propio número de Twilio (para evitar ecos)
+            if (numeroRemitente == numeroTwilio)
+            {
+                Console.WriteLine("⛔ Mensaje entrante ignorado: proviene del número de Twilio (eco del admin).");
+                return Ok(); // Salís sin guardar nada
+            }
+
+            if (string.IsNullOrEmpty(numeroRemitente) || string.IsNullOrEmpty(contenido))
+                return BadRequest("Datos incompletos.");
+
+            try
+            {
                 Console.WriteLine("Llamando al servicio para guardar el mensaje...");
                 await _mensajeService.GuardarMensajeAsync(numeroRemitente, contenido);
                 Console.WriteLine("✅ Mensaje guardado (o al menos el método fue ejecutado).");
 
                 var response = new MessagingResponse();
-                 response.Message("Mensaje recibido y guardado correctamente.");
+                response.Message("Mensaje recibido y guardado correctamente.");
 
-                 return Ok(response.ToString());
-             }
-             catch (Exception ex)
-             {
-                 Trace.TraceError($"❌ Error en el webhook: {ex.ToString()}");
-                Console.WriteLine($"❌ ERROR guardando el mensaje: {ex.Message}");
+                return Ok(response.ToString());
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError($"❌ Error en el webhook: {ex.ToString()}");
                 return InternalServerError(ex);
-             }
-         } 
+            }
+        }
     }
 }
