@@ -44,7 +44,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 20px;
+            padding: 10px;
             background: #f9f9f9;
             margin: 0 15px;
             border-radius: 8px;
@@ -85,11 +85,23 @@
             background: #fff;
             padding: 15px;
             border-radius: 8px;
+
         }
+        .chat-form {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 10px;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        #chat-container {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
     </style>
 </head>
 
-<body>
     <div class="main-content">
         <div class="page-content">
             <!-- Begin page -->
@@ -98,10 +110,7 @@
                     <div class="text-center mb-4">
                         <h1>Gestión de órdenes</h1>
                         <p class="text-muted">Gestiona las órdenes que recibe Tico Sport Socks</p>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'">
-                            <i class="bi bi-plus-circle me-2"></i>
-                            Registrar Venta Física
-                        </button>
+                       
                     </div>
                     <div class="contenedor-chat">
                         <!-- Panel Izquierdo: Lista de conversaciones -->
@@ -181,6 +190,12 @@
                             </div>
                         </div>
                     </div>
+                    @if (Model.Chat != null)
+                    {
+                        <div class="chat-form">
+                            @Html.Partial("_ChatForm", Model.Chat)
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -209,7 +224,6 @@
                     })
                     .catch(err => console.error("Error al actualizar mensajes:", err));
             }
-
 
             function actualizarConversaciones() {
                 fetch(window.location.href)
@@ -248,8 +262,41 @@
                 actualizarMensajes();
                 actualizarConversaciones();
                 actualizarInbox();
-            }, 6000);
+            }, 2000);
 
+            const chatForm = document.getElementById("chatForm");
+
+            if (chatForm) {
+                chatForm.addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const usuarioId = document.getElementById("usuarioId").value;
+                    const mensaje = document.getElementById("mensaje").value;
+
+                    if (mensaje.trim() === "") return;
+
+                    const formData = new FormData();
+                    formData.append("id", usuarioId);
+                    formData.append("contenido", mensaje);
+
+                    fetch(`/Conversaciones/EnviarMensaje/${usuarioId}`, {
+                        method: "POST",
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById("mensaje").value = "";
+                                actualizarMensajes();
+                            } else {
+                                alert("Error: " + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar mensaje:", error);
+                        });
+                });
+            }
         </script>
     }
 

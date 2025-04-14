@@ -23,10 +23,10 @@ namespace AcessoADatos.Mensajes
         public async Task GuardarMensajeAsync(string numeroRemitente, string contenido, DateTime fecha)
         {
             numeroRemitente = numeroRemitente.Replace("whatsapp:", "").Trim();
-            string numeroReceptor = "+14155238886"; // Ejemplo: el número del sandbox de Twilio
 
-            // Verificar si el Emisor existe en la base de datos usando su número
-            var usuarioEmisor = await _contexto.UsuariosTabla.FirstOrDefaultAsync(u => u.Numero == numeroRemitente);
+            // Verificar si el Emisor (cliente) existe
+            var usuarioEmisor = await _contexto.UsuariosTabla
+                .FirstOrDefaultAsync(u => u.Numero == numeroRemitente);
 
             if (usuarioEmisor == null)
             {
@@ -36,38 +36,21 @@ namespace AcessoADatos.Mensajes
                     Numero = numeroRemitente,
                     Email = $"{numeroRemitente}@autogenerado.com",
                     FechaRegistro = DateTime.UtcNow,
-                    Rol_ID = 2
+                    Rol_ID = 2,
+                    estado = true
                 };
 
                 _contexto.UsuariosTabla.Add(usuarioEmisor);
                 await _contexto.SaveChangesAsync();
+
                 Console.WriteLine($"✅ Usuario Emisor {numeroRemitente} creado automáticamente.");
             }
 
-            // 🔹 3️⃣ Verificar si el Receptor existe en la base de datos usando su número
-            var usuarioReceptor = await _contexto.UsuariosTabla.FirstOrDefaultAsync(u => u.Numero == numeroReceptor);
-
-            if (usuarioReceptor == null)
-            {
-                usuarioReceptor = new UsuariosTabla
-                {
-                    Nombre = "Usuario Administrador",
-                    Numero = numeroReceptor,
-                    Email = $"{numeroReceptor}@autogenerado.com",
-                    FechaRegistro = DateTime.UtcNow,
-                    Rol_ID = 1
-                };
-
-                _contexto.UsuariosTabla.Add(usuarioReceptor);
-                await _contexto.SaveChangesAsync();
-                Console.WriteLine($"✅ Usuario Receptor {numeroReceptor} creado automáticamente.");
-            }
-
-            // 🔹 4️⃣ Insertar el mensaje asegurando que Emisor y Receptor sean correctos
+            // Insertar el mensaje
             var nuevoMensaje = new MensajesTabla
             {
                 emisor_ID = usuarioEmisor.Usuario_ID,
-                receptor_ID = usuarioReceptor.Usuario_ID, // Asegurar que el receptor tenga un ID válido
+                receptor_ID = 5, // Admin virtual
                 contenido = contenido,
                 fecha = fecha
             };
@@ -77,6 +60,5 @@ namespace AcessoADatos.Mensajes
 
             Console.WriteLine("✅ Mensaje guardado correctamente.");
         }
-
     }
 }

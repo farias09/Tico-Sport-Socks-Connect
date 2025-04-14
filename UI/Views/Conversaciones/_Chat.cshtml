@@ -12,14 +12,6 @@
     }
 </div>
 
-
-<!-- Formulario de envío -->
-<form id="chatForm">
-    <input type="hidden" id="usuarioId" value="@Model.UsuarioId" />
-    <textarea id="mensaje" placeholder="Escribe tu mensaje..." class="form-control"></textarea>
-    <button type="submit" class="btn btn-success">Enviar</button>
-</form>
-
 <style>
     .chat-box {
         flex-grow: 1;
@@ -108,36 +100,4 @@
             color: rgba(0, 0, 0, 0.5);
         }
 </style>
-
-<script>
-    document.getElementById("chatForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const usuarioId = document.getElementById("usuarioId").value;
-        const mensaje = document.getElementById("mensaje").value;
-
-        if (mensaje.trim() === "") return;
-
-        const formData = new FormData();
-        formData.append("id", usuarioId);
-        formData.append("contenido", mensaje);
-
-        fetch(`/Conversaciones/EnviarMensaje/${usuarioId}`, {
-            method: "POST",
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("mensaje").value = "";
-                    actualizarMensajes();
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Error al enviar mensaje:", error);
-            });
-    });
-</script>
 
