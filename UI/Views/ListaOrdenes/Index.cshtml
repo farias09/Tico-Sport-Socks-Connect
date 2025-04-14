@@ -51,6 +51,7 @@
                         <select id="filtroEstado" class="form-select" onchange="filtrarOrdenes()">
                             <option value="">Todos</option>
                             <option value="Completada">Completada</option>
+                            <option value="En Proceso">En Proceso</option>
                             <option value="Pendiente">Pendiente</option>
                             <option value="Cancelada">Cancelada</option>
                         </select>
@@ -97,7 +98,7 @@
                                     @foreach (var orden in Model)
                                     {
                                         <tr>
-                                            <td>@orden.Orden_ID</td>
+                                            <td>#@orden.Orden_ID</td>
                                             <td>@orden.UsuarioNombre</td>
                                             <td>
                                                 @if (orden.Estado == "Pendiente")
@@ -106,7 +107,7 @@
                                                 }
                                                 else if (orden.Estado == "En proceso")
                                                 {
-                                                    <span class="badge" style="background-color: #c9e4ff; color: #023756; padding: 0.4rem 1rem; border: 1px solid #41a3f7; border-radius: 12px; ">Completada</span>
+                                            <span class="badge" style="background-color: #c9e4ff; color: #023756; padding: 0.4rem 1rem; border: 1px solid #41a3f7; border-radius: 12px; ">En proceso</span>
                                                 }
                                                 else if (orden.Estado == "Completada")
                                                 {
@@ -131,7 +132,7 @@
                                                 </button>
 
                                                 <button class="btn btn-sm btn-danger btn-anular" data-bs-toggle="modal" data-bs-target="#anularOrdenModal" data-orden-id="@orden.Orden_ID" @(orden.Estado == "Completada" || orden.Estado == "Cancelada" ? "disabled" : "")>
-                                                    <i class="fas fa-times"></i> Cancelar
+                                                    Cancelar
                                                 </button>
                                             </td>
                                         </tr>
@@ -190,7 +191,7 @@
 
                     // Verificar coincidencias
                     const coincideCliente = cliente === '' || clienteTexto.includes(cliente);
-                    const coincideEstado = estado === '' || estadoTexto === estado;
+                    const coincideEstado = estado === '' || estadoTexto === estado || (estado === "En Proceso" && estadoTexto === "En proceso");
                     const coincideTipo = tipo === '' || tipoTexto === tipo;
                     const coincideFecha = fecha === '' || fechaTexto === fecha;
 
@@ -256,7 +257,7 @@
 
             function prepararAnulacion(id) {
                 ordenIdAnular = id;
-                document.getElementById('ordenAnularNumero').textContent = '#' + id.toString().padStart(3, '0');
+                document.getElementById('ordenAnularNumero').textContent = '#' + id.toString();
             }
 
             function confirmarAnulacion() {
