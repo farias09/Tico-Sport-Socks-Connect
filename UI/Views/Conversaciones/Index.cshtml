@@ -97,16 +97,15 @@
             <!-- Begin page -->
             <div id="layout-wrapper">
                 <div class="container mt-4">
-                    <div class="text-center mb-4">
+                    <div class="text-center">
                         <h1>Gestión de órdenes</h1>
                         <p class="text-muted">Gestiona las órdenes que recibe Tico Sport Socks</p>
                         <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'">
-                            <i class="bi bi-plus-circle me-2"></i>
+                            <i class="bi bi-cart me-2"></i>
                             Registrar Venta Física
                         </button>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("OrdenesPendientes", "Ordenes")'">
-                            <i class="bi bi-basket2-fill"></i>
-                            Ver Ordenes Pendientes
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                            <i class="bi bi-plus-circle me-2"></i> Crear Orden
                         </button>
                     </div>
                     <div class="contenedor-chat">
@@ -156,9 +155,6 @@
                                     <h5 class="mb-0">Inventario</h5>
                                 </div>
                                 <div class="card-body">
-                                    <button type="button" class="btn btn-primary mb-3" onclick="location.href='@Url.Action("Create", "Ordenes")'">
-                                        Crear Orden
-                                    </button>
                                     <select class="form-select mb-3">
                                         <option>Selecciona la bodega</option>
                                         <option>Tibás</option>
@@ -184,7 +180,8 @@
                                                     <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-3">
                                                     <div>
                                                         <p class="mb-1"><strong>@producto.nombre</strong></p>
-                                                        <p class="mb-0">COD: @producto.CodigoDelProducto | Stock: @producto.stock</p>                                                    </div>
+                                                        <p class="mb-0">COD: @producto.CodigoDelProducto | Stock: @producto.stock</p>
+                                                    </div>
                                                 </div>
                                                 <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-info">Detalles</a>
                                             </div>
@@ -314,17 +311,17 @@
                         } else {
                             productos.forEach(producto => {
                                 const productoHTML = `
-                        <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
-                            <div class="d-flex align-items-center">
-                                <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
-                                <div>
-                                    <p class="mb-1"><strong>${producto.nombre}</strong></p>
-                                    <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
+                                <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;" class="me-3">
+                                        <div>
+                                            <p class="mb-1"><strong>${producto.nombre}</strong></p>
+                                            <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
+                                        </div>
+                                    </div>
+                                    <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>
                                 </div>
-                            </div>
-                            <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}" class="btn btn-sm btn-success">Detalles</a>
-                        </div>
-                    `;
+                            `;
                                 contenedorProductos.innerHTML += productoHTML;
                             });
                         }

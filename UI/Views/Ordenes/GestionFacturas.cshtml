@@ -136,15 +136,19 @@
                                         <td>
                                             @if (orden.Estado == "Pendiente")
                                             {
-                                                <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
+                                                <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px;">Pendiente</span>
+                                            }
+                                            else if (orden.Estado == "En proceso")
+                                            {
+                                                <span class="badge" style="background-color: #c9e4ff; color: #023756; padding: 0.4rem 1rem; border: 1px solid #41a3f7; border-radius: 12px;">Completada</span>
                                             }
                                             else if (orden.Estado == "Completada")
                                             {
-                                                <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
+                                                <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px;">Completada</span>
                                             }
                                             else if (orden.Estado == "Cancelada")
                                             {
-                                                <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
+                                                <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px;">Cancelada</span>
                                             }
                                             else
                                             {

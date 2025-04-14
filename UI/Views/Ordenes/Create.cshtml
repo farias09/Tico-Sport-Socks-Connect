@@ -17,125 +17,221 @@
 
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #2b3a67;
+            --accent-color: #e63946;
+            --accent-hover: #d32f3c;
             --success-color: #2ecc71;
-            --warning-color: #f39c12;
+            --success-hover: #27ae60;
+            --warning-color: #f7b801;
             --light-gray: #f8f9fa;
             --medium-gray: #e9ecef;
             --dark-gray: #6c757d;
+            --text-color: #333;
+            --text-muted: #6c757d;
             --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
-            color: #333;
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         .contenedor-orden {
-            padding: 20px 30px 30px;
+            padding: 25px 35px 35px;
             background-color: #fff;
             border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
         }
 
         h2 {
             color: var(--secondary-color);
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid var(--light-gray);
+            position: relative;
         }
+
+            h2:after {
+                content: "";
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 60px;
+                height: 2px;
+                background-color: var(--primary-color);
+            }
 
         h3 {
             color: var(--secondary-color);
-            font-size: 1.3rem;
-            margin-top: 30px;
+            font-size: 1.1rem;
+            margin-top: 5px;
             margin-bottom: 15px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+            h3:before {
+                content: "";
+                display: inline-block;
+                width: 4px;
+                height: 16px;
+                background-color: var(--primary-color);
+                margin-right: 10px;
+                border-radius: 2px;
+            }
 
         label {
             font-weight: 500;
             color: var(--secondary-color);
             display: block;
             margin-bottom: 8px;
+            font-size: 0.95rem;
         }
 
         .form-control {
             border: 1px solid #ddd;
             border-radius: var(--border-radius);
-            padding: 10px 15px;
+            padding: 8px 15px;
             height: auto;
-            transition: all 0.3s;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
             .form-control:focus {
                 border-color: var(--primary-color);
-                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+                box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
             }
 
         /* Estilos para la tabla */
         .table {
             border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 1.5rem;
         }
 
             .table thead th {
                 background-color: var(--secondary-color);
                 color: white;
                 border: none;
-                padding: 12px 15px;
+                padding: 8px 16px;
                 font-weight: 500;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
-            .table tbody tr:hover {
-                background-color: rgba(52, 152, 219, 0.05);
+                .table thead th:first-child {
+                    border-top-left-radius: var(--border-radius);
+                }
+
+                .table thead th:last-child {
+                    border-top-right-radius: var(--border-radius);
+                }
+
+            .table tbody tr {
+                transition: var(--transition);
             }
+
+                .table tbody tr:hover {
+                    background-color: rgba(67, 97, 238, 0.05);
+                }
+
+                .table tbody tr:last-child td:first-child {
+                    border-bottom-left-radius: var(--border-radius);
+                }
+
+                .table tbody tr:last-child td:last-child {
+                    border-bottom-right-radius: var(--border-radius);
+                }
 
             .table td {
-                padding: 12px 15px;
+                padding: 14px 16px;
                 vertical-align: middle;
                 border-color: #eee;
+                font-size: 0.95rem;
             }
 
         /* Botones */
+        .btn {
+            padding: 10px 20px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.9rem;
+        }
+
+        .btn i {
+            font-size: 0.95rem;
+        }
 
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+            color: white;
         }
 
             .btn-primary:hover {
-                background-color: #2980b9;
-                border-color: #2980b9;
+                background-color: var(--primary-hover);
+                border-color: var(--primary-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
             }
 
         .btn-success {
             background-color: var(--success-color);
             border-color: var(--success-color);
+            color: white;
         }
 
             .btn-success:hover {
-                background-color: #27ae60;
-                border-color: #27ae60;
+                background-color: var(--success-hover);
+                border-color: var(--success-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
             }
 
         .btn-danger {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
+            color: white;
         }
 
             .btn-danger:hover {
-                background-color: #c0392b;
-                border-color: #c0392b;
+                background-color: var(--accent-hover);
+                border-color: var(--accent-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
+            }
+
+        .btn-outline-secondary {
+            border-color: var(--dark-gray);
+            color: var(--dark-gray);
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: var(--dark-gray);
+                color: white;
             }
 
         /* Contenedores de acciones */
@@ -143,8 +239,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 25px 0;
+            margin: 30px 0;
             gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
         }
 
         .product-selection-container {
@@ -152,17 +250,20 @@
             gap: 15px;
             align-items: flex-end;
             background-color: var(--light-gray);
-            padding: 20px;
+            padding: 15px;
             border-radius: var(--border-radius);
-            margin-top: 25px;
+            margin-top: 5px;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         /* Estilos para Select2 */
         .select2-container--default .select2-selection--single {
             border: 1px solid #ddd;
             border-radius: var(--border-radius);
-            height: 45px;
-            padding: 8px 10px;
+            height: 35px;
+            padding: 2px 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
             .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -180,7 +281,8 @@
         }
 
         .select2-results__option {
-            padding: 10px 15px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
         }
 
         .select2-container {
@@ -190,14 +292,16 @@
         .select2-dropdown {
             border-color: #ddd;
             box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
         /* Badge para el tipo de venta */
         .venta-badge {
             display: inline-block;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: white;
             margin-left: 10px;
@@ -215,14 +319,14 @@
         .productos-section {
             background-color: white;
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: var(--box-shadow);
+            padding: 15px;
+            margin-top: 25px;
+            border: 1px solid var(--medium-gray);
         }
 
         .form-flex {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
             .form-flex .form-group {
@@ -238,9 +342,10 @@
             margin-top: 20px;
             text-align: right;
             font-size: 1.2rem;
-            padding: 15px;
+            padding: 20px;
             background-color: var(--light-gray);
             border-radius: var(--border-radius);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .total-label {
@@ -251,15 +356,16 @@
         .total-amount {
             font-weight: 700;
             color: var(--primary-color);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-left: 10px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
         }
 
         /* Animaciones */
         @@keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px);
             }
 
             to {
@@ -269,7 +375,130 @@
         }
 
         .animated-row {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Vista previa de imagen */
+        .product-preview-container {
+            position: absolute;
+            top: -150px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--medium-gray);
+            background-color: white;
+            padding: 5px;
+            box-shadow: var(--box-shadow);
+            display: none;
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+            .product-preview-container:hover {
+                transform: scale(1.05);
+            }
+
+        .product-preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: calc(var(--border-radius) - 2px);
+        }
+
+        .product-preview-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-size: 0.8rem;
+            text-align: center;
+            border-radius: calc(var(--border-radius) - 2px);
+        }
+
+        /* Estilo para productos con imagen en la tabla */
+        .product-with-image {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-image-thumbnail {
+            width: 45px;
+            height: 45px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+            .product-image-thumbnail:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+        /* Mejoras para dispositivos móviles */
+        @@media (max-width: 768px) {
+            .form-flex {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .product-selection-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .product-preview-container {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin: 0 auto 20px;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table, .table tbody, .table tr, .table td {
+                display: block;
+                width: 100%;
+            }
+
+                .table tr {
+                    margin-bottom: 20px;
+                    border: 1px solid var(--medium-gray);
+                    border-radius: var(--border-radius);
+                    overflow: hidden;
+                }
+
+                .table td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    text-align: right;
+                    padding: 12px 15px;
+                    border-bottom: 1px solid #eee;
+                }
+
+                    .table td:before {
+                        content: attr(data-label);
+                        font-weight: 600;
+                        text-align: left;
+                        color: var(--secondary-color);
+                    }
+
+            .action-container {
+                flex-direction: column-reverse;
+            }
+
+                .action-container button {
+                    width: 100%;
+                }
         }
     </style>
 </head>
@@ -306,6 +535,14 @@
                             <div class="productos-section">
                                 <h3>Agregar Productos</h3>
                                 <div class="product-selection-container">
+                                    <!-- Vista previa de la imagen del producto -->
+                                    <div class="product-preview-container" id="product-preview">
+                                        <div class="product-preview-placeholder" id="preview-placeholder">
+                                            Vista previa del producto
+                                        </div>
+                                        <img src="" alt="Vista previa del producto" class="product-preview-image" id="preview-image" style="display: none;">
+                                    </div>
+
                                     <div class="form-group" style="flex: 3;">
                                         <label>Producto</label>
                                         <select id="select-producto" class="form-control select2-productos">
@@ -315,7 +552,9 @@
                                                 <option value="@producto.Producto_ID"
                                                         data-nombre="@producto.nombre"
                                                         data-precio="@producto.precio"
-                                                        data-codigo="@producto.CodigoDelProducto">
+                                                        data-codigo="@producto.CodigoDelProducto"
+                                                        data-imagen="@(producto.imagen ?? "")">
+
                                                     @producto.nombre - @producto.CodigoDelProducto - ₡@producto.precio
                                                 </option>
                                             }
@@ -340,7 +579,8 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 40%">Producto</th>
+                                                    <th style="width: 5%">Imagen</th>
+                                                    <th style="width: 35%">Producto</th>
                                                     <th style="width: 15%">Precio</th>
                                                     <th style="width: 15%">Cantidad</th>
                                                     <th style="width: 15%">Subtotal</th>
@@ -384,7 +624,7 @@
             $(document).ready(function () {
                 // Inicializar Select2 con búsqueda
                 $('.select2-productos').select2({
-                    placeholder: "Buscar producto por nombre o código",
+                    placeholder: "Buscar producto por nombre o codigo...",
                     allowClear: true,
                     width: '100%',
                     matcher: function (params, data) {
@@ -410,12 +650,22 @@
                         // Personalizar cómo se muestran los resultados
                         if (!data.id) { return data.text; }
 
+                        var imagenUrl = data.element.getAttribute('data-imagen');
+                        var imagenHtml = imagenUrl
+                            ? `<img src="${imagenUrl}" alt="Miniatura" style="width:30px; height:30px; object-fit:cover; margin-right:10px; border-radius:3px; border:1px solid #ddd;">`
+                            : `<div style="width:30px; height:30px; margin-right:10px; background:#eee; display:inline-flex; align-items:center; justify-content:center; border-radius:3px;">
+                                                         <i class="fas fa-box" style="color:#999;"></i>
+                                                       </div>`;
+
                         var $result = $(
-                            '<div class="select-product-item">' +
+                            '<div class="d-flex align-items-center">' +
+                            imagenHtml +
+                            '<div>' +
                             '<div><span class="fw-bold">' + data.element.getAttribute('data-nombre') + '</span></div>' +
                             '<div class="d-flex justify-content-between">' +
                             '<span class="text-muted">Código: ' + data.element.getAttribute('data-codigo') + '</span>' +
                             '<span class="text-success">₡' + data.element.getAttribute('data-precio') + '</span>' +
+                            '</div>' +
                             '</div>' +
                             '</div>'
                         );
@@ -441,6 +691,7 @@
                     var nombre = $("#select-producto option:selected").data("nombre");
                     var precio = $("#select-producto option:selected").data("precio");
                     var cantidad = parseInt($("#cantidad-producto").val()) || 0;
+                    var imagenUrl = $("#select-producto option:selected").data("imagen") || '';
 
                     if (!productoID || cantidad <= 0) {
                         showAlertMessage("Seleccione un producto y una cantidad válida.");
@@ -461,7 +712,8 @@
                         Nombre: nombre,
                         Precio: precio,
                         Cantidad: cantidad,
-                        Subtotal: subtotal
+                        Subtotal: subtotal,
+                        ImagenUrl: imagenUrl
                     });
 
                     // Actualizar la tabla
@@ -470,6 +722,7 @@
                     // Limpiar selección y cantidad
                     $("#select-producto").val('').trigger('change');
                     $("#cantidad-producto").val('1');
+                    $("#product-preview").fadeOut(200);
                 });
 
                 function actualizarTabla() {
@@ -481,22 +734,29 @@
                     productosSeleccionados.forEach((producto, index) => {
                         total += producto.Subtotal;
 
+                        var imagenHtml = producto.ImagenUrl
+                            ? `<img src="${producto.ImagenUrl}" class="product-image-thumbnail" alt="${producto.Nombre}">`
+                            : `<div style="width:40px; height:40px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:4px;">
+                                                         <i class="fas fa-box" style="color:#999;"></i>
+                                                       </div>`;
+
                         tabla.append(`
-                                                        <tr class="animated-row">
-                                                            <td>
-                                                                <div class="fw-bold">${producto.Nombre}</div>
-                                                                <div class="small text-muted">ID: ${producto.Producto_ID}</div>
-                                                            </td>
-                                                            <td>₡${producto.Precio.toFixed(2)}</td>
-                                                            <td>${producto.Cantidad}</td>
-                                                            <td class="fw-bold">₡${producto.Subtotal.toFixed(2)}</td>
-                                                            <td>
-                                                                <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">
-                                                                    <i class="fas fa-trash"></i> Eliminar
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    `);
+                                                    <tr class="animated-row">
+                                                        <td>${imagenHtml}</td>
+                                                        <td>
+                                                            <div class="fw-bold">${producto.Nombre}</div>
+                                                            <div class="small text-muted">ID: ${producto.Producto_ID}</div>
+                                                        </td>
+                                                        <td>₡${producto.Precio.toFixed(2)}</td>
+                                                        <td>${producto.Cantidad}</td>
+                                                        <td class="fw-bold">₡${producto.Subtotal.toFixed(2)}</td>
+                                                        <td>
+                                                            <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">
+                                                                <i class="fas fa-trash"></i> Eliminar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                `);
                     });
 
                     // Actualizar el total
