@@ -35,7 +35,8 @@
 
     /* Estilos para el container principal */
     .container.mt-4,
-    .container.mt-3 {
+    .container.mt-3,
+    .container.py-5 {
         padding-left: 220px;
         transition: padding-left 0.3s ease;
         width: 100%;
@@ -44,7 +45,8 @@
 
     /* Cuando el sidebar está minimizado */
     .sidebar-left.minimized ~ .main-content .container.mt-4,
-    .sidebar-left.minimized ~ .main-content .container.mt-3 {
+    .sidebar-left.minimized ~ .main-content .container.mt-3,
+    .sidebar-left.minimized ~ .main-content .container py-5 {
         padding-left: 90px;
     }
 
@@ -244,7 +246,7 @@
                 <div class="app-search d-flex align-items-center mx-3 position-relative">
                     <div class="position-relative" style="width: 300px;">
                         <input type="text" id="globalSearchInput" class="form-control border-0 shadow-sm ps-5"
-                               placeholder="Buscar productos, reportes, paneles, etc..."
+                               placeholder="Buscar productos, reportes, etc..."
                                style="height: 40px; border-radius: 20px; margin-right: 40px;">
                         <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y me-3"
                            style="pointer-events: none; color: #6c757d;"></i>

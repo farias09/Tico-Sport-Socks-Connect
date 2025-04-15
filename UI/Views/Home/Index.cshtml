@@ -4,7 +4,6 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var prueba = new ProductoMasVendidoDto();
 
 }
 <!doctype html>
@@ -78,16 +77,16 @@
         </section>
 
         <!-- Bloque de resumen de reportes con gráficos -->
-<section class="container py-5">
-    <div class="row justify-content-center mb-5">
-        <div class="col-lg-6 mb-4">
-            <div class="bg-white shadow rounded p-4 h-100">
-                <h4 class="fw-bold mb-3 text-center">📊 Ventas históricas</h4>
-                <canvas id="ventasPorTipoChart" style="max-height: 150px; width: 100%;"></canvas>
+        <section class="container mt-4">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-6 mb-4">
+                    <div class="bg-white shadow rounded p-4 h-100">
+                        <h4 class="fw-bold mb-3 text-center">📊 Ventas históricas</h4>
+                        <canvas id="ventasPorTipoChart" style="max-height: 150px; width: 100%;"></canvas>
 
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                <script>
+                        <script>
                             const ctxTipo = document.getElementById('ventasPorTipoChart').getContext('2d');
 
                             const labelsTipo = @Html.Raw(Json.Encode(
@@ -129,15 +128,15 @@
                                     }
                                 }
                             });
-                </script>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="bg-white shadow rounded p-4 h-100">
-                <h4 class="fw-bold mb-3 text-center">📈 Ventas por mes</h4>
-                <p class="text-muted text-center fs-6">Distribución de productos más vendidos</p>
-                <canvas id="ventasPorMesChart" style="max-height: 150px; width: 100%;"></canvas>
-                <script>
+                        </script>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="bg-white shadow rounded p-4 h-100">
+                        <h4 class="fw-bold mb-3 text-center">📈 Ventas por mes</h4>
+                        <p class="text-muted text-center fs-6">Distribución de productos más vendidos</p>
+                        <canvas id="ventasPorMesChart" style="max-height: 150px; width: 100%;"></canvas>
+                        <script>
                             const ctxMes = document.getElementById('ventasPorMesChart').getContext('2d');
 
                             const labelsMes = @Html.Raw(Json.Encode(
@@ -178,104 +177,104 @@
                                     }
                                 }
                             });
-                </script>
+                        </script>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Secciones con fondo gris y enlaces -->
-    <div class="row justify-content-center text-center mb-5">
-        <div class="col-md-3">
-            <a href="@Url.Action("Index", "Productos")" class="text-decoration-none">
-                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
-                    <i class="bi bi-box-seam fs-1"></i>
-                    <h6 class="mt-3">Productos</h6>
-                    <p class="mb-0 fw-bold">@ViewBag.TotalProductos</p>
+            <!-- Secciones con fondo gris y enlaces -->
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-md-3">
+                    <a href="@Url.Action("Index", "Productos")" class="text-decoration-none">
+                        <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                            <i class="bi bi-box-seam fs-1"></i>
+                            <h6 class="mt-3">Productos</h6>
+                            <p class="mb-0 fw-bold">@ViewBag.TotalProductos</p>
 
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="@Url.Action("Index", "Usuarios")" class="text-decoration-none">
-                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
-                    <i class="bi bi-people fs-1"></i>
-                    <h6 class="mt-3">Clientes</h6>
-                    <p class="mb-0 fw-bold">@ViewBag.TotalUsuarios</p>
+                <div class="col-md-3">
+                    <a href="@Url.Action("Index", "Usuarios")" class="text-decoration-none">
+                        <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                            <i class="bi bi-people fs-1"></i>
+                            <h6 class="mt-3">Clientes</h6>
+                            <p class="mb-0 fw-bold">@ViewBag.TotalUsuarios</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="@Url.Action("Index", "Ordenes")" class="text-decoration-none">
-                <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
-                    <i class="bi bi-bar-chart-line fs-1"></i>
-                    <h6 class="mt-3">Ventas Hoy</h6>
-                    <p class="mb-0 fw-bold">₡@ViewBag.VentasHoy.ToString("N2")</p>
+                <div class="col-md-3">
+                    <a href="@Url.Action("Index", "Ordenes")" class="text-decoration-none">
+                        <div class="p-4 rounded h-100" style="background-color: #eff2f7; color: #343a40;">
+                            <i class="bi bi-bar-chart-line fs-1"></i>
+                            <h6 class="mt-3">Ventas Hoy</h6>
+                            <p class="mb-0 fw-bold">₡@ViewBag.VentasHoy.ToString("N2")</p>
 
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-    </div>
+            </div>
 
 
-    <!-- Últimas órdenes -->
-    <h2 class="mt-3 mb-4">📦 Últimas Órdenes Realizadas</h2>
+            <!-- Últimas órdenes -->
+            <h2 class="mt-3 mb-4">📦 Últimas Órdenes Realizadas</h2>
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="table-responsive">
-            <table class="table align-middle shadow-sm rounded table-hover" style="overflow: hidden;">
-                <thead class="table-success text-dark">
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th class="text-center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var orden in Model)
-                    {
-                        <tr>
-                            <td>@orden.UsuarioNombre</td>
-                            <td>₡@orden.Total.ToString("N2")</td>
-                            <td>
-                                @if (orden.Estado == "Pendiente")
-                                {
-                                    <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
-                                }
-                                else if (orden.Estado == "Completada")
-                                {
-                                    <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
-                                }
-                                else if (orden.Estado == "Cancelada")
-                                {
-                                    <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
-                                }
-                                else
-                                {
-                                    <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
-                                }
-                            </td>
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle shadow-sm rounded table-hover" style="overflow: hidden;">
+                        <thead class="table-success text-dark">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orden in Model)
+                            {
+                                <tr>
+                                    <td>@orden.UsuarioNombre</td>
+                                    <td>₡@orden.Total.ToString("N2")</td>
+                                    <td>
+                                        @if (orden.Estado == "Pendiente")
+                                        {
+                                            <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
+                                        }
+                                        else if (orden.Estado == "Completada")
+                                        {
+                                            <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
+                                        }
+                                        else if (orden.Estado == "Cancelada")
+                                        {
+                                            <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
+                                        }
+                                    </td>
 
-                            <td>@orden.FechaOrden.ToString("dd/MM/yyyy")</td>
-                            <td class="text-center">
-                                <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-outline-info btn-sm shadow-sm">
-                                    <i class="bi bi-eye"></i> Ver
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                                    <td>@orden.FechaOrden.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-outline-info btn-sm shadow-sm">
+                                            <i class="bi bi-eye"></i> Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
 
-            </table>
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info">No hay órdenes recientes registradas.</div>
-    }
-</section>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay órdenes recientes registradas.</div>
+            }
+        </section>
     }
 </body>
 
