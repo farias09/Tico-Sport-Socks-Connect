@@ -1,4 +1,5 @@
-﻿@model List<Abstracciones.Modelos.Ordenes.OrdenResumenDto>
+﻿
+@model List<Abstracciones.Modelos.Ordenes.OrdenResumenDto>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,6 +23,16 @@
     <link rel="stylesheet" href="~/Content/css/icons.css" />
 </head>
 
+<style>
+    .btn-danger:disabled {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+        border-color: #f5c6cb !important;
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+</style>
+
 <body>
     <div class="main-content">
         <div class="page-content">
@@ -40,6 +51,7 @@
                         <select id="filtroEstado" class="form-select" onchange="filtrarOrdenes()">
                             <option value="">Todos</option>
                             <option value="Completada">Completada</option>
+                            <option value="En Proceso">En Proceso</option>
                             <option value="Pendiente">Pendiente</option>
                             <option value="Cancelada">Cancelada</option>
                         </select>
@@ -58,7 +70,9 @@
                     </div>
                     <div class="col-md-2 ms-auto">
                         <label class="form-label">&nbsp;</label>
-                        <button id="btnRestablecer" class="btn btn-secondary w-100" onclick="restablecerFiltros()">
+                        <button id="btnRestablecer" class="btn w-100" onclick="restablecerFiltros()" style=" background-color: #192840; border-color: black; color: white;"
+                                onmouseover="this.style.backgroundColor='#1d3557'; this.style.color='#ffffff';"
+                                onmouseout="this.style.backgroundColor='#192840'; this.style.color='white';">
                             <i class="fas fa-sync-alt me-1"></i> Restablecer
                         </button>
                     </div>
@@ -84,35 +98,41 @@
                                     @foreach (var orden in Model)
                                     {
                                         <tr>
-                                            <td>@orden.Orden_ID.ToString("D3")</td>
+                                            <td>#@orden.Orden_ID</td>
                                             <td>@orden.UsuarioNombre</td>
                                             <td>
-                                                @if (orden.Estado == "Completada")
+                                                @if (orden.Estado == "Pendiente")
                                                 {
-                                                    <span class="badge bg-success">@orden.Estado</span>
+                                                    <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px; ">Pendiente</span>
                                                 }
-                                                else if (orden.Estado == "Pendiente")
+                                                else if (orden.Estado == "En proceso")
                                                 {
-                                                    <span class="badge bg-warning">@orden.Estado</span>
+                                            <span class="badge" style="background-color: #c9e4ff; color: #023756; padding: 0.4rem 1rem; border: 1px solid #41a3f7; border-radius: 12px; ">En proceso</span>
+                                                }
+                                                else if (orden.Estado == "Completada")
+                                                {
+                                                    <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px; ">Completada</span>
                                                 }
                                                 else if (orden.Estado == "Cancelada")
                                                 {
-                                                    <span class="badge bg-danger">@orden.Estado</span>
+                                                    <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px; ">Cancelada</span>
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge bg-secondary">@orden.Estado</span>
+                                                    <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
                                                 }
                                             </td>
                                             <td>@orden.FechaOrden.ToString("yyyy-MM-dd")</td>
                                             <td>@orden.TipoVenta</td>
                                             <td>₡@orden.Total.ToString("N0")</td>
                                             <td>
-                                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarDetallesOrden(@orden.Orden_ID)">
+
+                                                <button class="btn btn-sm btn-flat-secondary" onclick="location.href='@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })'">
                                                     <i class="fas fa-eye"></i> Ver
                                                 </button>
-                                                <button class="btn btn-sm btn-danger btn-anular" data-bs-toggle="modal" data-bs-target="#anularOrdenModal" data-orden-id="@orden.Orden_ID">
-                                                    <i class="fas fa-times"></i> Cancelar
+
+                                                <button class="btn btn-sm btn-danger btn-anular" data-bs-toggle="modal" data-bs-target="#anularOrdenModal" data-orden-id="@orden.Orden_ID" @(orden.Estado == "Completada" || orden.Estado == "Cancelada" ? "disabled" : "")>
+                                                    Cancelar
                                                 </button>
                                             </td>
                                         </tr>
@@ -171,7 +191,7 @@
 
                     // Verificar coincidencias
                     const coincideCliente = cliente === '' || clienteTexto.includes(cliente);
-                    const coincideEstado = estado === '' || estadoTexto === estado;
+                    const coincideEstado = estado === '' || estadoTexto === estado || (estado === "En Proceso" && estadoTexto === "En proceso");
                     const coincideTipo = tipo === '' || tipoTexto === tipo;
                     const coincideFecha = fecha === '' || fechaTexto === fecha;
 
@@ -237,7 +257,7 @@
 
             function prepararAnulacion(id) {
                 ordenIdAnular = id;
-                document.getElementById('ordenAnularNumero').textContent = '#' + id.toString().padStart(3, '0');
+                document.getElementById('ordenAnularNumero').textContent = '#' + id.toString();
             }
 
             function confirmarAnulacion() {
@@ -250,7 +270,6 @@
                     success: function(response) {
                         if (response.success) {
                             $('#anularOrdenModal').modal('hide');
-                            alert('La orden ha sido cancelada correctamente');
                             location.reload();
                         } else {
                             alert('Error al cancelar la orden: ' + response.message);

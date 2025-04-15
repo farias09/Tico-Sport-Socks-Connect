@@ -102,10 +102,14 @@ namespace UI.Controllers
                 return Json(new List<ProductosDto>(), JsonRequestBehavior.AllowGet);
             }
 
+            termino = termino.ToLower();
+
             var productos = _contexto.ProductosTabla
-                .Where(p => p.nombre.Contains(termino) ||
-                           p.CodigoDelProducto.ToString().Contains(termino) ||
-                           p.Producto_ID.ToString().Contains(termino))
+                .AsEnumerable()
+                .Where(p => (p.nombre != null && p.nombre.ToLower().Contains(termino)) ||
+                           (p.CodigoDelProducto != null && p.CodigoDelProducto.ToString().ToLower().Contains(termino)) ||
+                           (p.Producto_ID.ToString().Contains(termino)) ||
+                           (p.descripcion != null && p.descripcion.ToLower().Contains(termino)))
                 .Select(p => new ProductosDto
                 {
                     Producto_ID = p.Producto_ID,
@@ -113,8 +117,10 @@ namespace UI.Controllers
                     imagen = p.imagen,
                     precio = p.precio,
                     stock = p.stock,
-                    CodigoDelProducto = p.CodigoDelProducto
+                    CodigoDelProducto = p.CodigoDelProducto,
+                    descripcion = p.descripcion
                 })
+                .Take(20)
                 .ToList();
 
             return Json(productos, JsonRequestBehavior.AllowGet);

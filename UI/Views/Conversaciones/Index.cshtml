@@ -85,7 +85,6 @@
             background: #fff;
             padding: 15px;
             border-radius: 8px;
-
         }
 
         .chat-form {
@@ -108,10 +107,16 @@
         <!-- Begin page -->
         <div id="layout-wrapper">
             <div class="container mt-4">
-                <div class="text-center mb-4">
+                <div class="text-center">
                     <h1>Gestión de órdenes</h1>
                     <p class="text-muted">Gestiona las órdenes que recibe Tico Sport Socks</p>
-
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'">
+                        <i class="bi bi-cart me-2"></i>
+                        Registrar Venta Física
+                    </button>
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                        <i class="bi bi-plus-circle me-2"></i> Crear Orden
+                    </button>
                 </div>
                 <div class="contenedor-chat">
                     <!-- Panel Izquierdo: Lista de conversaciones -->
@@ -152,40 +157,51 @@
                             </div>
                         }
                     </div>
-                    
-                    <!-- Panel Derecho: Inventario y botón de crear orden -->
+
                     <div class="inventory-panel">
                         <div class="card">
                             <div class="card-header bg-white d-flex justify-content-between">
                                 <h5 class="mb-0">Inventario</h5>
                             </div>
                             <div class="card-body">
-                                <button type="button" class="btn btn-primary mb-3" onclick="location.href='@Url.Action("Create", "Ordenes")'">
-                                    Crear Orden
-                                </button>
                                 <select class="form-select mb-3">
                                     <option>Selecciona la bodega</option>
                                     <option>Tibás</option>
                                     <option>Pérez Zeledón</option>
                                 </select>
-                                <input type="text" class="form-control mb-3" placeholder="Nombre del producto, SKU..." />
-                                <h6>Productos más buscados</h6>
-                                <div class="list-group">
+                                <div class="mb-3">
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Nombre del producto, COD..."
+                                           id="buscador-productos"
+                                           aria-label="Buscar productos">
+                                </div>
 
+                                <!-- Contenedor para mostrar resultados de búsqueda -->
+                                <div id="resultados-busqueda" class="mb-3" style="display: none;">
+                                    <h6>Resultados de búsqueda</h6>
+                                    <div id="lista-resultados" class="list-group"></div>
+                                </div>
 
-                                    @foreach (var producto in Model.Productos)
-                                    {
-                                        <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
-                                            <div class="d-flex align-items-center">
-                                                <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-3">
-                                                <div>
-                                                    <p class="mb-1"><strong>@producto.nombre</strong></p>
-                                                    <p class="mb-0">COD: @producto.Producto_ID | Stock: @producto.stock</p>
+                                <!-- Contenedor para productos populares -->
+                                <div id="productos-populares">
+                                    <h6>Productos disponibles</h6>
+                                    <div class="list-group">
+                                        @foreach (var producto in Model.Productos)
+                                        {
+                                            <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@producto.imagen" alt="@producto.nombre" style="width: 50px; height: auto;" class="me-2">
+                                                    <div>
+                                                        <p class="mb-1"><strong>@producto.nombre</strong></p>
+                                                        <p class="mb-0">COD: @producto.CodigoDelProducto | Stock: @producto.stock</p>
+                                                        <p class="mb-0 text-success">Precio: ₡@string.Format("{0:n0}", producto.precio)</p>
+                                                    </div>
                                                 </div>
+                                                <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-info">Detalles</a>
                                             </div>
-                                            <a href="@Url.Action("DetalleProducto", "Ordenes", new { id = producto.Producto_ID })" class="btn btn-sm btn-success">Detalles</a>
-                                        </div>
-                                    }
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -297,6 +313,87 @@
                         console.error("Error al enviar mensaje:", error);
                     });
             });
+
+        }
+
+        // Variable para controlar el timeout de búsqueda
+        let searchTimeout;
+
+        // Escuchar cambios en el input de búsqueda
+        document.getElementById('buscador-productos').addEventListener('input', function (e) {
+            clearTimeout(searchTimeout);
+
+            const searchTerm = e.target.value.trim();
+            const resultadosContainer = document.getElementById('resultados-busqueda');
+            const productosPopulares = document.getElementById('productos-populares');
+
+            // Si el término de búsqueda está vacío, ocultar resultados y mostrar productos populares
+            if (searchTerm === '') {
+                resultadosContainer.style.display = 'none';
+                productosPopulares.style.display = 'block';
+                return;
+            }
+
+            // Mostrar que se está buscando
+            document.getElementById('lista-resultados').innerHTML = '<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Buscando productos...</div>';
+            resultadosContainer.style.display = 'block';
+            productosPopulares.style.display = 'none';
+
+            // Esperar 300ms después de la última tecla para hacer la búsqueda
+            searchTimeout = setTimeout(() => {
+                buscarProductos(searchTerm);
+            }, 300);
+        });
+
+        // Función para realizar la búsqueda AJAX
+        function buscarProductos(termino) {
+            fetch(`/Conversaciones/BuscarProductos?termino=${encodeURIComponent(termino)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la búsqueda');
+                    }
+                    return response.json();
+                })
+                .then(productos => {
+                    const listaResultados = document.getElementById('lista-resultados');
+
+                    if (productos.length === 0) {
+                        listaResultados.innerHTML = '<div class="text-center py-3">No se encontraron productos</div>';
+                        return;
+                    }
+
+                    // Limpiar resultados anteriores
+                    listaResultados.innerHTML = '';
+
+                    // Mostrar cada producto encontrado
+                    productos.forEach(producto => {
+                        const productoHTML = `
+                        <div class="d-flex align-items-center justify-content-between border p-2 mb-2">
+                            <div class="d-flex align-items-center">
+                                <img src="${producto.imagen || '/images/default-product.png'}"
+                                     alt="${producto.nombre}"
+                                     style="width: 50px; height: auto;"
+                                     class="me-2">
+                                <div>
+                                    <p class="mb-1"><strong>${producto.nombre}</strong></p>
+                                    <p class="mb-0">COD: ${producto.CodigoDelProducto} | Stock: ${producto.stock}</p>
+                                    <p class="mb-0 text-success">Precio: ₡${producto.precio?.toLocaleString() || '0'}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="/Ordenes/DetalleProducto/${producto.Producto_ID}"
+                                   class="btn btn-sm btn-info">Detalles</a>
+                            </div>
+                        </div>
+                    `;
+                        listaResultados.innerHTML += productoHTML;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al buscar productos:', error);
+                    document.getElementById('lista-resultados').innerHTML =
+                        '<div class="text-center py-3 text-danger">Error al buscar productos</div>';
+                });
         }
     </script>
 }
