@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Abstracciones.Modelos.Caja
 {
@@ -12,27 +8,29 @@ namespace Abstracciones.Modelos.Caja
         [Key]
         public int Caja_ID { get; set; }
 
+        [Required(ErrorMessage = "El nombre de la caja es obligatorio.")]
+        [StringLength(100)]
         public string nombre_caja { get; set; }
 
         [Required]
         public DateTime fecha_apertura { get; set; }
 
-        [Required]
         public DateTime? fecha_cierre { get; set; }
 
-        [Required]
-        public decimal? monto_inicial { get; set; }
+        [Required(ErrorMessage = "El monto inicial es obligatorio.")]
+        public decimal monto_inicial { get; set; }
 
-        public decimal? monto_final {  get; set; }
+        public decimal? monto_final { get; set; }
 
         public decimal? total_ventas { get; set; }
 
         public decimal? total_gastos { get; set; }
 
         [Required]
-        public bool estado {  get; set; }
+        public bool estado { get; set; }
 
-        [Required]
-        public int Usuario_ID { get; set; }
+        [StringLength(128)]
+        [Required(ErrorMessage = "El ID del usuario es obligatorio.")]
+        public string Usuario_ID { get; set; }
     }
 }

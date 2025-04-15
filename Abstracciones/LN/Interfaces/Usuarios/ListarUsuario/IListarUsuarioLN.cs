@@ -11,5 +11,7 @@ namespace Abstracciones.LN.Interfaces.Usuarios.ListarUsuario
     {
         List<UsuarioDto> Listar();
         UsuarioDto ObtenerUsuarioPorId(int usuarioId);
+
+        List<UsuarioDto> BuscarClientes(string query);
     }
 }

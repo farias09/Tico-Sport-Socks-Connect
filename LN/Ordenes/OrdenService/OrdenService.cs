@@ -4,8 +4,6 @@ using Abstracciones.Modelos.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LN.Ordenes.OrdenService
 {
@@ -101,6 +99,11 @@ namespace LN.Ordenes.OrdenService
         public List<VentasPorMesDto> ObtenerVentasPorMes()
         {
             return _ordenRepositorio.ObtenerVentasPorMes();
+        }
+
+        public List<OrdenesDto> BuscarOrdenes(string query)
+        {
+            return _ordenRepositorio.BuscarOrdenes(query);
         }
     }
 }

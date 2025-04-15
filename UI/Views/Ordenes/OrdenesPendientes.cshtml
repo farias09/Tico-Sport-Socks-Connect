@@ -1,8 +1,13 @@
-﻿@{
+﻿@model List<Abstracciones.Modelos.Ordenes.OrdenesDto>
+@{
+    ViewBag.Title = "Órdenes Pendientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var usuarios = ViewBag.Usuarios as Dictionary<int, string>;
+    var ordenesOrdenadas = Model.OrderByDescending(o => o.FechaOrden).ToList();
 }
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
@@ -17,205 +22,464 @@
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
 <style>
-    body {
-        background-color: #f9f9f9;
-        font-family: 'Arial', sans-serif;
+    :root {
+        --primary-color: #0d6efd;
+        --success-color: #198754;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --light-color: #f8f9fa;
+        --border-radius: 8px;
+        --box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        --transition: all 0.3s ease;
     }
 
-    .card-header {
-        border-bottom: 2px solid #ddd;
+    body {
+        background-color: #f9f9f9;
+    }
+
+    .page-header {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
     }
 
     .card {
-        margin-bottom: 20px;
-        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
         overflow: hidden;
+        transition: var(--transition);
+        border: 1px solid #e9ecef;
+    }
+
+    .card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        background-color: white;
+    }
+
+    .order-card {
+        position: relative;
+    }
+
+    .order-number {
+        font-weight: 600;
+    }
+
+    .order-meta {
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-badge {
+        padding: 0.4rem 1rem;
+        border-radius: 12px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
     }
 
     .badge-pendiente {
-        background-color: #ffc107;
-        color: black;
+        background-color: #fff3d6;
+        color: #4c3602;
+        border: 1px solid #e0b566;
     }
 
-    .badge-en-proceso {
-        background-color: #007bff;
-        color: white;
+    .badge-proceso {
+        background-color: #c9e4ff;
+        color: #023756;
+        border: 1px solid #41a3f7;
     }
 
-    .badge-enviado {
-        background-color: #28a745;
-        color: white;
+    .badge-completada {
+        background-color: #ceffce;
+        color: #03270b;
+        border: 1px solid #6cc3a6;
     }
 
-    .modal-header {
-        border-bottom: 2px solid #ddd;
+    .badge-cancelada {
+        background-color: #f1cecf;
+        color: #4e0606;
+        border: 1px solid #d46a6c;
     }
 
-    .btn-outline-primary {
-        transition: all 0.3s ease;
+    .filter-controls {
+        background-color: white;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1.5rem;
+        box-shadow: var(--box-shadow);
+        border: 1px solid #e9ecef;
     }
 
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
+    .table-products {
+        box-shadow: none;
+        border: 1px solid #e9ecef;
+    }
+
+    .table-products th {
+        background-color: #f8f9fa;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        transition: var(--transition);
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+    }
+
+    .empty-state {
+        padding: 3rem;
+        text-align: center;
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+    }
+
+    .empty-icon {
+        color: #adb5bd;
+        margin-bottom: 1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            flex-direction: column;
+            align-items: flex-start !important;
         }
 
+        .status-badge {
+            margin-top: 0.5rem;
+        }
+
+        .filter-row .col-md-4 {
+            margin-bottom: 0.5rem;
+        }
+    }
 </style>
 
 <body>
     <div class="main-content">
         <div class="page-content">
-    <div class="container py-5">
-        <div class="mb-4 text-center">
-            <h1 class="display-5 fw-bold text-primary">Pedidos Pendientes</h1>
-            <p class="text-muted">Gestiona y actualiza los pedidos realizados a por los clientes.</p>
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("VentaFisica", "Ordenes")'"><i class="bi bi-plus-circle"></i> Crear Nueva Orden</button>
-        </div>
+            <div id="layout-wrapper">
+                <div class="container mt-4">
+                    <div class="container-fluid">
+                        <!-- Header section with navigation -->
+                        <div class="row page-header">
+                            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                                <h4 class="mb-0">Órdenes Pendientes</h4>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button class="btn btn-outline-secondary" onclick="history.back()">
+                                        <i class="ri-arrow-left-line"></i> Volver
+                                    </button>
+                                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                                        <i class="ri-add-line"></i> Nueva Orden
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <p class="text-muted mb-0">Gestiona y actualiza los pedidos realizados por los clientes</p>
+                            </div>
+                        </div>
 
-        <!-- Filtros -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-8">
-                <div class="input-group">
-                    <span class="input-group-text bg-light"><i class="bi bi-search text-primary"></i></span>
-                    <input type="text" class="form-control" placeholder="Buscar por ID o código de caja">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <select class="form-select">
-                    <option selected>Filtrar por estado</option>
-                    <option value="1">Pendiente</option>
-                    <option value="2">En proceso</option>
-                    <option value="3">Enviado</option>
-                </select>
-            </div>
-        </div>
+                        <!-- Filtros con mejor organización y diseño -->
+                        <div class="filter-controls">
+                            <div class="row filter-row">
+                                <div class="col-md-4 mb-md-0">
+                                    <label for="searchInput" class="form-label">Buscar</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="ri-search-line"></i></span>
+                                        <input type="text" id="searchInput" class="form-control" placeholder="Por ID o cliente...">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-md-0">
+                                    <label for="statusFilter" class="form-label">Estado</label>
+                                    <select class="form-select" id="statusFilter">
+                                        <option value="">Todos los estados</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="En proceso">En proceso</option>
+                                        <option value="Completada">Completada</option>
+                                        <option value="Cancelada">Cancelada</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dateFilter" class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" id="dateFilter">
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Pedidos -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="card-title mb-0">Pedido #ORD001</h5>
-                    <small>Fecha de pedido: 15/06/2023</small>
-                </div>
-                <span class="badge badge-pendiente">Pendiente</span>
-            </div>
-            <div class="card-body">
-                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
-                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Producto</th>
-                            <th class="text-end">Cantidad</th>
-                            <th class="text-end">Precio</th>
-                            <th class="text-end">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medias Antideslizantes Blancas (M)</td>
-                            <td class="text-end">2</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡2,000</td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Negras (M)</td>
-                            <td class="text-end">1</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡1,000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end fw-bold">Total:</td>
-                            <td class="text-end fw-bold">₡3,000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha de envío no establecida</p>
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
-                    <i class="bi bi-calendar"></i> Establecer Envío
-                </button>
-            </div>
-        </div>
+                        <!-- Lista de órdenes -->
+                        <div class="orders-container">
+                            @if (ordenesOrdenadas != null && ordenesOrdenadas.Any())
+                            {
+                                foreach (var orden in ordenesOrdenadas)
+                                {
+                                    <div class="card order-card" data-id="@orden.Orden_ID" data-status="@orden.Estado" data-date="@orden.FechaOrden.ToString("yyyy-MM-dd")">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <div>
+                                                    <h5 class="order-number mb-0">Pedido #@(orden.Orden_ID)</h5>
+                                                    <div class="order-meta mt-1">
+                                                        <span><i class="ri-user-line"></i> Cliente: <strong>@usuarios[orden.Usuario_ID]</strong></span>
+                                                        <span class="ms-3"><i class="ri-calendar-line"></i> @orden.FechaOrden.ToString("dd/MM/yyyy")</span>
+                                                    </div>
+                                                </div>
+                                                @if (orden.Estado == "Pendiente")
+                                                {
+                                                    <span class="status-badge badge-pendiente"><i class="ri-time-line"></i> Pendiente</span>
+                                                }
+                                                else if (orden.Estado == "En proceso")
+                                                {
+                                                    <span class="status-badge badge-proceso"><i class="ri-loader-4-line"></i> En proceso</span>
+                                                }
+                                                else if (orden.Estado == "Completada")
+                                                {
+                                                    <span class="status-badge badge-completada"><i class="ri-check-line"></i> Completada</span>
+                                                }
+                                                else if (orden.Estado == "Cancelada")
+                                                {
+                                                    <span class="status-badge badge-cancelada"><i class="ri-close-line"></i> Cancelada</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="status-badge" style="background-color: #adb5bd; color: #fff; border: 1px solid #8c9399;">@orden.Estado</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            @{
+                                                var detalles = ViewBag.Detalles as List<Abstracciones.Modelos.Ordenes.DetalleOrdenesDto>;
+                                                var detallesOrden = detalles?.Where(d => d.Orden_ID == orden.Orden_ID).ToList();
+                                            }
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="card-title mb-0">Pedido #ORD002</h5>
-                    <small>Fecha de pedido: 15/06/2023</small>
-                </div>
-                <span class="badge badge-en-proceso">En Proceso</span>
-            </div>
-            <div class="card-body">
-                <p><i class="bi bi-person text-primary"></i> Cliente: <strong>Fabian Arias Artavia</strong></p>
-                <p><i class="bi bi-box text-primary"></i> Código de caja: <strong>BOX123</strong></p>
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Producto</th>
-                            <th class="text-end">Cantidad</th>
-                            <th class="text-end">Precio</th>
-                            <th class="text-end">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medias Antideslizantes Blancas (L)</td>
-                            <td class="text-end">2</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡2,000</td>
-                        </tr>
-                        <tr>
-                            <td>Medias Antideslizantes Negras (XL)</td>
-                            <td class="text-end">1</td>
-                            <td class="text-end">₡1,000</td>
-                            <td class="text-end">₡1,000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end fw-bold">Total:</td>
-                            <td class="text-end fw-bold">₡3,000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                <p class="mb-0"><i class="bi bi-truck text-primary"></i> Fecha estimada de envío: 29/12/2024</p>
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#envioModal">
-                    <i class="bi bi-calendar"></i> Modificar Fecha
-                </button>
-            </div>
-        </div>
+                                            @if (detallesOrden != null && detallesOrden.Any())
+                                            {
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-products mb-4">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Producto</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Precio Unitario</th>
+                                                                <th>Subtotal</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var detalle in detallesOrden)
+                                                            {
+                                                                <tr>
+                                                                    <td>@detalle.NombreProducto</td>
+                                                                    <td>@detalle.Cantidad</td>
+                                                                    <td>₡@detalle.PrecioUnitario.ToString("N2")</td>
+                                                                    <td>₡@detalle.Subtotal.ToString("N2")</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                                                <td><strong>₡@orden.Total.ToString("N2")</strong></td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            }
 
-
-        <!-- Modal -->
-        <div class="modal fade" id="envioModal" tabindex="-1" aria-labelledby="envioModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="envioModalLabel">Detalles de Envío - Pedido #ORD001</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <p>Establezca la fecha estimada de envío y confirme el envío del pedido.</p>
-                            <label for="shipping-date" class="form-label">Fecha de envío</label>
-                            <input type="date" class="form-control" id="shipping-date">
+                                            <div class="action-buttons">
+                                                @if (orden.Estado == "Pendiente")
+                                                {
+                                                    <button class="btn btn-primary me-2" onclick="cambiarEstado(@orden.Orden_ID, 'En proceso')">
+                                                        <i class="ri-play-circle-line"></i> Iniciar Proceso
+                                                    </button>
+                                                    <button class="btn btn-danger me-2" onclick="mostrarModalCancelar(@orden.Orden_ID)">
+                                                        <i class="ri-close-circle-line"></i> Cancelar Orden
+                                                    </button>
+                                                }
+                                                else if (orden.Estado == "En proceso")
+                                                {
+                                                    <button class="btn btn-success me-2" onclick="cambiarEstado(@orden.Orden_ID, 'Completada')">
+                                                        <i class="ri-check-line"></i> Marcar como Completada
+                                                    </button>
+                                                }
+                                                <button class="btn btn-outline-secondary" onclick="verDetalles(@orden.Orden_ID)">
+                                                    <i class="ri-eye-line"></i> Ver Detalles
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-state">
+                                    <i class="ri-inbox-line empty-icon ri-3x"></i>
+                                    <h5>No hay órdenes pendientes</h5>
+                                    <p class="text-muted">No hay órdenes pendientes en este momento.</p>
+                                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Ordenes")'">
+                                        <i class="ri-add-line"></i> Crear Nueva Orden
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="bi bi-check-circle"></i> Confirmar Envío</button>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmación de cancelación -->
+    <div class="modal fade" id="modalCancelarOrden" tabindex="-1" aria-labelledby="modalCancelarOrdenLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelarOrdenLabel">Confirmar Cancelación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="ri-alert-line text-warning ri-2x"></i>
+                    </div>
+                    <p>¿Estás seguro de que deseas cancelar esta orden?</p>
+                    <p class="text-muted">Esta acción no se puede deshacer.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmarCancelarOrden">Confirmar Cancelación</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    @section Scripts {
+        <script>
+            function cambiarEstado(ordenId, nuevoEstado) {
+                $.ajax({
+                    url: '@Url.Action("CambiarEstadoOrden", "Ordenes")',
+                    type: 'POST',
+                    data: { id: ordenId, estado: nuevoEstado },
+                    success: function (response) {
+                        if (response.success) {
+                            // Mostrar mensaje de éxito antes de recargar
+                            const toast = document.createElement('div');
+                            toast.className = 'position-fixed bottom-0 end-0 p-3';
+                            toast.style.zIndex = '5000';
+                            toast.innerHTML = `
+                                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="toast-header bg-success text-white">
+                                        <strong class="me-auto">Éxito</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                    <div class="toast-body">
+                                        Estado actualizado correctamente.
+                                    </div>
+                                </div>
+                            `;
+                            document.body.appendChild(toast);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            alert('Error al actualizar el estado: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error al comunicarse con el servidor');
+                    }
+                });
+            }
+
+            function mostrarModalCancelar(ordenId) {
+                $('#modalCancelarOrden').modal('show');
+                $('#confirmarCancelarOrden').off('click').on('click', function () {
+                    cambiarEstado(ordenId, 'Cancelada');
+                    $('#modalCancelarOrden').modal('hide');
+                });
+            }
+
+            function verDetalles(ordenId) {
+                window.location.href = '@Url.Action("Confirmacion", "Ordenes")' + '?id=' + ordenId;
+            }
+
+            // Filtros mejorados
+            $(document).ready(function () {
+                // Aplicar filtros en tiempo real
+                $('#searchInput, #statusFilter, #dateFilter').on('input change', function() {
+                    aplicarFiltros();
+                });
+
+                function aplicarFiltros() {
+                    const searchText = $('#searchInput').val().toLowerCase();
+                    const statusFilter = $('#statusFilter').val();
+                    const dateFilter = $('#dateFilter').val();
+                    let ordenesVisibles = 0;
+
+                    $('.order-card').each(function () {
+                        const orderId = $(this).data('id').toString().toLowerCase();
+                        const clientName = $(this).find('.order-meta strong').text().toLowerCase();
+                        const orderStatus = $(this).data('status');
+                        const orderDate = $(this).data('date');
+
+                        const matchesSearch = orderId.includes(searchText) ||
+                                            clientName.includes(searchText) ||
+                                            ('ord' + orderId).includes(searchText);
+                        const matchesStatus = statusFilter === '' || orderStatus === statusFilter;
+                        const matchesDate = dateFilter === '' || orderDate === dateFilter;
+
+                        if (matchesSearch && matchesStatus && matchesDate) {
+                            $(this).show();
+                            ordenesVisibles++;
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+
+                    // Mostrar mensaje cuando no hay resultados
+                    if (ordenesVisibles === 0) {
+                        if ($('.no-results-message').length === 0) {
+                            $('.orders-container').append(`
+                                <div class="empty-state no-results-message">
+                                    <i class="ri-search-line empty-icon ri-3x"></i>
+                                    <h5>No se encontraron resultados</h5>
+                                    <p class="text-muted">Intenta con otros criterios de búsqueda.</p>
+                                    <button class="btn btn-outline-secondary" id="clearFilters">
+                                        <i class="ri-filter-off-line"></i> Limpiar filtros
+                                    </button>
+                                </div>
+                            `);
+
+                            $('#clearFilters').on('click', function() {
+                                $('#searchInput').val('');
+                                $('#statusFilter').val('');
+                                $('#dateFilter').val('');
+                                aplicarFiltros();
+                            });
+                        }
+                    } else {
+                        $('.no-results-message').remove();
+                    }
+                }
+            });
+        </script>
+    }
 
     <!-- JAVASCRIPT -->
     <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
@@ -223,12 +487,6 @@
     <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
     <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
-
     <script src="~/Scripts/js/app.js"></script>
-
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
-
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
 </body>
 </html>

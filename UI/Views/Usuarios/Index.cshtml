@@ -20,6 +20,23 @@
     <div class="main-content">
         <div class="page-content">
             <div class="container mt-4">
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
                 <!-- Encabezado principal -->
                 <div class="text-center mb-4">
                     <h1>Gestión de Usuarios</h1>
@@ -41,7 +58,6 @@
                             <th>Dirección</th>
                             <th>Provincia</th>
                             <th>Número</th>
-                            <th>Contraseña</th>
                             <th>Fecha de Registro</th>
                             <th>Estado</th>
                             <th>Rol</th>
@@ -58,12 +74,24 @@
                                 <td>@(usuario.Direccion ?? "N/A")</td>
                                 <td>@(usuario.Provincia ?? "N/A")</td>
                                 <td>@(usuario.Numero ?? "N/A")</td>
-                                <td>@usuario.Contraseña</td>
                                 <td>@usuario.FechaRegistro.ToString("dd/MM/yyyy")</td>
                                 <td>@(usuario.Estado ? "Activo" : "Inactivo")</td>
                                 <td>@usuario.Rol</td>
                                 <td>
-                                    <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal" data-id="@usuario.Id" data-nombre="@usuario.Nombre" data-email="@usuario.Email" data-rol="@usuario.Rol">Editar</button>
+                                    <button class="btn btn-sm btn-secondary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editarUsuarioModal"
+                                            data-id="@usuario.Id"
+                                            data-nombre="@usuario.Nombre"
+                                            data-email="@usuario.Email"
+                                            data-rol="@usuario.Rol"
+                                            data-telefono="@usuario.Telefono"
+                                            data-direccion="@usuario.Direccion"
+                                            data-provincia="@usuario.Provincia"
+                                            data-numero="@usuario.Numero"
+                                            data-estado="@usuario.Estado">
+                                        Editar
+                                    </button>
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal" data-id="@usuario.Id">Eliminar</button>
                                 </td>
                             </tr>
@@ -113,7 +141,7 @@
 
             <!-- Modal para editar usuario -->
             <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario</h5>
@@ -122,36 +150,63 @@
                         <div class="modal-body">
                             <form id="formEditarUsuario" action="@Url.Action("Editar", "Usuarios")" method="post">
                                 <input type="hidden" id="editarId" name="Id" />
-                                <div class="mb-3">
-                                    <label for="editarNombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="editarNombre" name="Nombre" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarEmail" class="form-label">Correo Electrónico</label>
-                                    <input type="email" class="form-control" id="editarEmail" name="Email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarRol" class="form-label">Rol</label>
-                                    <select class="form-select" id="editarRol" name="Rol" required>
-                                        <option value="Administrador">Administrador</option>
-                                        <option value="Usuario">Usuario</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarTelefono" class="form-label">Teléfono</label>
-                                    <input type="text" class="form-control" id="editarTelefono" name="Telefono">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarDireccion" class="form-label">Dirección</label>
-                                    <input type="text" class="form-control" id="editarDireccion" name="Direccion">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarProvincia" class="form-label">Provincia</label>
-                                    <input type="text" class="form-control" id="editarProvincia" name="Provincia">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editarNumero" class="form-label">Número</label>
-                                    <input type="text" class="form-control" id="editarNumero" name="Numero" required>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editarNombre" class="form-label">Nombre Completo</label>
+                                            <input type="text" class="form-control" id="editarNombre" name="Nombre" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editarEmail" class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" id="editarEmail" name="Email" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editarTelefono" class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control" id="editarTelefono" name="Telefono">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editarRol" class="form-label">Rol</label>
+                                            <select class="form-select" id="editarRol" name="Rol" required>
+                                                <option value="Administrador">Administrador</option>
+                                                <option value="Usuario">Usuario</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editarDireccion" class="form-label">Dirección</label>
+                                            <input type="text" class="form-control" id="editarDireccion" name="Direccion">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editarProvincia" class="form-label">Provincia</label>
+                                            <select class="form-select" id="editarProvincia" name="Provincia">
+                                                <option value="">Seleccione una provincia</option>
+                                                <option value="San José">San José</option>
+                                                <option value="Alajuela">Alajuela</option>
+                                                <option value="Cartago">Cartago</option>
+                                                <option value="Heredia">Heredia</option>
+                                                <option value="Guanacaste">Guanacaste</option>
+                                                <option value="Puntarenas">Puntarenas</option>
+                                                <option value="Limón">Limón</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editarNumero" class="form-label">Número de Identificación</label>
+                                            <input type="text" class="form-control" id="editarNumero" name="Numero">
+                                        </div>
+
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="editarEstado" name="Estado">
+                                            <label class="form-check-label" for="editarEstado">Usuario Activo</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -191,30 +246,37 @@
     <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
     <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Llenar el modal de editar con los datos del usuario
-            $('#editarUsuarioModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Botón que activó el modal
-                var id = button.data('id');
-                var nombre = button.data('nombre');
-                var email = button.data('email');
-                var rol = button.data('rol');
+        // Cargar datos en el modal de edición
+        $('#editarUsuarioModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var id = button.data('id');
+            var nombre = button.data('nombre');
+            var email = button.data('email');
+            var rol = button.data('rol');
+            var telefono = button.data('telefono');
+            var direccion = button.data('direccion');
+            var provincia = button.data('provincia');
+            var numero = button.data('numero');
+            var estado = button.data('estado');
 
-                var modal = $(this);
-                modal.find('#editarId').val(id);
-                modal.find('#editarNombre').val(nombre);
-                modal.find('#editarEmail').val(email);
-                modal.find('#editarRol').val(rol);
-            });
+            var modal = $(this);
+            modal.find('#editarId').val(id);
+            modal.find('#editarNombre').val(nombre);
+            modal.find('#editarEmail').val(email);
+            modal.find('#editarRol').val(rol === "Administrador" ? "Administrador" : "Usuario");
+            modal.find('#editarTelefono').val(telefono);
+            modal.find('#editarDireccion').val(direccion);
+            modal.find('#editarProvincia').val(provincia);
+            modal.find('#editarNumero').val(numero);
+            modal.find('#editarEstado').prop('checked', estado === true);
+        });
 
-            // Llenar el modal de eliminar con el ID del usuario
-            $('#eliminarUsuarioModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Botón que activó el modal
-                var id = button.data('id');
-
-                var modal = $(this);
-                modal.find('#eliminarId').val(id);
-            });
+        // Configurar el formulario de eliminación
+        $('#eliminarUsuarioModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var modal = $(this);
+            modal.find('#eliminarId').val(id);
         });
     </script>
 </body>

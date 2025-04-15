@@ -19,5 +19,6 @@ namespace Abstracciones.AD.Interfaces.Ordenes
         List<ProductoMasVendidoDto> ObtenerProductosMasVendidos();
         List<VentasPorTipoDto> ObtenerVentasPorTipo();
         List<VentasPorMesDto> ObtenerVentasPorMes();
+        List<OrdenesDto> BuscarOrdenes(string query);
     }
 }

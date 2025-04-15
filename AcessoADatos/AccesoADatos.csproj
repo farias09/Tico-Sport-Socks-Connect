@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cajas\CerrarCaja\CerrarCajaAD.cs" />
     <Compile Include="Carrito\CarritoRepository.cs" />
     <Compile Include="Categorias\ListarCategorias\ListarCategoriasAD.cs" />
     <Compile Include="Cajas\CrearCaja\CrearCajaAD.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Contexto.cs" />
     <Compile Include="MovimientosCajas\CrearMovimiento\CrearMovimientoAD.cs" />
     <Compile Include="Mensajes\MensajeRepositorio.cs" />
+    <Compile Include="MovimientosCajas\ListarMovimientosAD.cs" />
     <Compile Include="Ordenes\OrdenRepositorio.cs" />
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoAD.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoAD.cs" />

@@ -24,10 +24,9 @@ namespace Abstracciones.Modelos.MovimientosCaja
 
         public string Descripcion { get; set; }
 
-        [Required]
-        public int Venta_id { get; set; }
+        public int? Venta_id { get; set; }
 
-        public int Usuario_ID { get; set; }
+        public string Usuario_ID { get; set; }
 
         public bool Estado { get; set; }
     }

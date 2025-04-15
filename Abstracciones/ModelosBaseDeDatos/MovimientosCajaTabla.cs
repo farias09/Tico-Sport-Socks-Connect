@@ -21,8 +21,8 @@ namespace Abstracciones.ModelosBaseDeDatos
         public string Tipo_Movimiento { get; set; }
         public decimal Monto { get; set; }
         public string Descripcion { get; set; }
-        public int Venta_id { get; set; }
-        public int Usuario_ID { get; set; }
+        public int? Venta_id { get; set; }
+        public string Usuario_ID { get; set; }
         public bool Estado { get; set; }
 
     }

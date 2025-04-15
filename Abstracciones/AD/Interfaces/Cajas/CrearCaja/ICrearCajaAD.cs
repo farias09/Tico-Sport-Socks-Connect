@@ -7,5 +7,6 @@ namespace Abstracciones.AD.Interfaces.Cajas.CrearCaja
         int Crear(CajasTabla laCajaAGuardar);
 
         bool HayCajaAbierta();
+
     }
 }

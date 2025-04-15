@@ -39,5 +39,10 @@ namespace LN.Productos.ListarProductos
             }
             return laListaDeCodigos;
         }
+
+        public List<ProductosDto> BuscarProductos(string query)
+        {
+            return _listarProductoAD.BuscarProductos(query);
+        }
     }
 }

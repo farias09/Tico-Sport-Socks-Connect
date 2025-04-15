@@ -22,6 +22,16 @@
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
+
+    <style>
+        .btn-danger:disabled {
+            background-color: #f8d7da !important;
+            color: #721c24 !important;
+            border-color: #f5c6cb !important;
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,15 +65,19 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-3">
                         <div class="card text-center shadow">
                             <div class="card-body">
                                 <h5>Completadas</h5>
-                                <h2 class="text-success">@ViewBag.Completadas</h2>
+                                <h2 class="text-success">
+                                    @Model.Count(orden => orden.Estado == "Completada")
+                                </h2>
                                 <p class="text-muted mb-0">Órdenes cerradas</p>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-3">
                         <div class="card text-center shadow">
                             <div class="card-body">
@@ -88,7 +102,7 @@
                                 <i class="bi bi-plus-circle-fill text-success" style="font-size: 2rem;"></i>
                                 <h5 class="fw-bold mt-2">Nueva Factura</h5>
                                 <p class="text-muted">Crea una factura para tu cliente</p>
-                                <a href="@Url.Action("ConsultarFacturas", "Ordenes")" class="btn btn-success w-75 mt-2 rounded-pill">
+                                <a href="@Url.Action("ConsultarFactura", "Ordenes")" class="btn btn-success w-75 mt-2 rounded-pill">
                                     <i class="bi bi-pencil-square me-1"></i> Generar Orden
                                 </a>
                             </div>
@@ -99,10 +113,10 @@
                     <div class="col-md-6">
                         <div class="card text-center shadow-sm border-0" style="transition: transform 0.3s;">
                             <div class="card-body">
-                                <i class="bi bi-clipboard-data-fill text-primary" style="font-size: 2rem;"></i>
+                                <i class="bi bi-clipboard-data-fill text-info" style="font-size: 2rem;"></i>
                                 <h5 class="fw-bold mt-2">Consultar Órdenes</h5>
                                 <p class="text-muted">Revisa y gestiona órdenes existentes</p>
-                                <a href="@Url.Action("GestionFacturas", "Ordenes")" class="btn btn-primary w-75 mt-2 rounded-pill">
+                                <a href="@Url.Action("OrdenesPendientes", "Ordenes")" class="btn btn-info w-75 mt-2 rounded-pill">
                                     <i class="bi bi-list-check me-1"></i> Ver Órdenes
                                 </a>
                             </div>
@@ -136,22 +150,32 @@
                                         <td>
                                             @if (orden.Estado == "Pendiente")
                                             {
-                                                <span class="badge bg-warning">Pendiente</span>
+                                                <span class="badge" style="background-color: #fff3d6; color: #4c3602; padding: 0.4rem 1rem; border: 1px solid #e0b566; border-radius: 12px;">Pendiente</span>
                                             }
-                                            else if (orden.Estado == "Completado")
+                                            else if (orden.Estado == "En proceso")
                                             {
-                                                <span class="badge bg-success">Completada</span>
+                                                <span class="badge" style="background-color: #c9e4ff; color: #023756; padding: 0.4rem 1rem; border: 1px solid #41a3f7; border-radius: 12px;">En proceso</span>
+                                            }
+                                            else if (orden.Estado == "Completada")
+                                            {
+                                                <span class="badge" style="background-color: #ceffce; color: #03270b; padding: 0.4rem 1rem; border: 1px solid #6cc3a6; border-radius: 12px;">Completada</span>
+                                            }
+                                            else if (orden.Estado == "Cancelada")
+                                            {
+                                                <span class="badge" style="background-color: #f1cecf; color: #4e0606; padding: 0.4rem 1rem; border: 1px solid #d46a6c; border-radius: 12px;">Cancelada</span>
                                             }
                                             else
                                             {
-                                                <span class="badge bg-secondary">@orden.Estado</span>
+                                                <span class="badge" style="background-color: #adb5bd; color: #fff; padding: 0.4rem 1rem; border: 1px solid #8c9399; border-radius: 12px;">@orden.Estado</span>
                                             }
                                         </td>
                                         <td>₡@orden.Total.ToString("N0")</td>
                                         <td>
-                                            <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-sm btn-secondary">Ver</a>
-                                            <button class="btn btn-sm btn-danger">Anular</button>
-                                            <button class="btn btn-sm btn-primary">Enviar</button>
+                                            <a href="@Url.Action("Confirmacion", "Ordenes", new { id = orden.Orden_ID })" class="btn btn-sm btn-flat-secondary">Ver</a>
+                                            <button class="btn btn-sm btn-danger btn-anular" data-bs-toggle="modal" data-bs-target="#anularOrdenModal" data-orden-id="@orden.Orden_ID" @(orden.Estado == "Completada" || orden.Estado == "Cancelada" ? "disabled" : "")>
+                                                Cancelar
+                                            </button>
+                                            <button class="btn btn-sm btn-label-primary">Enviar</button>
                                         </td>
                                     </tr>
                                 }
@@ -163,4 +187,73 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para confirmar anulación -->
+    <div class="modal fade" id="anularOrdenModal" tabindex="-1" aria-labelledby="anularOrdenModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="anularOrdenModalLabel">Confirmar Cancelación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas cancelar la orden <strong id="ordenAnularNumero">#000</strong>?</p>
+                    <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmarAnulacion()">Cancelar Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/Scripts/libs/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    <!-- Font Awesome para iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        let ordenIdAnular = 0;
+
+        function prepararAnulacion(id) {
+            ordenIdAnular = id;
+            document.getElementById('ordenAnularNumero').textContent = '#' + id.toString();
+        }
+
+        function confirmarAnulacion() {
+            if (ordenIdAnular === 0) return;
+
+            $.ajax({
+                url: '@Url.Action("AnularOrden", "ListaOrdenes")',
+                type: 'POST',
+                data: { id: ordenIdAnular },
+                success: function(response) {
+                    if (response.success) {
+                        $('#anularOrdenModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert('Error al cancelar la orden: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error al comunicarse con el servidor');
+                }
+            });
+        }
+
+        // Asignar eventos a los botones de cancelar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-anular').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ordenId = parseInt(this.getAttribute('data-orden-id'));
+                    prepararAnulacion(ordenId);
+                });
+            });
+        });
+    </script>
 </body>

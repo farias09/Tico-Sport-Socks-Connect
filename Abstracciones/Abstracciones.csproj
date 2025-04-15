@@ -43,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AD\Interfaces\Cajas\CerrarCaja\ICerrarCajaAD.cs" />
     <Compile Include="AD\Interfaces\Categorias\ListarCategorias\IListarCategoriasAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\CrearCaja\ICrearCajaAD.cs" />
     <Compile Include="AD\Interfaces\Cajas\ListarCaja\IListarCajaAD.cs" />
     <Compile Include="AD\Interfaces\MoviemientosCaja\ICrearMovimientoAD.cs" />
     <Compile Include="AD\Interfaces\Carrito\ICarritoRepository.cs" />
     <Compile Include="AD\Interfaces\Mensajes\IMensajeRepositorio.cs" />
+    <Compile Include="AD\Interfaces\MoviemientosCaja\IListarMovimientosAD.cs" />
     <Compile Include="AD\Interfaces\Ordenes\IOrdenRepositorio.cs" />
     <Compile Include="AD\Interfaces\Productos\ActualizarProducto\IActualizarProductoAD.cs" />
     <Compile Include="AD\Interfaces\Productos\CambiarEstado\ICambiarEstadoProductoAD.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="AD\Interfaces\Usuarios\ListarUsuario\IListarUsuarioAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\CrearVenta\ICrearVentaAD.cs" />
     <Compile Include="AD\Interfaces\Ventas\ListarVenta\IListarVentaAD.cs" />
+    <Compile Include="LN\Interfaces\Cajas\CerrarCaja\ICerrarCajaLN.cs" />
     <Compile Include="LN\Interfaces\Carrito\ICarritoLN.cs" />
     <Compile Include="LN\Interfaces\Categorias\ListarCategorias\IListarCategoriasLN.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Categorias\ConvertirACategoriasDto\IConvertirACategoriasDto.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="LN\Interfaces\General\Conversiones\MovimientosCaja\IConvertirObjetoAMovimientosCajaTabla.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosDto\IConvertirAProductosDto.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Productos\ConvertirAProductosTabla\IConvertirAProductosTabla.cs" />
+    <Compile Include="LN\Interfaces\MovimientosCaja\IListarMovimientosLN.cs" />
     <Compile Include="LN\Interfaces\Usuarios\ActualizarUsuario\IActualizarUsuarioLN.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Usuarios\ConvertirAUsuariosDto\IConvertirAUsuariosDto.cs" />
     <Compile Include="LN\Interfaces\General\Conversiones\Cajas\ConvertirACajasTabla\IConvertirACajasTabla.cs" />

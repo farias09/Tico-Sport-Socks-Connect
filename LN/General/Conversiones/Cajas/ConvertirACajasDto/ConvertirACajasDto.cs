@@ -1,11 +1,6 @@
 ﻿using Abstracciones.LN.Interfaces.General.Conversiones.Cajas.ConvertirACajasDto;
 using Abstracciones.Modelos.Caja;
 using Abstracciones.ModelosBaseDeDatos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LN.General.Conversiones.Cajas.ConvertirACajasDto
 {

@@ -48,5 +48,21 @@ namespace LN.Usuarios.ListarUsuario
             var usuario = _listarUsuarioAD.Listar().FirstOrDefault(u => u.Usuario_ID == usuarioId);
             return usuario;
         }
+
+        public List<UsuarioDto> BuscarClientes(string query)
+        {
+            var clientes = _listarUsuarioAD.BuscarClientes(query);
+
+            // Desencriptar contraseñas si es necesario
+            foreach (var cliente in clientes)
+            {
+                if (!string.IsNullOrEmpty(cliente.Contraseña))
+                {
+                    cliente.Contraseña = AesEncryption.Decrypt(cliente.Contraseña);
+                }
+            }
+
+            return clientes;
+        }
     }
 }
