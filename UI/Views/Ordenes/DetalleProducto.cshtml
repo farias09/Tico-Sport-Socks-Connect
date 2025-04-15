@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Abstracciones.Modelos.Productos.ProductosDto
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!doctype html>
@@ -6,9 +7,9 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Gestión de Órdenes | Tico Sport Socks</title>
+    <title>Gestión de Productos | Tico Sport Socks</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Gestión de órdenes de Tico Sport Socks" name="description" />
+    <meta content="Gestión de productos de Tico Sport Socks" name="description" />
     <meta content="Tico Sport Socks" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/images/favicon.ico">
@@ -17,128 +18,251 @@
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <style>
+    :root {
+        --primary-color: #4b38b3;
+        --secondary-color: #6c757d;
+        --light-bg: #f8f9fa;
+        --dark-bg: #343a40;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --border-radius: 0.5rem;
+        --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+
+    .card {
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: white;
+        border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .main-image {
+        object-fit: cover;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
     .thumbnail {
         cursor: pointer;
-        transition: all 0.3s;
+        transition: var(--transition);
+        border-radius: var(--border-radius);
+        object-fit: cover;
+        border: 2px solid transparent;
     }
 
         .thumbnail:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
+            border-color: var(--primary-color);
         }
+
+        .thumbnail.active {
+            border-color: var(--primary-color);
+        }
+
+    .product-title {
+        font-weight: 700;
+        color: var(--dark-bg);
+        margin-bottom: 1.5rem;
+    }
+
+    .product-info {
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .product-info p {
+            margin-bottom: 0.5rem;
+        }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .btn-outline-secondary {
+        border-color: var(--secondary-color);
+        color: var(--secondary-color);
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+    .modal-content {
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+    }
+
+    .form-control, .form-select {
+        border-radius: var(--border-radius);
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(75, 56, 179, 0.25);
+        }
+
+    .img-thumbnail {
+        padding: 0.25rem;
+    }
+
+    @@media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .main-image {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .thumbnail {
+            width: 60px !important;
+            height: 60px !important;
+        }
+    }
 </style>
 
 <body>
     <div class="main-content">
         <div class="page-content">
-            <div class="container py-5">
+            <div class="container mt-4">
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <button class="btn btn-outline-secondary btn-sm" onclick="location.href='@Url.Action("Index", "Ordenes")'">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="history.back()">
                             <i class="fas fa-arrow-left me-2"></i>Volver a la lista
                         </button>
                         <div>
                             <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal">
                                 <i class="fas fa-edit me-2"></i>Editar
                             </button>
-                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                <i class="fas fa-trash-alt me-2"></i>Eliminar
-                            </button>
+                        </div>
+                    </div>
 
-                            <!-- Edit Modal -->
-                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- Formulario de edición -->
-                                            <form>
-                                                <div class="mb-3">
-                                                    <label for="codigoProducto" class="form-label">Codigo</label>
-                                                    <input type="number" class="form-control" id="codigoProducto" value="00008776">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="nombreProducto" class="form-label">Nombre del Producto</label>
-                                                    <input type="text" class="form-control" id="nombreProducto" value="Medias Antideslizantes Deportivas">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="categoriaProducto" class="form-label">Categoria</label>
-                                                    <input type="text" class="form-control" id="categoriaProducto" value="Deportes">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="tallaProducto" class="form-label">Talla</label>
-                                                    <input type="text" class="form-control" id="tallaProducto" value="M">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="stockProducto" class="form-label">Stock Disponible</label>
-                                                    <input type="number" class="form-control" id="stockProducto" value="120">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="descripcionProducto" class="form-label">Descripción</label>
-                                                    <textarea class="form-control" id="descripcionProducto" rows="4">Estas medias antideslizantes deportivas de Tico Sport Socks están diseñadas para brindar máximo confort y rendimiento durante tus actividades físicas. Fabricadas con materiales de alta calidad, ofrecen una excelente transpirabilidad y soporte para tus pies.</textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="precioProducto" class="form-label">Precio</label>
-                                                    <input type="number" class="form-control" id="precioProducto" value="5400">
-                                                </div>
-                                                <!-- Agregar más campos según sea necesario -->
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
-                                        </div>
-                                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4 mb-md-0">
+                                <img src="@Model.imagen" alt="Imagen principal del producto" class="img-fluid rounded mb-3 main-image mx-auto d-block" id="mainImage" style="width: 350px; height: 450px;">
+                                <div class="d-flex justify-content-center mt-3">
+                                    <img src="@Model.imagen" alt="Miniatura 1" class="img-thumbnail me-2 thumbnail active" onclick="changeImage(this)" style="width: 80px; height: 80px;">
                                 </div>
                             </div>
-
-                            <!-- Delete Modal -->
-                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel">Eliminar Producto</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro de que deseas eliminar este producto?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                                        </div>
-                                    </div>
+                            <div class="col-md-6">
+                                <h1 class="product-title">@Model.nombre</h1>
+                                <div class="product-info">
+                                    <p class="mb-2"><strong><i class="fas fa-barcode me-2"></i>Código:</strong> @Model.CodigoDelProducto</p>
+                                    <p class="mb-2"><strong><i class="fas fa-tag me-2"></i>Categoría:</strong> @Model.Categoria_ID</p>
+                                    <p class="mb-2"><strong><i class="fas fa-boxes me-2"></i>Stock:</strong> <span class="badge bg-success">@Model.stock unidades</span></p>
                                 </div>
+                                <p class="text-muted mb-4">@Model.descripcion</p>
+                                <h3 class="product-price mb-4">Precio Unitario: ₡@Model.precio</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-4 mb-md-0">
-                                    <img src="@Model.imagen" alt="Imagen principal del producto" class="img-fluid rounded mb-3 main-image mx-auto d-block" id="mainImage" style="width: 300px; height: 450px;">
-                                    <div class="d-flex justify-content-center">
-                                        <img src="@Model.imagen" alt="Miniatura 1" class="img-thumbnail me-2 thumbnail" onclick="changeImage(this.src)" style="width: 75px; height: 75px;">
-                                        <img src="@Model.imagen" alt="Miniatura 2" class="img-thumbnail me-2 thumbnail" onclick="changeImage(this.src)" style="width: 75px; height: 75px;">
-                                        <img src="@Model.imagen" alt="Miniatura 3" class="img-thumbnail thumbnail" onclick="changeImage(this.src)" style="width: 75px; height: 75px;">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <h1 class="h2 mb-4">@Model.nombre</h1>
-                                    <div class="bg-light p-3 rounded mb-4">
-                                        <p class="mb-2"><strong>Código:</strong> @Model.CodigoDelProducto</p>
-                                        <p class="mb-2"><strong>Categoría:</strong> @Model.Categoria_ID</p>
-                                        <p class="mb-2"><strong>Stock:</strong> @Model.stock unidades</p>
-                                    </div>
-                                    <p class="text-muted mb-4">@Model.descripcion</p>
-                                    <h3 class="h4 text-primary">Precio Unitario: ₡@Model.precio</h3>
-                                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="productId" value="@Model.Producto_ID" />
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="codigoProducto" class="form-label">Código</label>
+                                <input type="text" class="form-control" id="codigoProducto" value="@Model.CodigoDelProducto" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="nombreProducto" value="@Model.nombre" required>
                             </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="categoriaProducto" class="form-label">Categoría</label>
+                                <input type="text" class="form-control" id="categoriaProducto" value="@Model.Categoria_ID" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="stockProducto" class="form-label">Stock Disponible</label>
+                                <input type="number" class="form-control" id="stockProducto" value="@Model.stock" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="precioProducto" class="form-label">Precio</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₡</span>
+                                    <input type="number" step="0.01" class="form-control" id="precioProducto" value="@Model.precio" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="estadoProducto" class="form-label">Estado</label>
+                                <select class="form-select" id="estadoProducto" required>
+                                    <option value="true" selected="@Model.Estado">Activo</option>
+                                    <option value="false" selected="@(!Model.Estado)">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionProducto" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcionProducto" rows="4" required>@Model.descripcion</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagenProducto" class="form-label">Imagen del Producto</label>
+                            <input class="form-control" type="file" id="imagenProducto" accept="image/*">
+                            <small class="text-muted">Dejar en blanco para mantener la imagen actual</small>
+                            <div class="mt-2">
+                                <img id="imagenPreview" src="@Model.imagen" style="max-height: 100px;" class="img-thumbnail" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -150,17 +274,97 @@
     <script src="~/Scripts/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/Scripts/libs/simplebar/simplebar.min.js"></script>
     <script src="~/Scripts/libs/node-waves/waves.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="~/Scripts/js/app.js"></script>
 
-    <!-- apexcharts -->
-    <script src="~/Scripts/libs/apexcharts/apexcharts.min.js"></script>
-
-    <script src="~/Scripts/js/pages/dashboard.init.js"></script>
     <script>
-        function changeImage(src) {
-            document.getElementById('mainImage').src = src;
+        function changeImage(element) {
+            // Change the main image
+            document.getElementById('mainImage').src = element.src;
+
+            // Remove the 'active' class from all thumbnails
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+
+            // Add the 'active' class to the clicked thumbnail
+            element.classList.add('active');
         }
+
+        // Preview de imagen al seleccionar archivo
+        document.getElementById('imagenProducto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagenPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // Si no se selecciona una nueva imagen, mantener la actual
+                document.getElementById('imagenPreview').src = '@Model.imagen';
+            }
+        });
+
+        // Manejar el guardado de cambios
+        document.getElementById('saveChangesBtn').addEventListener('click', function() {
+            const form = document.getElementById('editProductForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('Producto_ID', document.getElementById('productId').value);
+            formData.append('CodigoDelProducto', document.getElementById('codigoProducto').value);
+            formData.append('nombre', document.getElementById('nombreProducto').value);
+            formData.append('Categoria_ID', document.getElementById('categoriaProducto').value);
+            formData.append('stock', document.getElementById('stockProducto').value);
+            formData.append('precio', document.getElementById('precioProducto').value);
+            formData.append('descripcion', document.getElementById('descripcionProducto').value);
+            formData.append('Estado', document.getElementById('estadoProducto').value);
+
+            const imagenInput = document.getElementById('imagenProducto');
+            if (imagenInput.files.length > 0) {
+                formData.append('imagenArchivo', imagenInput.files[0]);
+            } else {
+                // Si no se selecciona una nueva imagen, enviar la URL de la imagen actual
+                formData.append('imagenActual', '@Model.imagen');
+            }
+
+            $.ajax({
+                url: '@Url.Action("ActualizarProducto", "Productos")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: 'El producto se ha actualizado correctamente.',
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.message || 'Ocurrió un error al actualizar el producto.',
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un error al comunicarse con el servidor.',
+                        icon: 'error'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -6,6 +6,9 @@ using Abstracciones.LN.Interfaces.Usuarios.EliminarUsuario;
 using UI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Abstracciones.Modelos.Usuarios;
+using System;
+using TicoSportSocksConnect.UI.Models;
 
 namespace UI.Controllers
 {
@@ -15,6 +18,8 @@ namespace UI.Controllers
         private readonly ICrearUsuarioLN _crearUsuarioLN;
         private readonly IActualizarUsuarioLN _actualizarUsuarioLN;
         private readonly IEliminarUsuarioLN _eliminarUsuarioLN;
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
 
         public UsuariosController(
             IListarUsuarioLN listarUsuarioLN,
@@ -26,6 +31,7 @@ namespace UI.Controllers
             _crearUsuarioLN = crearUsuarioLN;
             _actualizarUsuarioLN = actualizarUsuarioLN;
             _eliminarUsuarioLN = eliminarUsuarioLN;
+            _context = new ApplicationDbContext();
         }
 
         // GET: Usuarios
@@ -80,20 +86,46 @@ namespace UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var usuarioDto = new Abstracciones.Modelos.Usuarios.UsuarioDto
+                try
                 {
-                    Usuario_ID = usuarioViewModel.Id,
-                    Nombre = usuarioViewModel.Nombre,
-                    Email = usuarioViewModel.Email,
-                    Rol_ID = usuarioViewModel.Rol == "Administrador" ? 1 : 2, // Asignar Rol_ID basado en el rol seleccionado
-                    estado = true // Mantener el estado activo
-                };
+                    // Obtener el usuario existente primero
+                    var usuarioExistente = _listarUsuarioLN.ObtenerUsuarioPorId(usuarioViewModel.Id);
 
-                _actualizarUsuarioLN.Actualizar(usuarioDto);
-                return RedirectToAction("Index");
+                    if (usuarioExistente == null)
+                    {
+                        TempData["ErrorMessage"] = "Usuario no encontrado";
+                        return RedirectToAction("Index");
+                    }
+
+                    // Actualizar todos los campos permitidos
+                    var usuarioDto = new UsuarioDto
+                    {
+                        Usuario_ID = usuarioViewModel.Id,
+                        Nombre = usuarioViewModel.Nombre,
+                        Email = usuarioViewModel.Email,
+                        Telefono = usuarioViewModel.Telefono,
+                        Direccion = usuarioViewModel.Direccion,
+                        Provincia = usuarioViewModel.Provincia,
+                        Numero = usuarioViewModel.Numero,
+                        Rol_ID = usuarioViewModel.Rol == "Administrador" ? 1 : 2,
+                        estado = usuarioViewModel.Estado,
+                        FechaRegistro = usuarioExistente.FechaRegistro,
+                        Contraseña = usuarioExistente.Contraseña // Mantener la contraseña original
+                    };
+
+                    _actualizarUsuarioLN.Actualizar(usuarioDto);
+                    TempData["SuccessMessage"] = "Usuario actualizado correctamente";
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error al actualizar usuario: {ex.Message}";
+                    return RedirectToAction("Index");
+                }
             }
 
-            return View("Index", _listarUsuarioLN.Listar());
+            TempData["ErrorMessage"] = "Datos del formulario inválidos";
+            return RedirectToAction("Index");
         }
 
         // POST: Usuarios/Eliminar
@@ -153,5 +185,24 @@ namespace UI.Controllers
 
             return View("Index", adminsViewModel); 
         }
+
+        #region Usuarios del Sistema (AspNetUsers)
+
+        public ActionResult ListaAspNetUsers(string busqueda)
+        {
+            var usuarios = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                usuarios = usuarios.Where(u => u.Nombre.Contains(busqueda));
+            }
+
+            ViewBag.Busqueda = busqueda;
+            return View(usuarios.ToList());
+        }
+
+
+        #endregion
+
     }
 }

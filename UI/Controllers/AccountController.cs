@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Abstracciones.Utilidades;
+using LN.General.EmailSender;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -161,7 +163,16 @@ namespace TicoSportSocksConnect.UI.Controllers
             {
                 try
                 {
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        Identificacion = model.Identificacion,
+                        PhoneNumber = model.PhoneNumber,
+                        Nombre = model.Nombre,
+                        Apellido = model.Apellido,
+                        NombreDeUsuario = model.NombreDeUsuario
+                    }; 
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
@@ -195,7 +206,6 @@ namespace TicoSportSocksConnect.UI.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -203,51 +213,83 @@ namespace TicoSportSocksConnect.UI.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var user = await UserManager.FindByNameAsync(model.Email);
-                    if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                    {
-                        return View("ForgotPasswordConfirmation");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Ocurrió un error al procesar la solicitud de recuperación.");
-                }
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
+            try
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "El correo ingresado no está registrado.");
+                    return View(model);
+                }
+
+                // Crear la URL personalizada de reset
+                string callbackUrl = Url.Action("ResetPassword", "Account",
+                    new { email = user.Email }, protocol: Request.Url.Scheme);
+
+                // Enviar correo usando tu clase personalizada
+                var emailData = new Email
+                {
+                    To = user.Email,
+                    Subject = "Restablece tu contraseña",
+                    Body = $@"
+        <html>
+        <body style='font-family: Arial, sans-serif; background-color: #f6f6f6; padding: 20px;'>
+            <div style='max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);'>
+                <h2 style='color: #333;'>Restablecer tu contraseña</h2>
+                <p style='color: #555;'>Hola,</p>
+                <p style='color: #555;'>Recibimos una solicitud para restablecer tu contraseña. Puedes hacerlo haciendo clic en el siguiente botón:</p>
+                <div style='text-align: center; margin: 30px 0;'>
+                    <a href='{callbackUrl}' style='background-color: #007bff; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; display: inline-block;'>Restablecer contraseña</a>
+                </div>
+                <p style='color: #999; font-size: 14px;'>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+                <hr style='margin-top: 30px;'>
+                <p style='color: #bbb; font-size: 12px;'>Este es un mensaje automático, por favor no respondas.</p>
+            </div>
+        </body>
+        </html>"
+                };
+
+
+
+                var sender = new EmailSender();
+                sender.SendEmail(emailData);
+
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al enviar el correo.");
+                return View(model);
+            }
+        }
+
+
+        // GET: /Account/ResetPasswordCustom?email=ejemplo@email.com
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return View("Error");
+            }
+
+            var model = new ResetPasswordViewModel { Email = email };
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        //
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
-
-        //
-        // POST: /Account/ResetPassword
+        // POST: /Account/ResetPasswordCustom
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -257,29 +299,47 @@ namespace TicoSportSocksConnect.UI.Controllers
             {
                 return View(model);
             }
+
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "No se encontró un usuario con ese correo.");
+                return View(model);
+            }
+
             try
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null)
+                // Remover la contraseña anterior
+                var removeResult = await UserManager.RemovePasswordAsync(user.Id);
+
+                if (!removeResult.Succeeded)
+                {
+                    ModelState.AddModelError("", "Error al quitar la contraseña anterior.");
+                    return View(model);
+                }
+
+                // Establecer la nueva contraseña
+                var addResult = await UserManager.AddPasswordAsync(user.Id, model.Password);
+
+                if (addResult.Succeeded)
                 {
                     return RedirectToAction("ResetPasswordConfirmation", "Account");
                 }
-                var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-                if (result.Succeeded)
+
+                // Mostrar errores si no se pudo cambiar
+                foreach (var error in addResult.Errors)
                 {
-                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+                    ModelState.AddModelError("", error);
                 }
-                AddErrors(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ModelState.AddModelError("", "Ocurrió un error al restablecer la contraseña.");
+                ModelState.AddModelError("", "Ocurrió un error al actualizar la contraseña.");
             }
 
-            return View();
+            return View(model);
         }
 
-        //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
@@ -287,7 +347,6 @@ namespace TicoSportSocksConnect.UI.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
@@ -444,6 +503,121 @@ namespace TicoSportSocksConnect.UI.Controllers
                 base.Dispose(disposing);
             }
         }
+
+        public async Task<ActionResult> Perfil()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new UserInfoViewModel
+            {
+                NombreDeUsuario = user.NombreDeUsuario,
+                Email = user.Email,
+                Password = user.PasswordHash,
+                Nombre = user.Nombre, 
+                Apellido = user.Apellido,
+                Identificacion = user.Identificacion,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View(model);
+        }
+
+        public async Task<ActionResult> EditProfile()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new EditProfileViewModel
+            {
+                NombreDeUsuario = user.NombreDeUsuario,
+                Email = user.Email,
+                Nombre = user.Nombre,
+                Apellido = user.Apellido,
+                Identificacion = user.Identificacion,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            // Validar la contraseña actual solo si se está intentando cambiar la contraseña
+            if (!string.IsNullOrEmpty(model.NewPassword))
+            {
+                if (string.IsNullOrWhiteSpace(model.OldPassword))
+                {
+                    ModelState.AddModelError("OldPassword", "Debe ingresar su contraseña actual para cambiarla.");
+                    return View(model);
+                }
+
+                var passwordVerificationResult = UserManager.PasswordHasher.VerifyHashedPassword(
+                    user.PasswordHash, model.OldPassword);
+
+                if (passwordVerificationResult != PasswordVerificationResult.Success)
+                {
+                    ModelState.AddModelError("OldPassword", "La contraseña actual es incorrecta.");
+                    return View(model);
+                }
+            }
+
+            // Actualizar los datos básicos del usuario
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            user.NombreDeUsuario = model.NombreDeUsuario;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Nombre = model.Nombre;
+            user.Apellido = model.Apellido;
+
+            var updateResult = await UserManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                AddErrors(updateResult);
+                return View(model);
+            }
+
+            // Cambiar la contraseña solo si se proporcionó una nueva
+            if (!string.IsNullOrEmpty(model.NewPassword))
+            {
+                var changePasswordResult = await UserManager.ChangePasswordAsync(
+                    User.Identity.GetUserId(),
+                    model.OldPassword,
+                    model.NewPassword);
+
+                if (!changePasswordResult.Succeeded)
+                {
+                    AddErrors(changePasswordResult);
+                    return View(model);
+                }
+            }
+
+            return RedirectToAction("Perfil", "Account");
+        }
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins

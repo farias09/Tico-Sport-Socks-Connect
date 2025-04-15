@@ -5,149 +5,422 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Dashboard | Clivax - Admin & Dashboard Template</title>
+    <title>Consultar Factura | Tico Sport Socks</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Codebucks" name="author" />
+    <meta content="Sistema de facturación Tico Sport Socks" name="description" />
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="~/Content/images/favicon.ico">
-
-    <!-- dark layout js -->
-    <script src="~/Scripts/js/pages/layout.js"></script>
 
     <!-- Bootstrap and app CSS -->
     <link rel="stylesheet" href="~/Content/css/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/css/app.css" />
     <link rel="stylesheet" href="~/Content/css/icons.css" />
+
+    <!-- Custom styles -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .invoice-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .search-box {
+            border-radius: 50px;
+            padding: 12px 20px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .search-btn {
+            border-radius: 50px;
+            padding: 10px 25px;
+            margin-left: 8px;
+            background-color: #4bbf73;
+            border: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+            .search-btn:hover {
+                background-color: #3da463;
+                transform: translateY(-1px);
+            }
+
+        .invoice-header {
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .send-btn {
+            border-radius: 50px;
+            padding: 10px 28px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+            .send-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+        .placeholder-container {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #a0a0a0;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .placeholder-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #d0d0d0;
+        }
+
+        .company-logo {
+            width: 80px;
+            height: auto;
+            margin-right: 15px;
+        }
+
+        .invoice-section-title {
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #495057;
+            background-color: #f8f9fa;
+        }
+
+        .table td, .table th {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0,0,0,.02);
+        }
+
+        .invoice-date {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 2px 10px;
+            border-radius: 4px;
+            margin-top: 2px;
+        }
+
+        .invoice-total {
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="main-content">
+        <div class="page-content">
+            <div id="layout-wrapper">
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4">Consultar Factura por Orden</h2>
 
-    <div class="container mt-4">
-        <h2 class="text-center mb-4">Consultar Factura por Orden</h2>
-
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="number" id="numeroOrden" class="form-control" placeholder="Ingrese número de orden" />
-                    <button id="buscarOrden" class="btn btn-success">
-                        <i class="bi bi-search"></i> Buscar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="facturaContainer" class="d-none">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="fw-bold">Factura #<span id="facturaNumero">---</span></h5>
-                            <p class="text-muted mb-1">Fecha: <span id="facturaFecha">---</span></p>
-                        </div>
-                        <div class="text-end">
-                            <p class="fw-bold">Tico Sport Socks</p>
-                            <p class="text-muted small">Heredia, Costa Rica</p>
+                    <div class="search-container mb-5">
+                        <div class="input-group">
+                            <input type="number" id="numeroOrden" class="form-control search-box" placeholder="Ingrese número de orden" />
+                            <button id="buscarOrden" class="btn btn-success search-btn">
+                                <i class="bi bi-search me-1"></i> Buscar
+                            </button>
                         </div>
                     </div>
-                    <hr />
-                    <p class="fw-bold">Cliente</p>
-                    <p id="facturaCliente">Nombre: <span class="text-muted">---</span></p>
-                    <p id="facturaCorreo">Correo: <span class="text-muted">---</span></p>
 
-                    <hr />
-                    <p class="fw-bold">Productos</p>
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Producto</th>
-                                <th class="text-center">Cantidad</th>
-                                <th class="text-end">Precio Unitario</th>
-                                <th class="text-end">Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="facturaProductos">
-                            <tr>
-                                <td colspan="4" class="text-center text-muted">No hay productos</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" class="text-end fw-bold">Total:</td>
-                                <td class="text-end fw-bold" id="facturaTotal">₡0.00</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <!-- Placeholder section when no invoice is displayed -->
+                    <div id="placeholderContainer" class="placeholder-container">
+                        <div class="placeholder-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <h4>Ingrese un número de orden para ver la factura</h4>
+                        <p class="text-muted">La información de la factura se mostrará aquí</p>
+                    </div>
 
-                    <button id="enviarFactura" class="btn btn-primary mt-3">
-                        <i class="bi bi-envelope"></i> Enviar factura por correo
-                    </button>
+                    <div id="facturaContainer" class="d-none">
+                        <div class="card invoice-card">
+                            <div class="invoice-header d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="/Content/images/LOGOTSS.png" alt="Tico Sport Socks" class="company-logo" onerror="this.src='/api/placeholder/80/80';this.onerror=null;">
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Factura #<span id="facturaNumero">---</span></h5>
+                                        <div id="facturaFecha" class="invoice-date">
+                                            <i class="bi bi-calendar me-1"></i>
+                                            <span>Fecha: ---</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end" style="margin-right: 10px;">
+                                    <p class="fw-bold mb-0">Tico Sport Socks</p>
+                                    <p class="text-muted small mb-0">Heredia, Costa Rica</p>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h6 class="invoice-section-title">Información del Cliente</h6>
+                                        <p class="mb-2" id="facturaCliente"><strong>Nombre:</strong> <span class="text-muted">---</span></p>
+                                        <p id="facturaCorreo"><strong>Correo:</strong> <span class="text-muted">---</span></p>
+                                    </div>
+                                </div>
+
+                                <h6 class="invoice-section-title">Detalle de Productos</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th class="text-center">Cantidad</th>
+                                                <th class="text-end">Precio Unitario</th>
+                                                <th class="text-end">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="facturaProductos">
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted">No hay productos</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-end fw-bold">Total:</td>
+                                                <td class="text-end fw-bold invoice-total" id="facturaTotal">₡0.00</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="text-end mt-4">
+                                    <button id="enviarFactura" class="btn btn-primary send-btn">
+                                        <i class="bi bi-envelope me-1"></i> Enviar por correo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let ordenActual = null;
+        let correoCliente = null;
 
-<script>
-    let ordenActual = null;
-    let correoCliente = null;
-
-    $("#buscarOrden").click(function () {
-        let id = $("#numeroOrden").val();
-        if (!id) return alert("Por favor ingrese un número de orden.");
-
-        $.get("/Ordenes/ObtenerFacturaOrden", { id: id }, function (response) {
-            if (!response.success) {
-                alert(response.message);
+        $("#buscarOrden").click(function () {
+            let id = $("#numeroOrden").val();
+            if (!id) {
+                mostrarAlerta("Por favor ingrese un número de orden", "warning");
                 return;
             }
 
-            // Mostrar factura
-            ordenActual = response;
-            correoCliente = response.cliente.Email;
+            $.get("/Ordenes/ObtenerFacturaOrden", { id: id }, function (response) {
+                if (!response.success) {
+                    mostrarAlerta(response.message, "danger");
+                    return;
+                }
 
-            $("#facturaContainer").removeClass("d-none");
+                // Mostrar factura y ocultar placeholder
+                ordenActual = response;
+                correoCliente = response.cliente.Email;
 
-            $("#facturaNumero").text(response.orden.Orden_ID);
-            $("#facturaFecha").text(new Date(response.orden.FechaOrden).toLocaleDateString());
-            $("#facturaCliente span").text(response.cliente.Nombre);
-            $("#facturaCorreo span").text(response.cliente.Email);
-            $("#facturaTotal").text("₡" + response.orden.Total.toLocaleString());
+                $("#placeholderContainer").addClass("d-none");
+                $("#facturaContainer").removeClass("d-none");
 
-            let productos = response.productos;
-            let html = "";
+                $("#facturaNumero").text(response.orden.Orden_ID);
 
-            productos.forEach(p => {
-                html += `<tr>
-                            <td>${p.NombreProducto}</td>
-                            <td class="text-center">${p.Cantidad}</td>
-                            <td class="text-end">₡${p.PrecioUnitario.toLocaleString()}</td>
-                            <td class="text-end">₡${p.Subtotal.toLocaleString()}</td>
-                         </tr>`;
+                // Parsear correctamente la fecha
+                let fechaOrden = new Date(parseInt(response.orden.FechaOrden.substr(6)));
+                if (!isNaN(fechaOrden)) {
+                    let dia = fechaOrden.getDate().toString().padStart(2, '0');
+                    let mes = (fechaOrden.getMonth() + 1).toString().padStart(2, '0');
+                    let año = fechaOrden.getFullYear();
+                    let hora = fechaOrden.getHours().toString().padStart(2, '0');
+                    let minutos = fechaOrden.getMinutes().toString().padStart(2, '0');
+
+                    $("#facturaFecha span").html(`${dia}/${mes}/${año}`);
+                } else {
+                    $("#facturaFecha span").text("Fecha no disponible");
+                }
+
+                $("#facturaCliente span").text(response.cliente.Nombre);
+                $("#facturaCorreo span").text(response.cliente.Email);
+                $("#facturaTotal").text("₡" + response.orden.Total.toLocaleString());
+
+                let productos = response.productos;
+                let html = "";
+
+                if (productos && productos.length > 0) {
+                    productos.forEach(p => {
+                        html += `<tr>
+                                        <td>${p.NombreProducto}</td>
+                                        <td class="text-center">${p.Cantidad}</td>
+                                        <td class="text-end">₡${p.PrecioUnitario.toLocaleString()}</td>
+                                        <td class="text-end">₡${p.Subtotal.toLocaleString()}</td>
+                                    </tr>`;
+                    });
+                } else {
+                    html = `<tr><td colspan="4" class="text-center text-muted">No hay productos en esta orden</td></tr>`;
+                }
+
+                $("#facturaProductos").html(html);
+            }).fail(function () {
+                mostrarAlerta("Error al conectar con el servidor", "danger");
             });
-
-            $("#facturaProductos").html(html);
         });
-    });
 
-    $("#enviarFactura").click(function () {
-        if (!ordenActual || !correoCliente) return alert("Debe consultar una orden primero.");
+        function mostrarAlerta(mensaje, tipo) {
+            let alertaHTML = `
+                    <div class="alert alert-${tipo} alert-dismissible fade show mt-3" role="alert">
+                        ${mensaje}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
 
-        let htmlFactura = $("#facturaContainer").html();
+            // Si ya existe una alerta, reemplazarla
+            if ($('.alert').length) {
+                $('.alert').remove();
+            }
 
-        $.post("/Ordenes/EnviarFactura", {
-            correo: correoCliente,
-            facturaHtml: htmlFactura
-        }, function (response) {
-            if (response.success) {
-                alert(response.message);
-            } else {
-                alert("Error al enviar factura: " + response.message);
+            $('.search-container').after(alertaHTML);
+
+            // Auto-cerrar después de 4 segundos
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 4000);
+        }
+
+        // Al presionar Enter en el campo de búsqueda
+        $("#numeroOrden").keypress(function (e) {
+            if (e.which == 13) {
+                $("#buscarOrden").click();
             }
         });
-    });
-</script>
+    </script>
 
+    <script>
+        $("#enviarFactura").click(function () {
+            if (!ordenActual || !correoCliente) {
+                mostrarAlerta("Debe consultar una orden primero", "warning");
+                return;
+            }
+
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...');
+            $(this).prop('disabled', true);
+
+            // Formatear la fecha correctamente
+            const fechaOrden = new Date(parseInt(ordenActual.orden.FechaOrden.substr(6)));
+            const dia = fechaOrden.getDate().toString().padStart(2, '0');
+            const mes = (fechaOrden.getMonth() + 1).toString().padStart(2, '0');
+            const año = fechaOrden.getFullYear();
+            const fechaFormateada = `${dia}/${mes}/${año}`;
+
+            // Generar el HTML de la factura según tu imagen
+            const facturaHtml = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd;">
+    <h1 style="text-align: center; font-size: 24px; margin-bottom: 5px;">Factura #${ordenActual.orden.Orden_ID}</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">${fechaFormateada}</p>
+    
+    <h2 style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px;">
+        INFORMACIÓN DEL CLIENTE
+    </h2>
+    
+    <p><strong>Nombre:</strong> ${ordenActual.cliente.Nombre}</p>
+    <p><strong>Correo:</strong> ${ordenActual.cliente.Email}</p>
+    
+    <h2 style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px;">
+        DETALLE DE PRODUCTOS
+    </h2>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <th style="text-align: left; padding: 8px 0;">Producto</th>
+                <th style="text-align: center; padding: 8px 0;">Cantidad</th>
+                <th style="text-align: right; padding: 8px 0;">Precio Unitario</th>
+                <th style="text-align: right; padding: 8px 0;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${ordenActual.productos.map(item => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 8px 0;">${item.NombreProducto}</td>
+                    <td style="text-align: center; padding: 8px 0;">${item.Cantidad}</td>
+                    <td style="text-align: right; padding: 8px 0;">€${item.PrecioUnitario.toFixed(3).replace('.', ',')}</td>
+                    <td style="text-align: right; padding: 8px 0;">€${item.Subtotal.toFixed(3).replace('.', ',')}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+    
+    <div style="text-align: right; font-weight: bold; margin-top: 20px;">
+        <p>Total: €${ordenActual.orden.Total.toFixed(3).replace('.', ',')}</p>
+    </div>
+    
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+    
+    <p style="text-align: center; color: #666; font-size: 14px;">
+        Gracias por su compra en Tico Sport Socks
+    </p>
+</div>
+`;
+
+            // Enviar la factura por correo
+            $.ajax({
+                url: '/Ordenes/EnviarFactura',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    correo: correoCliente,
+                    facturaHtml: facturaHtml
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        mostrarAlerta("Factura enviada correctamente a " + correoCliente, "success");
+                    } else {
+                        mostrarAlerta("Error al enviar: " + response.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    mostrarAlerta("Error de conexión: " + error, "danger");
+                    console.error("Error detallado:", xhr.responseText);
+                },
+                complete: function () {
+                    $("#enviarFactura").html('<i class="bi bi-envelope me-1"></i> Enviar por correo');
+                    $("#enviarFactura").prop('disabled', false);
+                }
+            });
+        });
+    </script>
+</body>

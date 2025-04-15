@@ -10,6 +10,7 @@ using Twilio.Types;
 using Twilio;
 using UI.Models;
 using Twilio.Rest.Api.V2010.Account;
+using Abstracciones.Modelos.Productos;
 
 
 namespace UI.Controllers
@@ -27,6 +28,7 @@ namespace UI.Controllers
         {
             // Obtener lista de conversaciones
             var conversaciones = _contexto.MensajesTabla
+                .Where(m => m.emisor_ID != 5)
                 .Select(m => new { m.emisor_ID, m.receptor_ID })
                 .Distinct()
                 .ToList();
@@ -53,7 +55,8 @@ namespace UI.Controllers
                     nombre = p.nombre,
                     imagen = p.imagen,
                     precio = p.precio,
-                    stock = p.stock
+                    stock = p.stock,
+                    CodigoDelProducto = p.CodigoDelProducto
                 })
                 .ToList();
 
@@ -91,6 +94,37 @@ namespace UI.Controllers
             return View(modelo);
         }
 
+        [HttpGet]
+        public ActionResult BuscarProductos(string termino)
+        {
+            if (string.IsNullOrWhiteSpace(termino))
+            {
+                return Json(new List<ProductosDto>(), JsonRequestBehavior.AllowGet);
+            }
+
+            termino = termino.ToLower();
+
+            var productos = _contexto.ProductosTabla
+                .AsEnumerable()
+                .Where(p => (p.nombre != null && p.nombre.ToLower().Contains(termino)) ||
+                           (p.CodigoDelProducto != null && p.CodigoDelProducto.ToString().ToLower().Contains(termino)) ||
+                           (p.Producto_ID.ToString().Contains(termino)) ||
+                           (p.descripcion != null && p.descripcion.ToLower().Contains(termino)))
+                .Select(p => new ProductosDto
+                {
+                    Producto_ID = p.Producto_ID,
+                    nombre = p.nombre,
+                    imagen = p.imagen,
+                    precio = p.precio,
+                    stock = p.stock,
+                    CodigoDelProducto = p.CodigoDelProducto,
+                    descripcion = p.descripcion
+                })
+                .Take(20)
+                .ToList();
+
+            return Json(productos, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Chat(int id)
         {
@@ -125,7 +159,7 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<ActionResult> EnviarMensaje(int id, string contenido)
         {
-            Console.WriteLine($"📩 Enviando mensaje a ID: {id}, Contenido: {contenido}");
+            Console.WriteLine($"Enviando mensaje a ID: {id}, Contenido: {contenido}");
 
             if (string.IsNullOrEmpty(contenido))
             {
@@ -141,8 +175,8 @@ namespace UI.Controllers
 
             var nuevoMensaje = new MensajesTabla
             {
-                emisor_ID = 2,
-                receptor_ID = 1,
+                emisor_ID = 5, // ← el admin
+                receptor_ID = usuario.Usuario_ID,
                 contenido = contenido,
                 fecha = DateTime.UtcNow
             };
@@ -156,13 +190,13 @@ namespace UI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error al enviar mensaje por WhatsApp: {ex.Message}");
-                // El mensaje se guardó, pero no se pudo enviar por WhatsApp
+                Console.WriteLine($"Error al enviar mensaje por WhatsApp: {ex.Message}");
                 return Json(new { success = false, message = "Mensaje guardado, pero no se pudo enviar por WhatsApp." });
             }
 
             return Json(new { success = true });
         }
+
 
         private async Task EnviarMensajeWhatsApp(string numeroDestino, string contenido)
         {
@@ -194,7 +228,7 @@ namespace UI.Controllers
                 {
                     Contenido = m.contenido,
                     Fecha = m.fecha,
-                    EsMio = (m.emisor_ID == id)
+                    EsMio = (m.emisor_ID == 5)
                 })
                 .ToList();
 
