@@ -1,11 +1,8 @@
 ﻿using Abstracciones.AD.Interfaces.Cajas.ListarCaja;
 using Abstracciones.Modelos.Caja;
 using AccesoADatos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AcessoADatos.Cajas.ListarCaja
 {

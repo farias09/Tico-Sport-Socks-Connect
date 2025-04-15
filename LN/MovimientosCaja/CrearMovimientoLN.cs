@@ -19,8 +19,13 @@ namespace LN.MovimientosCaja
 
         public async Task<int> Guardar(MovimientosCajaDto modelo)
         {
-            int cantidadDeDatosGuardados = await _movimiento.Guardar(_convertirAMovimientosCajaTabla.ConvertivetirAMovimientosCajaTabla(modelo));
-            return cantidadDeDatosGuardados;
+            // Convertir el DTO a la entidad de base de datos
+            var entidad = _convertirAMovimientosCajaTabla.ConvertivetirAMovimientosCajaTabla(modelo);
+
+            // Guardar y obtener el ID del nuevo movimiento
+            int idMovimiento = await _movimiento.Guardar(entidad);
+
+            return idMovimiento; // Devuelve el ID real generado por la base de datos
         }
 
     }
