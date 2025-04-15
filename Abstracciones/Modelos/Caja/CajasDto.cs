@@ -31,6 +31,6 @@ namespace Abstracciones.Modelos.Caja
 
         [StringLength(128)]
         [Required(ErrorMessage = "El ID del usuario es obligatorio.")]
-        public string Usuario_GUID { get; set; }
+        public string Usuario_ID { get; set; }
     }
 }

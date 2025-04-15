@@ -29,7 +29,7 @@ namespace AcessoADatos.Cajas.ListarCaja
                                                  total_ventas = laCaja.total_ventas,
                                                  total_gastos = laCaja.total_gastos,
                                                  estado = laCaja.estado,
-                                                 Usuario_GUID = laCaja.Usuario_GUID
+                                                 Usuario_ID = laCaja.Usuario_ID
                                              }).ToList();
 
             return laListadeCajas;
@@ -53,7 +53,7 @@ namespace AcessoADatos.Cajas.ListarCaja
                 total_ventas = laCaja.total_ventas,
                 total_gastos = laCaja.total_gastos,
                 estado = laCaja.estado,
-                Usuario_GUID = laCaja.Usuario_GUID
+                Usuario_ID = laCaja.Usuario_ID
             };
         }
     }

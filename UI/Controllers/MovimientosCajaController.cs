@@ -1,131 +1,148 @@
-﻿using Abstracciones.LN.Interfaces.MovimientosCaja;
-using Abstracciones.Modelos.MovimientosCaja;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿    using Abstracciones.LN.Interfaces.MovimientosCaja;
+    using Abstracciones.Modelos.MovimientosCaja;
+    using Microsoft.AspNet.Identity;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Mvc;
 
-namespace UI.Controllers
-{
-    public class MovimientosCajaController : Controller
+    namespace UI.Controllers
     {
-        private readonly ICrearMovimientoLN _crearMovimientoLN;
+        public class MovimientosCajaController : Controller
+        {
+            private readonly ICrearMovimientoLN _crearMovimientoLN;
+            private readonly IListarMovimientosLN _listarMovimientosLN;
 
-        public MovimientosCajaController(ICrearMovimientoLN crearMovimientoLN)
-        {
-            _crearMovimientoLN = crearMovimientoLN; 
-        }
-        // GET: MovimientosCaja
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: MovimientosCaja/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: MovimientosCaja/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: MovimientosCaja/Create
-        [HttpPost]
-        public async Task<ActionResult> CreateMovimiento(MovimientosCajaDto modelo)
-        {
-            if (!ModelState.IsValid)
+            public MovimientosCajaController(ICrearMovimientoLN crearMovimientoLN, IListarMovimientosLN listarMovimientosLN)
             {
-                TempData["Error"] = "Los datos ingresados no son válidos.";
-                return View(modelo);
+                _crearMovimientoLN = crearMovimientoLN;
+                _listarMovimientosLN = listarMovimientosLN;
+            }
+            // GET: MovimientosCaja
+            public ActionResult Listar()
+            {
+                var movimientos = _listarMovimientosLN.Listar();
+                return View(movimientos);
             }
 
-            try
+            [HttpGet]
+            public ActionResult ObtenerMovimientosPorCaja(int cajaId)
             {
-                // Verificar que el monto sea válido
-                if (modelo.Monto <= 0)
+                try
                 {
-                    TempData["Error"] = "El monto debe ser mayor a 0.";
-                    return View(modelo);
+                    var movimientos = _listarMovimientosLN.ListarPorCaja(cajaId);
+                    return Json(movimientos, JsonRequestBehavior.AllowGet);
                 }
-
-                // Determinar el tipo de movimiento
-                if (string.IsNullOrWhiteSpace(modelo.Tipo_Movimiento) ||
-                    (modelo.Tipo_Movimiento != "Ingreso" && modelo.Tipo_Movimiento != "Egreso"))
+                catch (Exception ex)
                 {
-                    TempData["Error"] = "El tipo de movimiento debe ser 'Ingreso' o 'Egreso'.";
-                    return View(modelo);
-                }
-
-                // Guardar el movimiento en la base de datos
-                int idMovimiento = await _crearMovimientoLN.Guardar(modelo);
-
-                if (idMovimiento > 0)
-                {
-                    TempData["Success"] = "Movimiento registrado correctamente.";
-                    return RedirectToAction("Index"); // Redirige a la lista de movimientos
-                }
-                else
-                {
-                    TempData["Error"] = "No se pudo registrar el movimiento.";
-                    return View(modelo);
+                    Response.StatusCode = 500;
+                    return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Ocurrió un error al procesar la solicitud: " + ex.Message;
-                return View(modelo);
-            }
-        }
 
-        // GET: MovimientosCaja/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: MovimientosCaja/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
+
+            // GET: MovimientosCaja/Details/5
+            public ActionResult Details(int id)
             {
                 return View();
             }
-        }
 
-        // GET: MovimientosCaja/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: MovimientosCaja/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
+            // GET: MovimientosCaja/Create
+            public ActionResult Create()
             {
                 return View();
+            }
+
+            // POST: MovimientosCaja/Create
+            [HttpPost]
+            public async Task<ActionResult> CreateMovimiento(MovimientosCajaDto modelo)
+            {
+                modelo.Fecha = DateTime.Now;
+                modelo.Usuario_ID = User.Identity.GetUserId();
+
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { success = false, message = "Datos inválidos." });
+                }
+
+                try
+                {
+                    if (modelo.Monto == 0)
+                    {
+                        return Json(new { success = false, message = "El monto debe ser diferente de 0." });
+                    }
+
+                    if (string.IsNullOrWhiteSpace(modelo.Tipo_Movimiento) ||
+                        (modelo.Tipo_Movimiento != "Ingreso" && modelo.Tipo_Movimiento != "Egreso"))
+                    {
+                        return Json(new { success = false, message = "Tipo de movimiento inválido." });
+                    }
+
+                    int idMovimiento = await _crearMovimientoLN.Guardar(modelo);
+
+                    if (idMovimiento > 0)
+                    {
+                        return Json(new { success = true, message = "Movimiento registrado correctamente." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Error al guardar el movimiento." });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error: " + ex.Message });
+                }
+            }
+
+
+            // GET: MovimientosCaja/Edit/5
+            public ActionResult Edit(int id)
+            {
+                return View();
+            }
+
+            // POST: MovimientosCaja/Edit/5
+            [HttpPost]
+            public ActionResult Edit(int id, FormCollection collection)
+            {
+                try
+                {
+                    // TODO: Add update logic here
+
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View();
+                }
+            }
+
+            // GET: MovimientosCaja/Delete/5
+            public ActionResult Delete(int id)
+            {
+                return View();
+            }
+
+            // POST: MovimientosCaja/Delete/5
+            [HttpPost]
+            public ActionResult Delete(int id, FormCollection collection)
+            {
+                try
+                {
+                    // TODO: Add delete logic here
+
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View();
+                }
             }
         }
     }
-}

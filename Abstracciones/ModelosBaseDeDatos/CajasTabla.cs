@@ -32,6 +32,6 @@ namespace Abstracciones.ModelosBaseDeDatos
         public bool estado { get; set; }
 
         [Required]
-        public string Usuario_GUID { get; set; }
+        public string Usuario_ID { get; set; }
     }
 }

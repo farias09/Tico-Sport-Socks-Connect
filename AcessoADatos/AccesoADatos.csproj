@@ -60,6 +60,7 @@
     <Compile Include="Contexto.cs" />
     <Compile Include="MovimientosCajas\CrearMovimiento\CrearMovimientoAD.cs" />
     <Compile Include="Mensajes\MensajeRepositorio.cs" />
+    <Compile Include="MovimientosCajas\ListarMovimientosAD.cs" />
     <Compile Include="Ordenes\OrdenRepositorio.cs" />
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoAD.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoAD.cs" />

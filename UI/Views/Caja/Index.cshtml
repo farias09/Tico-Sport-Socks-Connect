@@ -61,12 +61,12 @@
                         </div>
 
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            <!--<div class="col-md-4">
                                 <div class="card text-center">
                                     <div class="card-body">
                                         <h5>Registrar Movimientos</h5>
-                                        <p class="text-muted">Ingresos y egresos</p>
-                                        <button class="btn btn-success w-100 mb-2 btnAbrirModalMovimiento"
+                                        <p class="text-muted">Ingresos y egresos</p>-->
+                                        @*<button class="btn btn-success w-100 mb-2 btnAbrirModalMovimiento"
                                                 data-bs-tipo="Ingreso" data-caja-id="@caja.Caja_ID"
                                                 data-bs-toggle="modal" data-bs-target="#registrarMovimientoModal">
                                             Registrar Ingreso
@@ -76,9 +76,15 @@
                                                 data-bs-toggle="modal" data-bs-target="#registrarMovimientoModal">
                                             Registrar Salida
                                         </button>
-                                    </div>
+                                        <button class="btn btn-outline-dark w-100 mt-2 btnVerHistorial"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#verHistorialModal"
+                                                data-caja-id="@caja.Caja_ID">
+                                            Ver Historial
+                                        </button>*@
+                                    <!--</div>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="col-md-4">
                                 <div class="card text-center">
@@ -95,7 +101,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            @*<div class="col-md-4">
                                 <div class="card text-center">
                                     <div class="card-body">
                                         <h5>Reportes</h5>
@@ -105,7 +111,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     }
                 }
@@ -113,12 +119,6 @@
                 {
                     <div class="alert alert-info">No hay cajas abiertas actualmente.</div>
                 }
-
-                <div class="text-end mt-3">
-                    <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#verHistorialModal">
-                        Ver Historial de Movimientos
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -169,6 +169,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="formRegistrarMovimiento">
+                            <input type="hidden" id="cajaIdMovimiento" name="Caja_ID" />
                             <div class="mb-3">
                                 <label for="tipoMovimiento" class="form-label">Tipo de Movimiento</label>
                                 <input type="text" class="form-control" id="tipoMovimiento" name="Tipo_Movimiento" readonly>
@@ -251,23 +252,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                        <table class="table table-striped">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Hora</th>
-                                    <th>Tipo</th>
-                                    <th>Monto</th>
-                                    <th>Motivo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>08:30 AM</td><td>Ingreso</td><td>₡30,000</td><td>Venta de productos</td></tr>
-                                <tr><td>10:15 AM</td><td>Salida</td><td>₡5,000</td><td>Compra de materiales</td></tr>
-                                <tr><td>12:00 PM</td><td>Ingreso</td><td>₡40,000</td><td>Pago de servicios</td></tr>
-                                <tr><td>02:45 PM</td><td>Salida</td><td>₡10,000</td><td>Gastos de transporte</td></tr>
-                                <tr><td>04:00 PM</td><td>Ingreso</td><td>₡20,000</td><td>Venta adicional</td></tr>
-                            </tbody>
-                        </table>
+                        <!-- Aquí se cargará la tabla dinámica desde la vista parcial -->
+                        <div id="contenedorMovimientosCaja">
+                            <p class="text-muted">Seleccione una caja para ver los movimientos.</p>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
@@ -275,6 +263,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Modal para Generar Reportes -->
         <div class="modal fade" id="reportesModal" tabindex="-1" aria-labelledby="reportesModalLabel" aria-hidden="true">
@@ -311,7 +300,10 @@
         // Mostrar tipo de movimiento en el modal
         $('.btnAbrirModalMovimiento').click(function () {
             let tipo = $(this).data('bs-tipo');
+            let cajaId = $(this).data('caja-id');
+
             $('#tipoMovimiento').val(tipo);
+            $('#cajaIdMovimiento').val(cajaId);
             $('#registrarMovimientoModalLabel').text('Registrar ' + tipo);
         });
 
@@ -327,15 +319,19 @@
             }
 
             $.ajax({
-                url: '/Caja/CreateMovimiento',
+                url: '/MovimientosCaja/CreateMovimiento',
                 type: 'POST',
                 data: $('#formRegistrarMovimiento').serialize(),
-                success: function () {
-                    alert('Movimiento registrado exitosamente.');
-                    location.reload();
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload(); // o actualizar una sección si prefieres
+                    } else {
+                        alert("Error al registrar: " + response.message);
+                    }
                 },
                 error: function (xhr) {
-                    alert('Error al registrar: ' + xhr.responseText);
+                    alert("Error inesperado al registrar.");
                 }
             });
         });
@@ -369,6 +365,50 @@
             $('#montoCierre').val('');
             $('#hiddenCajaId').val('');
         });
+
+        // Limpiar el contenedor del historial al cerrar el modal
+        $('#verHistorialModal').on('hidden.bs.modal', function () {
+            $('#contenedorMovimientosCaja').html('<p class="text-muted">Seleccione una caja para ver los movimientos.</p>');
+        });
+
+        // Mostrar historial dinámicamente al abrir modal
+        $('#verHistorialModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var cajaId = button.data('caja-id');
+
+            const contenedor = $('#contenedorMovimientosCaja');
+            contenedor.html('<p class="text-muted">Cargando movimientos...</p>');
+
+            $.getJSON('/MovimientosCaja/ObtenerMovimientosPorCaja', { cajaId: cajaId })
+                .done(function (data) {
+                    if (!data || data.length === 0) {
+                        contenedor.html('<p class="text-muted">No hay movimientos registrados.</p>');
+                        return;
+                    }
+
+                    let tabla = `<table class='table table-bordered'>
+                            <thead class='table-light'>
+                                <tr><th>Fecha</th><th>Tipo</th><th>Monto</th><th>Motivo</th></tr>
+                            </thead><tbody>`;
+
+                    data.forEach(item => {
+                        const fecha = new Date(item.Fecha).toLocaleString("es-CR", { hour12: false });
+                        tabla += `<tr>
+                            <td>${fecha}</td>
+                            <td class="${item.Tipo_Movimiento === 'Ingreso' ? 'text-success' : 'text-danger'}">${item.Tipo_Movimiento}</td>
+                            <td>₡${item.Monto}</td>
+                            <td>${item.Descripcion}</td>
+                          </tr>`;
+                    });
+
+                    tabla += "</tbody></table>";
+                    contenedor.html(tabla);
+                })
+                .fail(() => {
+                    contenedor.html('<p class="text-danger">Error al cargar los movimientos.</p>');
+                });
+        });
+
     });
     </script>
 </body>

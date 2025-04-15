@@ -23,7 +23,7 @@ namespace AccesoADatos.Cajas.CrearCaja
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al crear la caja en la base de datos. Usuario_GUID: {laCajaAGuardar.Usuario_GUID}", ex);
+                throw new Exception($"Error al crear la caja en la base de datos. Usuario_GUID: {laCajaAGuardar.Usuario_ID}", ex);
             }
         }
 

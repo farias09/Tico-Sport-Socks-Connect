@@ -19,7 +19,7 @@ namespace LN.General.Conversiones.Cajas.ConvertirACajasTabla
                 total_ventas = laCaja.total_ventas,
                 total_gastos = laCaja.total_gastos,
                 estado = laCaja.estado,
-                Usuario_GUID = laCaja.Usuario_GUID
+                Usuario_ID = laCaja.Usuario_ID
             };
         }
     }

@@ -73,6 +73,7 @@ using Abstracciones.AD.Interfaces.Cajas.CerrarCaja;
 using Abstracciones.LN.Interfaces.Cajas.CerrarCaja;
 using AcessoADatos.Cajas.CerrarCaja;
 using LN.Cajas.CerrarCaja;
+using AcessoADatos.MovimientosCajas;
 
 namespace UI
 {
@@ -134,6 +135,9 @@ namespace UI
 
             container.RegisterType<ICrearMovimientoLN, CrearMovimientoLN>();
             container.RegisterType<ICrearMovimientoAD, CrearMovimientoAD>();
+
+            container.RegisterType<IListarMovimientosLN, ListarMovimientosLN>();
+            container.RegisterType<IListarMovimientosAD, ListarMovimientosAD>();
 
             container.RegisterType<Contexto>(new HierarchicalLifetimeManager());
 

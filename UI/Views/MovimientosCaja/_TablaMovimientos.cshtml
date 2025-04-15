@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Abstracciones.Modelos.MovimientosCaja.MovimientosCajaDto>
+
+@try
+{
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Monto</th>
+                <th>Motivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.Tipo_Movimiento</td>
+                        <td>₡@item.Monto</td>
+                        <td>@item.Descripcion</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No hay movimientos registrados para esta caja.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception ex)
+{
+    <div class="alert alert-danger">
+        Error al renderizar la vista parcial: @ex.Message
+    </div>
+}

@@ -61,8 +61,8 @@ namespace UI.Controllers
         {
             try
             {
-                modelo.Usuario_GUID = ObtenerUsuarioGuidDesdeIdentity();
-                ModelState.Remove("Usuario_GUID");
+                modelo.Usuario_ID = ObtenerUsuarioGuidDesdeIdentity();
+                ModelState.Remove("Usuario_ID");
                 modelo.estado = true;
                 modelo.fecha_apertura = DateTime.Now;
 
