@@ -25,7 +25,7 @@ namespace LN.Cajas.CrearCaja
 
         public bool VerificarCajaAbierta()
         {
-            return _caja.HayCajaAbierta(); // Llama a la capa de acceso a datos
+            return _caja.HayCajaAbierta(); 
         }
     }
 }

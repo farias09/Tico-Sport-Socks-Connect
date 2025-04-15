@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cajas\CerrarCaja\CerrarCajaLN.cs" />
     <Compile Include="Carrito\CarritoLN.cs" />
     <Compile Include="Categorias\ListarCategorias\ListarCategoriasLN.cs" />
     <Compile Include="General\Conversiones\Categorias\ConvertirACategoriasDto\ConvertirACategoriasDto.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="General\Email\EmailSender.cs" />
     <Compile Include="MovimientosCaja\CrearMovimientoLN.cs" />
     <Compile Include="Mensajes\MensajeService.cs" />
+    <Compile Include="MovimientosCaja\ListarMovimientosLN.cs" />
     <Compile Include="Ordenes\OrdenService\OrdenService.cs" />
     <Compile Include="Productos\ActualizarProducto\ActualizarProductoLN.cs" />
     <Compile Include="Productos\CambiarEstado\CambiarEstadoProductoLN.cs" />

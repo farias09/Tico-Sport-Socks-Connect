@@ -24,14 +24,14 @@ namespace AccesoADatos.MovimientosCajas.CrearMovimiento
             try
             {
                 _elContexto.MovimientosCajaTabla.Add(elMovimientoAGuardar);
-                EntityState estado = _elContexto.Entry(elMovimientoAGuardar).State = System.Data.Entity.EntityState.Added;
-                int cantidadDeDatosGuardados = await _elContexto.SaveChangesAsync();
-                return cantidadDeDatosGuardados;
+                await _elContexto.SaveChangesAsync();
+                return elMovimientoAGuardar.MovimientoCaja_ID; 
             }
             catch (Exception ex)
             {
-                return 0;
+                throw new Exception("Error al guardar el movimiento en la base de datos", ex);
             }
         }
+
     }
 }
