@@ -165,13 +165,6 @@ namespace UI.Controllers
         }
 
         // GET: Productos/Edit/5
-        public ActionResult ActualizarProducto(int id)
-        {
-            ProductosDto elProducto = _obtenerPorId.Obtener(id);
-            return View(elProducto);
-        }
-
-        // POST: Productos/Edit/5
         [HttpPost]
         public async Task<ActionResult> ActualizarProducto(ProductosDto elProducto, HttpPostedFileBase imagenArchivo)
         {
@@ -181,12 +174,11 @@ namespace UI.Controllers
                 var existeProducto = _listarProducto.Listar();
                 bool codigoDuplicado = existeProducto
                     .Any(elProductoValido => elProductoValido.CodigoDelProducto == elProducto.CodigoDelProducto &&
-                                           elProductoValido.Producto_ID != elProducto.Producto_ID);
+                                             elProductoValido.Producto_ID != elProducto.Producto_ID);
 
                 if (codigoDuplicado)
                 {
-                    ModelState.AddModelError("CodigoDelProducto", "Ya existe ese código de producto.");
-                    return View(elProducto);
+                    return Json(new { success = false, message = "Ya existe un producto con este código." });
                 }
 
                 // Procesar imagen solo si se subió un nuevo archivo
@@ -217,16 +209,22 @@ namespace UI.Controllers
                     imagenArchivo.SaveAs(filePath);
                     elProducto.imagen = "/Content/Uploads/Productos/" + fileName;
                 }
+                else
+                {
+                    // Mantener la imagen actual si no se subio una nueva
+                    var productoActual = _obtenerPorId.Obtener(elProducto.Producto_ID);
+                    if (productoActual != null)
+                    {
+                        elProducto.imagen = productoActual.imagen;
+                    }
+                }
 
-                // Resto de la lógica de actualización...
                 int cantidadDeDatosActualizados = await _actualizarProducto.Editar(elProducto);
-
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error al actualizar: " + ex.Message);
-                return View(elProducto);
+                return Json(new { success = false, message = "Error al actualizar: " + ex.Message });
             }
         }
 

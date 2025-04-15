@@ -3,6 +3,7 @@
     ViewBag.Title = "Órdenes Pendientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var usuarios = ViewBag.Usuarios as Dictionary<int, string>;
+    var ordenesOrdenadas = Model.OrderByDescending(o => o.FechaOrden).ToList();
 }
 
 <!doctype html>
@@ -117,9 +118,6 @@
                                             <div class="col-md-4">
                                                 <div class="input-group">
                                                     <input type="text" id="searchInput" class="form-control" placeholder="Buscar por ID o cliente...">
-                                                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                                                        <i class="ri-search-line"></i>
-                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -138,9 +136,9 @@
 
                                         <!-- Lista de órdenes -->
                                         <div class="table-responsive">
-                                            @if (Model != null && Model.Any())
+                                            @if (ordenesOrdenadas != null && ordenesOrdenadas.Any())
                                             {
-                                                foreach (var orden in Model)
+                                                foreach (var orden in ordenesOrdenadas)
                                                 {
                                                     <div class="card mb-3 border order-card" data-id="@orden.Orden_ID" data-status="@orden.Estado" data-date="@orden.FechaOrden.ToString("yyyy-MM-dd")">
                                                         <div class="card-header bg-light">
@@ -215,20 +213,6 @@
                                                                 <div>
                                                                     @if (orden.Estado == "Pendiente")
                                                                     {
-                                                                        <span class="text-muted"><i class="ri-time-line align-middle me-1"></i> Fecha de envío no establecida</span>
-                                                                    }
-                                                                    else if (orden.Estado == "En proceso")
-                                                                    {
-                                                                        <div class="d-flex align-items-center">
-                                                                            <span class="text-muted me-2"><i class="ri-truck-line align-middle me-1"></i> Fecha estimada de envío:</span>
-                                                                            <input type="date" class="form-control form-control-sm" style="width: auto; display: inline-block;" value="@DateTime.Now.AddDays(3).ToString("yyyy-MM-dd")">
-                                                                            <button class="btn btn-sm btn-outline-primary ms-2">Modificar</button>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                                <div>
-                                                                    @if (orden.Estado == "Pendiente")
-                                                                    {
                                                                         <button class="btn btn-sm btn-primary me-2" onclick="cambiarEstado(@orden.Orden_ID, 'En proceso')">
                                                                             <i class="ri-play-circle-line align-middle me-1"></i> Iniciar Proceso
                                                                         </button>
@@ -289,36 +273,33 @@
 
     @section Scripts {
         <script>
-        function cambiarEstado(ordenId, nuevoEstado) {
-            if (confirm(`¿Estás seguro de cambiar el estado de la orden a "${nuevoEstado}"?`)) {
-                $.ajax({
-                    url: '@Url.Action("CambiarEstadoOrden", "Ordenes")',
-                    type: 'POST',
-                    data: { id: ordenId, estado: nuevoEstado },
-                    success: function (response) {
-                        if (response.success) {
-                            location.reload();
-                        } else {
-                            alert('Error al actualizar el estado: ' + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert('Error al comunicarse con el servidor');
+         function cambiarEstado(ordenId, nuevoEstado) {
+            $.ajax({
+                url: '@Url.Action("CambiarEstadoOrden", "Ordenes")',
+                type: 'POST',
+                data: { id: ordenId, estado: nuevoEstado },
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Error al actualizar el estado: ' + response.message);
                     }
-                });
-            }
-        }
-
-        function verDetalles(ordenId) {
-            window.location.href = '@Url.Action("Confirmacion", "Ordenes")' + '?id=' + ordenId;
+                },
+                error: function () {
+                    alert('Error al comunicarse con el servidor');
+                }
+            });
         }
 
         function mostrarModalCancelar(ordenId) {
             $('#modalCancelarOrden').modal('show');
             $('#confirmarCancelarOrden').off('click').on('click', function () {
                 cambiarEstado(ordenId, 'Cancelada');
-                $('#modalCancelarOrden').modal('hide');
             });
+        }
+
+        function verDetalles(ordenId) {
+            window.location.href = '@Url.Action("Confirmacion", "Ordenes")' + '?id=' + ordenId;
         }
 
         // Filtros
@@ -353,6 +334,39 @@
                 });
             }
         });
+
+
+            $(document).ready(function () {
+                $('#searchButton').click(function () {
+                    const searchText = $('#searchInput').val().toLowerCase();
+
+                    $('.order-card').each(function () {
+                        const orderId = $(this).data('id').toString().toLowerCase();
+                        const clientName = $(this).find('p strong').text().toLowerCase();
+
+                        if (orderId.includes(searchText) || clientName.includes(searchText)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+
+                $('#searchInput').on('input', function () {
+                    const searchText = $(this).val().toLowerCase();
+
+                    $('.order-card').each(function () {
+                        const orderId = $(this).data('id').toString().toLowerCase();
+                        const clientName = $(this).find('p strong').text().toLowerCase();
+
+                        if (orderId.includes(searchText) || clientName.includes(searchText)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            });
         </script>
     }
 

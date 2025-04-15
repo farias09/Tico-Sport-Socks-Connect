@@ -74,7 +74,7 @@ namespace UI.Controllers
             }
 
             ViewBag.Detalles = detalles;
-            ViewBag.Usuarios = usuarios; // Pasar el diccionario a la vista
+            ViewBag.Usuarios = usuarios;
             return View(ordenes);
         }
 
@@ -120,7 +120,7 @@ namespace UI.Controllers
 
             if (producto == null)
             {
-                return HttpNotFound(); // Si no se encuentra el producto, devuelve un error 404
+                return HttpNotFound();
             }
 
             // Pasar el producto a la vista
@@ -180,7 +180,7 @@ namespace UI.Controllers
                 // Asignar el total calculado a la orden
                 model.Orden.Total = totalOrden;
                 model.Orden.FechaOrden = DateTime.Now;
-                model.Orden.Estado = "Pendiente"; // Estado inicial por defecto
+                model.Orden.Estado = "Pendiente";
 
                 // Crear la orden con los detalles completos
                 var ordenCreada = _ordenService.CrearOrden(model.Orden, detallesOrdenes);
@@ -247,61 +247,102 @@ namespace UI.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(correo))
+                {
+                    return Json(new { success = false, message = "El correo electrónico es requerido" });
+                }
+
+                if (string.IsNullOrWhiteSpace(facturaHtml))
+                {
+                    return Json(new { success = false, message = "El contenido de la factura es requerido" });
+                }
+
+                // Validar formato de correo
+                try
+                {
+                    var mailAddress = new System.Net.Mail.MailAddress(correo);
+                }
+                catch
+                {
+                    return Json(new { success = false, message = "El formato del correo electrónico no es válido" });
+                }
+
                 Task.Run(() => EnviarFacturaAsync(correo, facturaHtml));
 
-                return Json(new { success = true, message = "Procesando su factura. En breve recibirá un correo con el detalle de su compra." });
+                return Json(new
+                {
+                    success = true,
+                    message = "La factura está siendo procesada y será enviada al correo electrónico proporcionado."
+                });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al iniciar el proceso: " + ex.Message });
+                return Json(new
+                {
+                    success = false,
+                    message = "Error interno al procesar la solicitud: " + ex.Message
+                });
             }
         }
 
         // Proceso asincronico
         private async Task EnviarFacturaAsync(string correo, string facturaHtml)
         {
+            MailMessage mailMessage = null;
+            Attachment attachment = null;
+            MemoryStream stream = null;
+
             try
             {
                 byte[] pdfBytes = GenerarPDF(facturaHtml);
 
-                // Configuración del servidor SMTP
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("brianvargas570@gmail.com", "vvpudyarvqzjaafk "),
+                    Credentials = new NetworkCredential("brianvargas570@gmail.com", "vvpudyarvqzjaafk"),
                     EnableSsl = true,
                     Timeout = 10000,
                     DeliveryMethod = SmtpDeliveryMethod.Network
                 };
 
-                // Mensaje generico
-                var mailMessage = new MailMessage
+                mailMessage = new MailMessage
                 {
                     From = new MailAddress("brianvargas570@gmail.com"),
                     Subject = "Factura de Compra - Tico Sport Socks",
-                    Body = "Estimado cliente,<br/><br/>Adjunto encontrarás la factura digital de tu compra reciente en Tico Sport Socks.<br/><br/>Gracias por tu preferencia.<br/><br/>Atentamente,<br/>Equipo de Tico Sport Socks",
-                    IsBodyHtml = true,
+                    Body = "Estimado cliente,\n\nAdjunto encontrarás la factura de tu compra.\n\nGracias por tu preferencia.\n\nAtentamente,\nTico Sport Socks",
+                    IsBodyHtml = false,
                     Priority = MailPriority.High
                 };
 
                 mailMessage.To.Add(correo);
 
-                // Se adjunta el pdf de la factura
-                string nombreArchivo = "Factura_TicoSportSocks.pdf";
-                MemoryStream stream = new MemoryStream(pdfBytes);
-                mailMessage.Attachments.Add(new Attachment(stream, nombreArchivo, "application/pdf"));
+                string nombreArchivo = $"Factura_TSS_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                stream = new MemoryStream(pdfBytes);
+                attachment = new Attachment(stream, nombreArchivo, "application/pdf");
+                mailMessage.Attachments.Add(attachment);
 
-                await Task.Run(() => smtpClient.Send(mailMessage));
-
-                // Limpieza
-                mailMessage.Dispose();
-                stream.Dispose();
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (SmtpException smtpEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error SMTP: {smtpEx.StatusCode} - {smtpEx.Message}");
+                throw;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error en envío asíncrono: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"Error general: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                attachment?.Dispose();
+                stream?.Dispose();
+                mailMessage?.Dispose();
             }
         }
+
+
+
         public ActionResult UltimasOrdenes()
         {
             Func<int, string> obtenerNombreUsuario = id =>

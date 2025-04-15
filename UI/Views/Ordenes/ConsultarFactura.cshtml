@@ -300,36 +300,6 @@
             });
         });
 
-        $("#enviarFactura").click(function () {
-            if (!ordenActual || !correoCliente) {
-                mostrarAlerta("Debe consultar una orden primero", "warning");
-                return;
-            }
-
-            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...');
-            $(this).prop('disabled', true);
-
-            let htmlFactura = $("#facturaContainer").html();
-
-            $.post("/Ordenes/EnviarFactura", {
-                correo: correoCliente,
-                facturaHtml: htmlFactura
-            }, function (response) {
-                if (response.success) {
-                    mostrarAlerta(response.message, "success");
-                } else {
-                    mostrarAlerta("Error al enviar factura: " + response.message, "danger");
-                }
-
-                $("#enviarFactura").html('<i class="bi bi-envelope me-1"></i> Enviar por correo');
-                $("#enviarFactura").prop('disabled', false);
-            }).fail(function () {
-                mostrarAlerta("Error al conectar con el servidor", "danger");
-                $("#enviarFactura").html('<i class="bi bi-envelope me-1"></i> Enviar por correo');
-                $("#enviarFactura").prop('disabled', false);
-            });
-        });
-
         function mostrarAlerta(mensaje, tipo) {
             let alertaHTML = `
                     <div class="alert alert-${tipo} alert-dismissible fade show mt-3" role="alert">
@@ -356,6 +326,101 @@
             if (e.which == 13) {
                 $("#buscarOrden").click();
             }
+        });
+    </script>
+
+    <script>
+        $("#enviarFactura").click(function () {
+            if (!ordenActual || !correoCliente) {
+                mostrarAlerta("Debe consultar una orden primero", "warning");
+                return;
+            }
+
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...');
+            $(this).prop('disabled', true);
+
+            // Formatear la fecha correctamente
+            const fechaOrden = new Date(parseInt(ordenActual.orden.FechaOrden.substr(6)));
+            const dia = fechaOrden.getDate().toString().padStart(2, '0');
+            const mes = (fechaOrden.getMonth() + 1).toString().padStart(2, '0');
+            const año = fechaOrden.getFullYear();
+            const fechaFormateada = `${dia}/${mes}/${año}`;
+
+            // Generar el HTML de la factura según tu imagen
+            const facturaHtml = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd;">
+    <h1 style="text-align: center; font-size: 24px; margin-bottom: 5px;">Factura #${ordenActual.orden.Orden_ID}</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">${fechaFormateada}</p>
+    
+    <h2 style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px;">
+        INFORMACIÓN DEL CLIENTE
+    </h2>
+    
+    <p><strong>Nombre:</strong> ${ordenActual.cliente.Nombre}</p>
+    <p><strong>Correo:</strong> ${ordenActual.cliente.Email}</p>
+    
+    <h2 style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px;">
+        DETALLE DE PRODUCTOS
+    </h2>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <th style="text-align: left; padding: 8px 0;">Producto</th>
+                <th style="text-align: center; padding: 8px 0;">Cantidad</th>
+                <th style="text-align: right; padding: 8px 0;">Precio Unitario</th>
+                <th style="text-align: right; padding: 8px 0;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${ordenActual.productos.map(item => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 8px 0;">${item.NombreProducto}</td>
+                    <td style="text-align: center; padding: 8px 0;">${item.Cantidad}</td>
+                    <td style="text-align: right; padding: 8px 0;">€${item.PrecioUnitario.toFixed(3).replace('.', ',')}</td>
+                    <td style="text-align: right; padding: 8px 0;">€${item.Subtotal.toFixed(3).replace('.', ',')}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+    
+    <div style="text-align: right; font-weight: bold; margin-top: 20px;">
+        <p>Total: €${ordenActual.orden.Total.toFixed(3).replace('.', ',')}</p>
+    </div>
+    
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+    
+    <p style="text-align: center; color: #666; font-size: 14px;">
+        Gracias por su compra en Tico Sport Socks
+    </p>
+</div>
+`;
+
+            // Enviar la factura por correo
+            $.ajax({
+                url: '/Ordenes/EnviarFactura',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    correo: correoCliente,
+                    facturaHtml: facturaHtml
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        mostrarAlerta("Factura enviada correctamente a " + correoCliente, "success");
+                    } else {
+                        mostrarAlerta("Error al enviar: " + response.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    mostrarAlerta("Error de conexión: " + error, "danger");
+                    console.error("Error detallado:", xhr.responseText);
+                },
+                complete: function () {
+                    $("#enviarFactura").html('<i class="bi bi-envelope me-1"></i> Enviar por correo');
+                    $("#enviarFactura").prop('disabled', false);
+                }
+            });
         });
     </script>
 </body>
